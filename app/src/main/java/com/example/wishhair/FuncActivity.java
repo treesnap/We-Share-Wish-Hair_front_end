@@ -10,6 +10,8 @@ import androidx.loader.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -28,10 +30,12 @@ public class FuncActivity extends AppCompatActivity {
     private int selectImageView;
     private final List<String> imagePaths = new ArrayList<>();
 
+    private FuncLoading loading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_func);
+        setContentView(R.layout.func_activity);
 
         Button btn_back = findViewById(R.id.func_btn_back);
         btn_back.setOnClickListener(view -> finish());
@@ -61,11 +65,15 @@ public class FuncActivity extends AppCompatActivity {
             setImageView(userImage4, 3);
         });
 
+        loading = new FuncLoading(this);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         Button btn_submit = findViewById(R.id.func_btn_submit);
         btn_submit.setOnClickListener(view -> {
-            Intent intent = new Intent(FuncActivity.this, FaceResultActivity.class);
-            startActivity(intent);
-            finish();
+            loading.show();
+//            Intent intent = new Intent(FuncActivity.this, FaceResultActivity.class);
+//            startActivity(intent);
+//            finish();
         });
 
 

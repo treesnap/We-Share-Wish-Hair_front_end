@@ -16,7 +16,6 @@ import com.example.wishhair.home.HomeItems;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +27,7 @@ public class FaceResultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_func_result);
+        setContentView(R.layout.func_activity_faceresult);
 
         Button btn_back = findViewById(R.id.faceResult_btn_back);
         btn_back.setOnClickListener(view -> finish());
