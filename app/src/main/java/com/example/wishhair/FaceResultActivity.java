@@ -33,6 +33,9 @@ public class FaceResultActivity extends AppCompatActivity {
         Button btn_back = findViewById(R.id.faceResult_btn_back);
         btn_back.setOnClickListener(view -> finish());
 
+        Button btn_finish = findViewById(R.id.faceResult_btn_finish);
+        btn_finish.setOnClickListener(view -> finish());
+
         CustomTokenHandler customTokenHandler = new CustomTokenHandler(this);
         String accessToken = customTokenHandler.getAccessToken();
 
@@ -40,12 +43,16 @@ public class FaceResultActivity extends AppCompatActivity {
         faceShape = findViewById(R.id.faceResult_faceShape);
         faceShape_message = findViewById(R.id.faceResult_faceShape_message);
 
+//        TODO : 임시 코드
+        userName.setText("현정");
+        faceShape.setText("달걀형");
+        faceShape_message.setText("달걀형");
 //        homeItem 과 형식이 같아 재사용
         ArrayList<HomeItems> faceRecItems = new ArrayList<>();
 //        dummyData
         String imageSample = "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg";
         for (int i = 0; i < 5; i++) {
-            HomeItems newItems = new HomeItems(imageSample, "hairStyle", "876", false);
+            HomeItems newItems = new HomeItems(imageSample, "물결펌", "876", false);
             faceRecItems.add(newItems);
         }
 

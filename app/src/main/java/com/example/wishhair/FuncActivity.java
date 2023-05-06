@@ -61,6 +61,13 @@ public class FuncActivity extends AppCompatActivity {
             setImageView(userImage4, 3);
         });
 
+        Button btn_submit = findViewById(R.id.func_btn_submit);
+        btn_submit.setOnClickListener(view -> {
+            Intent intent = new Intent(FuncActivity.this, FaceResultActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
 
     }
 

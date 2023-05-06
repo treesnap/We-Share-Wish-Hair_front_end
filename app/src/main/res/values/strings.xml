@@ -39,7 +39,9 @@
     <string name="register_text_sex_man">남성</string>
     <string name="register_text_sex_woman">여성</string>
     <string name="register_message_6">회원가입완료</string>
-
+    <!-- find password -->
+    <string name="find_password_message1">비밀번호 찾기</string>
+    <string name="find_password_message2">아이디 확인 후 비밀번호를 \n 확인할 수 있습니다.</string>
     <!--    review -->
     <string name="review_filter_whole">전체</string>
     <string name="review_filter_man">남성</string>
@@ -56,6 +58,9 @@
     <string name="write_review_massage_2">시술에 대한 별점을 매겨주세요</string>
     <string name="write_review_massage_3">최소 5자, 최대 200자 사이로 작성해주세요</string>
     <string name="write_review_submit">등록하기</string>
+    <string name="write_review_message_4">• 헤어스타일명</string>
+    <string name="write_review_message_5">• 사진</string>
+    <string name="write_review_message_6">• 내용</string>
 
     <!--    home -->
     <string name="home_icon_notification">home_icon_notification</string>
@@ -67,21 +72,18 @@
     <string name="home_message_6">이달의 추천 리뷰</string>
     <string name="home_message_7">님 만을 위한 추천</string>
 
-    <string name="find_password_message1">비밀번호 찾기</string>
-    <string name="find_password_message2">아이디 확인 후 비밀번호를 \n 확인할 수 있습니다.</string>
-
     <string name="xmlDisplay_username">userName</string>
     <string name="message_confirm">확인</string>
     <string name="message_cancel">취소</string>
-    <string name="write_review_message_4">• 헤어스타일명</string>
-    <string name="write_review_message_5">• 사진</string>
-    <string name="write_review_message_6">• 내용</string>
+
+<!--    main func-->
     <string name="func_message_1">사진 4장을 업로드해주세요 :)</string>
     <string name="func_message_2">정면을 보고 있는 사진을 업로드해주세요</string>
     <string name="func_message_btn_submit">얼굴형 분석하기</string>
+<!--    faceResult -->
     <string name="faceResult_message_1">님의 얼굴형은</string>
     <string name="faceResult_message_2">입니다.</string>
     <string name="faceResult_message_3">을 위한 추천 헤어스타일</string>
-
+    <string name="faceResult_btn_finish">얼굴형 분석 끝내기</string>
 
 </resources>
