@@ -30,12 +30,14 @@ public class HomeItems {
 //    recommend
     String hairImage;
     String hairStyle;
-    String heartCount;
+    String likes;
+    Boolean isLike;
 
-    public HomeItems(String hairImage, String hairStyle, String heartCount) {
+    public HomeItems(String hairImage, String hairStyle, String likes, boolean isLike) {
         this.hairImage = hairImage;
         this.hairStyle = hairStyle;
-        this.heartCount = heartCount;
+        this.likes = likes;
+        this.isLike = isLike;
     }
 
     public String getHairImage() {
@@ -54,11 +56,19 @@ public class HomeItems {
         this.hairStyle = hairStyle;
     }
 
-    public String getHeartCount() {
-        return heartCount;
+    public String getLikes() {
+        return likes;
     }
 
-    public void setHeartCount(String heartCount) {
-        this.heartCount = heartCount;
+    public void setLikes(String likes) {
+        this.likes = likes;
+    }
+
+    public Boolean getLike() {
+        return isLike;
+    }
+
+    public void setLike(Boolean like) {
+        isLike = like;
     }
 }

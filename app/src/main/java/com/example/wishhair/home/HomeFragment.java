@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment {
         //===============================dummy data===============================
         String imageSample = "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg";
         for (int i = 0; i < 5; i++) {
-            HomeItems newRecItems = new HomeItems(imageSample, "hairStyle", "876");
+            HomeItems newRecItems = new HomeItems(imageSample, "hairStyle", "876", false);
             recommendItems.add(newRecItems);
         }
 
