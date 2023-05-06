@@ -79,6 +79,9 @@
     <string name="func_message_1">사진 4장을 업로드해주세요 :)</string>
     <string name="func_message_2">정면을 보고 있는 사진을 업로드해주세요</string>
     <string name="func_message_btn_submit">얼굴형 분석하기</string>
+    <string name="faceResult_message_1">님의 얼굴형은</string>
+    <string name="faceResult_message_2">입니다.</string>
+    <string name="faceResult_message_3">을 위한 추천 헤어스타일</string>
 
 
 </resources>
