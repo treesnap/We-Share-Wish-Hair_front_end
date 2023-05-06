@@ -38,6 +38,24 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<HomeRecommendAdap
         holder.bindHairImage(item.getHairImage());
         holder.hairStyle.setText(item.getHairStyle());
         holder.likes.setText(item.getLikes());
+
+        boolean isLike = item.getIsLike();
+        if (isLike) {
+            holder.like.setImageResource(R.drawable.heart_fill);
+        } else {
+            holder.like.setImageResource(R.drawable.heart_empty);
+        }
+        holder.like.setOnClickListener(view -> {
+            HomeItems clickItem = items.get(position);
+            boolean clickLike = clickItem.getIsLike();
+            clickItem.setIsLike(!clickLike);
+
+            if (clickItem.getIsLike()) {
+                holder.like.setImageResource(R.drawable.heart_fill);
+            } else {
+                holder.like.setImageResource(R.drawable.heart_empty);
+            }
+        });
     }
 
     @Override
@@ -46,21 +64,19 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<HomeRecommendAdap
     }
 
     public class RecViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView hairImage;
+        private final ImageView hairImage, like;
         private final TextView hairStyle, likes;
-
         public RecViewHolder(@NonNull View itemView) {
             super(itemView);
 
             this.hairImage = itemView.findViewById(R.id.home_item_rec_hairImage);
             this.hairStyle = itemView.findViewById(R.id.home_item_rec_hairStyle);
             this.likes = itemView.findViewById(R.id.home_item_rec_heartCount);
+            this.like = itemView.findViewById(R.id.home_item_rec_likeImageView);
         }
         public void bindHairImage(String imageURL) {
             Glide.with(context).load(imageURL).into(hairImage);
         }
     }
-
-
 
 }
