@@ -11,7 +11,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="wrap_content" >
 
     <!--    top bar -->
             <androidx.appcompat.widget.Toolbar
@@ -106,8 +106,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:layout_marginStart="45dp"
-                android:layout_marginEnd="45dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 android:layout_marginBottom="70dp"
                 tools:listitem="@layout/home_item_reco_style"
                 app:layout_constraintTop_toBottomOf="@id/faceResult_faceShape_message"

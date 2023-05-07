@@ -10,7 +10,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 
-public interface FuncApi {
+public interface FaceFuncApi {
     @Multipart
     @POST("/api/")
     Call<ResponseBody> uploadImages(

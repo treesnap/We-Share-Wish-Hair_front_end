@@ -11,26 +11,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-<!--    top -->
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
-            <ImageButton
-                android:id="@+id/home_btn_notification"
-                android:layout_gravity="center_vertical|end"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/home_bell"
-                android:scaleType="fitCenter"
-                android:background="@color/white"
-                android:contentDescription="@string/home_icon_notification" />
-        </FrameLayout>
-
 <!--    title -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -76,7 +63,7 @@
                 android:textColor="@color/black"
                 android:textStyle="bold" />
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/home_btn_go"
+                android:id="@+id/home_btn_faceFunc"
                 android:layout_width="78dp"
                 android:layout_height="78dp"
                 android:layout_margin="7dp"
@@ -90,7 +77,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@color/signBox_gray" />
+            android:background="@color/signBox_gray" >
+<!--            TODO : 임시 태그반영 추천 버튼-->
+            <Button
+                android:id="@+id/home_btn_tagFunc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="tag"/>
+        </LinearLayout>
 
 <!--    review hot-->
         <LinearLayout
