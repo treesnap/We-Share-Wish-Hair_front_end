@@ -14,10 +14,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -71,12 +74,21 @@ public class FuncActivity extends AppCompatActivity {
         Button btn_submit = findViewById(R.id.func_btn_submit);
         btn_submit.setOnClickListener(view -> {
             loading.show();
-//            Intent intent = new Intent(FuncActivity.this, FaceResultActivity.class);
-//            startActivity(intent);
-//            finish();
+            loadingDialog();
         });
 
+    }
 
+    private void loadingDialog() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(FuncActivity.this, FaceResultActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }, 2000);
     }
 
     private void setImageView(ImageView imageView, int position) {
