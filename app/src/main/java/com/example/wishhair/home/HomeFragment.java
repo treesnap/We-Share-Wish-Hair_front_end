@@ -21,6 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.FaceFuncActivity;
 import com.example.wishhair.R;
+import com.example.wishhair.TagFuncActivity;
 import com.example.wishhair.sign.UrlConst;
 
 import org.json.JSONObject;
@@ -50,9 +51,15 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.home_fragment, container, false);
 
 //        faceFunc
-        Button btn_go = v.findViewById(R.id.home_btn_faceFunc);
-        btn_go.setOnClickListener(view -> {
+        Button btn_faceFunc = v.findViewById(R.id.home_btn_faceFunc);
+        btn_faceFunc.setOnClickListener(view -> {
             Intent intent = new Intent(requireContext(), FaceFuncActivity.class);
+            startActivity(intent);
+        });
+//        TagFunc
+        Button btn_tagFunc = v.findViewById(R.id.home_btn_tagFunc);
+        btn_tagFunc.setOnClickListener(view -> {
+            Intent intent = new Intent(requireContext(), TagFuncActivity.class);
             startActivity(intent);
         });
 

@@ -72,20 +72,17 @@ public class FaceFuncActivity extends AppCompatActivity {
         Button btn_submit = findViewById(R.id.func_btn_submit);
         btn_submit.setOnClickListener(view -> {
             loading.show();
-            loadingDialog();
+            loadingTime();
         });
 
     }
 
-    private void loadingDialog() {
+    private void loadingTime() {
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(FaceFuncActivity.this, FaceResultActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        handler.postDelayed(() -> {
+            Intent intent = new Intent(FaceFuncActivity.this, FaceResultActivity.class);
+            startActivity(intent);
+            finish();
         }, 2000);
     }
 
