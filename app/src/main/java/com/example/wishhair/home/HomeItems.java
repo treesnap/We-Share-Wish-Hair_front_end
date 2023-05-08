@@ -2,8 +2,8 @@ package com.example.wishhair.home;
 
 public class HomeItems {
 //    hot review
-    String username;
-    String context_review;
+    private String username;
+    private String context_review;
 
     public HomeItems(String username, String context_review) {
         this.username = username;
@@ -28,14 +28,16 @@ public class HomeItems {
 
     //    TODO: set recommend item
 //    recommend
-    String hairImage;
-    String hairStyle;
-    String heartCount;
+    private String hairImage;
+    private String hairStyle;
+    private String likes;
+    private boolean isLike;
 
-    public HomeItems(String hairImage, String hairStyle, String heartCount) {
+    public HomeItems(String hairImage, String hairStyle, String likes, boolean isLike) {
         this.hairImage = hairImage;
         this.hairStyle = hairStyle;
-        this.heartCount = heartCount;
+        this.likes = likes;
+        this.isLike = isLike;
     }
 
     public String getHairImage() {
@@ -54,11 +56,19 @@ public class HomeItems {
         this.hairStyle = hairStyle;
     }
 
-    public String getHeartCount() {
-        return heartCount;
+    public String getLikes() {
+        return likes;
     }
 
-    public void setHeartCount(String heartCount) {
-        this.heartCount = heartCount;
+    public void setLikes(String likes) {
+        this.likes = likes;
+    }
+
+    public boolean getIsLike() {
+        return isLike;
+    }
+
+    public void setIsLike(boolean like) {
+        isLike = like;
     }
 }

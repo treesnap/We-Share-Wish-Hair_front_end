@@ -21,11 +21,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class FuncUploader {
-    private final FuncApi api;
+public class FaceFuncUploader {
+    private final FaceFuncApi api;
     private final Context context;
 
-    public FuncUploader(FuncApi api, Context context) {
+    public FaceFuncUploader(FaceFuncApi api, Context context) {
         //로그를 보기 위한 Interceptor
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         if (BuildConfig.DEBUG) {
@@ -37,7 +37,7 @@ public class FuncUploader {
                 .baseUrl(UrlConst.URL)
                 .client(client)
                 .build();
-        this.api = retrofit.create(FuncApi.class);
+        this.api = retrofit.create(FaceFuncApi.class);
         this.context = context;
     }
 

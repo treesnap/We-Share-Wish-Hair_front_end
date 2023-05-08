@@ -12,17 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.wishhair.FuncActivity;
+import com.example.wishhair.FaceFuncActivity;
 import com.example.wishhair.R;
+import com.example.wishhair.TagFuncActivity;
 import com.example.wishhair.sign.UrlConst;
 
 import org.json.JSONObject;
@@ -30,7 +29,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import me.relex.circleindicator.CircleIndicator3;
 
@@ -52,14 +50,16 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.home_fragment, container, false);
 
-//        notification
-        ImageButton btn_notification;
-        btn_notification = v.findViewById(R.id.home_btn_notification);
-
-//        go analyze
-        Button btn_go = v.findViewById(R.id.home_btn_go);
-        btn_go.setOnClickListener(view -> {
-            Intent intent = new Intent(requireContext(), FuncActivity.class);
+//        faceFunc
+        Button btn_faceFunc = v.findViewById(R.id.home_btn_faceFunc);
+        btn_faceFunc.setOnClickListener(view -> {
+            Intent intent = new Intent(requireContext(), FaceFuncActivity.class);
+            startActivity(intent);
+        });
+//        TagFunc
+        Button btn_tagFunc = v.findViewById(R.id.home_btn_tagFunc);
+        btn_tagFunc.setOnClickListener(view -> {
+            Intent intent = new Intent(requireContext(), TagFuncActivity.class);
             startActivity(intent);
         });
 
@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment {
         //===============================dummy data===============================
         String imageSample = "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg";
         for (int i = 0; i < 5; i++) {
-            HomeItems newRecItems = new HomeItems(imageSample, "hairStyle", "876");
+            HomeItems newRecItems = new HomeItems(imageSample, "hairStyle", "876", false);
             recommendItems.add(newRecItems);
         }
 
