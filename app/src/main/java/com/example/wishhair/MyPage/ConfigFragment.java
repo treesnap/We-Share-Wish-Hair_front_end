@@ -18,12 +18,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -58,12 +63,11 @@ public class ConfigFragment extends Fragment {
     final static private String url = UrlConst.URL + "/api/user";
     static private String accessToken;
     Button config_apply;
-
-    TextView nameTv1;
-    TextView sexTv;
-    TextView IDTv;
-    TextView PWTv;
-
+    EditText configNickname;
+    RadioButton btnMan;
+    RadioButton btnWoman;
+    RadioGroup btnGroup;
+    String sexAfter;
 
 
     public ConfigFragment() {
@@ -122,6 +126,10 @@ public class ConfigFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.my_config_fragment, container, false);
         config_apply = view.findViewById(R.id.config_apply);
+        configNickname = view.findViewById(R.id.config_input_nickname);
+        btnMan = view.findViewById(R.id.config_radiobtn_sex_man);
+        btnWoman = view.findViewById(R.id.config_radiobtn_sex_woman);
+        btnGroup = view.findViewById(R.id.config_radiobtn_group);
         return view;
     }
 
@@ -141,7 +149,7 @@ public class ConfigFragment extends Fragment {
         });
 
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        String accessToken = loginSP.getString("accessToken", "fail acc");
+        accessToken = loginSP.getString("accessToken", "fail acc");
 
 //        ImageButton btn = view.findViewById(R.id.modify_commit_button);
 //        btn.setOnClickListener(new View.OnClickListener() {
@@ -154,20 +162,51 @@ public class ConfigFragment extends Fragment {
         config_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(view.getContext(), R.style.ConfigAlertDialogTheme);
-                View v = LayoutInflater.from(getContext()).inflate(R.layout.mypage_config_dialog, view.findViewById(R.id.dialog_config_layout));
-                // alert의 title과 Messege 세팅
+                ConfigRequest(accessToken);
 
+            }
+        });
+        btnGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton btn = btnGroup.findViewById(i);
+                switch (i) {
+                    case R.id.config_radiobtn_sex_man -> {
+                        sexAfter = "MAN";
+                        break;
+                    }
+                    case R.id.config_radiobtn_sex_woman -> {
+                        sexAfter = "WOMAN";
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
+    public void ConfigRequest(String accessToken) {
+        String nickname_after = configNickname.getText().toString();
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put("nickname",nickname_after);
+            obj.put("sex", sexAfter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PATCH, url , obj, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(getContext(), R.style.ConfigAlertDialogTheme);
+                View v = LayoutInflater.from(getContext()).inflate(R.layout.mypage_config_dialog, getView().findViewById(R.id.dialog_config_layout));
                 myAlertBuilder.setView(v);
                 AlertDialog alertDialog = myAlertBuilder.create();
 
-                // 버튼 리스너 설정
                 v.findViewById(R.id.dialog_config_OKbtn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         alertDialog.dismiss();
-
-                        // POST 기능 구현
                     }
                 });
 
@@ -178,42 +217,61 @@ public class ConfigFragment extends Fragment {
                 // Alert를 생성해주고 보여주는 메소드(show를 선언해야 Alert가 생성됨)
                 alertDialog.show();
             }
-        });
-
-    }
-
-    public void ConfigRequest(String accessToken) {
-        String name = nameTv1.getText().toString();
-        String sex = sexTv.getText().toString();
-        String ID = IDTv.getText().toString();
-        String PW = PWTv.getText().toString();
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url , null, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.i("modify","request success");
-
-            }
         }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                Log.i("test","error test 409");
+
+                int errorCode = volleyError.networkResponse != null ? volleyError.networkResponse.statusCode : -1;
+                switch (errorCode) {
+                    case 400:
+                        // Bad Request 에러 처리
+                        break;
+                    case 401:
+                        // Unauthorized 에러 처리
+                        // 헤더 미포함 시, 로그인이 필요합니다
+                        break;
+                    case 404:
+                        // Not Found 에러 처리
+                        break;
+                    case 409:
+                        // 닉네임 중복
+                        AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(getContext(), R.style.ConfigAlertDialogTheme);
+                        View v = LayoutInflater.from(getContext()).inflate(R.layout.mypage_config_dialog, getView().findViewById(R.id.dialog_config_layout));
+                        myAlertBuilder.setView(v);
+                        AlertDialog alertDialog = myAlertBuilder.create();
+
+                        TextView dialogTv = v.findViewById(R.id.dialog_config_tv);
+                        dialogTv.setText("동일한 닉네임이 존재합니다 !");
+                        v.findViewById(R.id.dialog_config_OKbtn).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                alertDialog.dismiss();
+                            }
+                        });
+
+                        // 다이얼로그 형태 지우기
+                        if (alertDialog.getWindow() != null) {
+                            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                        }
+                        // Alert를 생성해주고 보여주는 메소드(show를 선언해야 Alert가 생성됨)
+                        alertDialog.show();
+                        break;
+                    default:
+                        // 기타 에러 처리
+                        break;
+                }
             }
         }) {
 
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap();
-                params.put("Authorization", "bearer" + accessToken);
-                params.put("name",name);
-                params.put("sex",sex);
-                params.put("id", ID);
-                params.put("pw", PW);
-
-                return params;
-            }
+//            @Nullable
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap();
+//                params.put("Authorization", "bearer" + accessToken);
+//                return params;
+//            }
 
             @Override
             public Map<String, String> getHeaders() {
