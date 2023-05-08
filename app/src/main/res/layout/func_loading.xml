@@ -23,6 +23,7 @@
         android:textSize="23sp"
         android:textStyle="bold"
         android:textColor="@color/default_blue"
+        android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@id/loading_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

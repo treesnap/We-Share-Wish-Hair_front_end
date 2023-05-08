@@ -86,7 +86,12 @@
     <string name="faceResult_message_3">을 위한 추천 헤어스타일</string>
     <string name="faceResult_btn_finish">얼굴형 분석 끝내기</string>
     <string name="loading_message">AI가 얼굴형을 분석하고 있어요</string>
+
+    <!--    tag func -->
     <string name="tagFunc_title">헤어스타일 추천</string>
     <string name="tagFunc_message1">• 머리카락 기장</string>
+    <string name="tagFunc_message2">• 펌 유무</string>
+    <string name="tagFunc_message3">• 이미지</string>
+    <string name="tagFunc_btn_submit">헤어스타일 추천받기</string>
 
 </resources>

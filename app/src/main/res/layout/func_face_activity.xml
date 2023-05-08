@@ -109,7 +109,7 @@
         android:layout_marginBottom="30dp"
         android:background="@drawable/border_sign_button"
         android:text="@string/func_message_btn_submit"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/text_ivory"
         app:layout_constraintStart_toStartOf="parent"
