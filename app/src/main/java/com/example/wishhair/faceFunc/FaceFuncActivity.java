@@ -100,14 +100,15 @@ public class FaceFuncActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityResult.launch(intent);
+//        배경 남아서 못생겨지는거 임시방편
+        imageView.setBackground(null);
     }
 
     // TODO 사진 크기별로 이상하게 들어감
-//      사진 넣었을 때 배경이 남아서 못생겨짐
 //      이미지 uri list 에 넣어서 서버로 보내야함
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
+            new ActivityResultCallback<>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {

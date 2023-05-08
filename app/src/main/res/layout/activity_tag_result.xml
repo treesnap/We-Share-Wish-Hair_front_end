@@ -1,9 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".TagResultActivity">
+    android:layout_height="match_parent" >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".TagResultActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <!--    top bar -->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/tagResult_topBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <Button
+                    android:id="@+id/tagResult_btn_back"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/back"/>
+            </androidx.appcompat.widget.Toolbar>
+
+            <TextView
+                android:id="@+id/tagResult_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/tagResult_title"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/tagResult_topBar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tagResult_recyclerView"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tagResult_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="70dp"
+                tools:listitem="@layout/home_item_reco_style"
+                app:layout_constraintTop_toBottomOf="@id/tagResult_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/tagResult_btn_finish"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="bottom"
+        android:text="@string/tagResult_btn_finish"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_ivory"
+        android:background="@drawable/border_sign_button"/>
+
+</FrameLayout>

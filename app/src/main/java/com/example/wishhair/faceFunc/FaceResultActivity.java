@@ -9,9 +9,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.wishhair.CustomTokenHandler;
 import com.example.wishhair.R;
 import com.example.wishhair.home.HomeItems;
@@ -37,9 +39,6 @@ public class FaceResultActivity extends AppCompatActivity {
         Button btn_finish = findViewById(R.id.faceResult_btn_finish);
         btn_finish.setOnClickListener(view -> finish());
 
-        CustomTokenHandler customTokenHandler = new CustomTokenHandler(this);
-        String accessToken = customTokenHandler.getAccessToken();
-
         userName = findViewById(R.id.faceResult_userName);
         faceShape = findViewById(R.id.faceResult_faceShape);
         faceShape_message = findViewById(R.id.faceResult_faceShape_message);
@@ -63,10 +62,9 @@ public class FaceResultActivity extends AppCompatActivity {
         recyclerView.setAdapter(faceResultAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-
+        CustomTokenHandler customTokenHandler = new CustomTokenHandler(this);
+        String accessToken = customTokenHandler.getAccessToken();
         faceResultRequest(accessToken);
-
-
     }
 
     private void faceResultRequest(String accessToken) {
@@ -88,5 +86,8 @@ public class FaceResultActivity extends AppCompatActivity {
                 return params;
             }
         };
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);
     }
 }

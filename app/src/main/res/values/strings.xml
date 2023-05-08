@@ -94,4 +94,7 @@
     <string name="tagFunc_message3">• 이미지</string>
     <string name="tagFunc_btn_submit">헤어스타일 추천받기</string>
 
+    <string name="tagResult_btn_finish">헤어스타일 추천 종료</string>
+    <string name="tagResult_title">태그를 반영한 추천 헤어스타일</string>
+
 </resources>
