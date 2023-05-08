@@ -287,17 +287,21 @@ public class MyPageFragment extends Fragment {
 
     //wishlist recyclerview request
     public void myPageRecyclerviewRequest(String accessToken) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_wishlist , null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url2 , null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     JSONObject obj = new JSONObject(response.toString());
-                    JSONArray jsonArray = obj.getJSONArray("result");
-                    for (int i=0;i<3;i++) {
+                    JSONArray jsonArray = obj.getJSONArray("reviews");
+                    for (int i=0;i<jsonArray.length();i++) {
                         HeartlistItem item = new HeartlistItem();
                         JSONObject object = jsonArray.getJSONObject(i);
-                        item.setHeartlistStyleName(object.getString("name"));
-                        Log.i("photo response test", object.getString("name"));
+                        item.setHeartlistStyleName(object.getString("hairStyleName"));
+                        item.setHeartlistReviewerNickname(object.getString("userNickname"));
+                        item.setHeartlistGrade(object.getString("score"));
+                        item.setHeartlistReviewID(object.getInt("reviewId"));
+//                        item.setHeartlistPicture(object.getString());
+
                         adapter.addItem(item);
                         adapter.notifyDataSetChanged();
                     }

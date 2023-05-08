@@ -1,6 +1,7 @@
 package com.example.wishhair.favorite;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.wishhair.R;
 import com.example.wishhair.review.detail.ImageSliderAdapter;
+import com.example.wishhair.sign.UrlConst;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +36,11 @@ public class FavoriteDetail extends Fragment {
     public FavoriteDetail() {
         // Required empty public constructor
     }
+    private SharedPreferences loginSP;
+    final static private String url_like_chk = UrlConst.URL + "/api/review/like";
+    final static private String url2 = UrlConst.URL + "/api";
+
+    static private String accessToken;
 
     private ViewPager2 sliderViewPager;
     private CircleIndicator3 circleIndicator;

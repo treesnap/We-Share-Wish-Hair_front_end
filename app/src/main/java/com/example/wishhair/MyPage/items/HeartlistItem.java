@@ -6,7 +6,8 @@ import android.widget.TextView;
 public class HeartlistItem {
     ImageView HeartlistPicture;
     String HeartlistGrade, HeartlistHeartcount;
-    String HeartlistStyleName;
+    String HeartlistStyleName, HeartlistReviewerNickname;
+    int HeartlistReviewID;
 
 //    public HeartlistItem(ImageView imageView, TextView grade, TextView count, TextView StyleName) {
 //        HeartlistPicture = imageView;
@@ -46,5 +47,21 @@ public class HeartlistItem {
 
     public String getHeartlistStyleName() {
         return HeartlistStyleName;
+    }
+
+    public String getHeartlistReviewerNickname() {
+        return HeartlistReviewerNickname;
+    }
+
+    public void setHeartlistReviewerNickname(String heartlistReviewerNickname) {
+        HeartlistReviewerNickname = heartlistReviewerNickname;
+    }
+
+    public int getHeartlistReviewID() {
+        return HeartlistReviewID;
+    }
+
+    public void setHeartlistReviewID(int heartlistReviewID) {
+        HeartlistReviewID = heartlistReviewID;
     }
 }
