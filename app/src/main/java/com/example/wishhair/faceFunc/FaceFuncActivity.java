@@ -1,4 +1,4 @@
-package com.example.wishhair;
+package com.example.wishhair.faceFunc;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -19,6 +19,8 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import com.example.wishhair.R;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

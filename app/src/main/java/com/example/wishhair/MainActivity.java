@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private final FragmentManager fragmentManager = getSupportFragmentManager();
     private static FragmentTransaction fragmentTransaction;
     private final HomeFragment homeFragment = new HomeFragment();
-    private final RecommendFragment recommendFragment = new RecommendFragment();
     private final ReviewFragment reviewFragment = new ReviewFragment();
     private final MyPageFragment myPageFragment = new MyPageFragment();
     private final MyStyleFragment myStyleFragment = new MyStyleFragment();

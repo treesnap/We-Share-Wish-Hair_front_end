@@ -25,14 +25,14 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".FaceResultActivity"
+            android:name=".faceFunc.FaceResultActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".FaceFuncActivity"
+            android:name=".faceFunc.FaceFuncActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

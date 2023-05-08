@@ -1,10 +1,11 @@
-package com.example.wishhair;
+package com.example.wishhair.faceFunc;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.example.wishhair.BuildConfig;
 import com.example.wishhair.sign.UrlConst;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 

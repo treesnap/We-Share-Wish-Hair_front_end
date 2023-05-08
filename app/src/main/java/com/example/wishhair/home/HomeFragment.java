@@ -19,7 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.wishhair.FaceFuncActivity;
+import com.example.wishhair.faceFunc.FaceFuncActivity;
 import com.example.wishhair.R;
 import com.example.wishhair.TagFuncActivity;
 import com.example.wishhair.sign.UrlConst;
