@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
@@ -23,10 +24,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.MyPage.items.HeartlistItem;
 import com.example.wishhair.R;
 import com.example.wishhair.review.detail.ImageSliderAdapter;
 import com.example.wishhair.sign.UrlConst;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,6 +67,8 @@ public class FavoriteDetail extends Fragment {
 
     private ViewPager2 sliderViewPager;
     private CircleIndicator3 circleIndicator;
+    FavoriteDetailRecyclerViewAdapter favoriteDetailRecyclerViewAdapter;
+    RecyclerView reviewRecyclerView;
     public ArrayList<String> images = new ArrayList<String>(
             Arrays.asList(
             "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg",
@@ -102,6 +107,7 @@ public class FavoriteDetail extends Fragment {
         favoriteBtn = view.findViewById(R.id.favorite_detail_heart_button);
         stylenameTv = view.findViewById(R.id.favorite_detail_stylename);
         hashtags = view.findViewById(R.id.favorite_detail_hashtag);
+        reviewRecyclerView = view.findViewById(R.id.favorite_detail_review_recyclerview);
         return view;
     }
 
@@ -115,6 +121,10 @@ public class FavoriteDetail extends Fragment {
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         accessToken = loginSP.getString("accessToken", "fail acc");
 
+        favoriteDetailRecyclerViewAdapter = new FavoriteDetailRecyclerViewAdapter();
+        reviewRecyclerView.setAdapter(favoriteDetailRecyclerViewAdapter);
+
+        // data transfer (FavoriteFragment -> FavoriteDetailFragment)
         if (getArguments() != null) {
             stylenameTv.setText(getArguments().getString("hairStylename"));
             String[] tags = getArguments().getStringArray("tags");
@@ -164,6 +174,52 @@ public class FavoriteDetail extends Fragment {
 
             @Override
             public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+
+                return params;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(jsonObjectRequest);
+    }
+
+    //favorite detail recyclerview request
+    public void FavoriteDetailRecyclerViewRequest(String accessToken) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url2 , null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject obj = new JSONObject(response.toString());
+                    JSONArray jsonArray = obj.getJSONArray("reviews");
+                    for (int i=0;i<jsonArray.length();i++) {
+                        FavoriteDetailRecyclerViewItem item = new FavoriteDetailRecyclerViewItem();
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        item.setStyleReviewNickname(object.getString(""));
+                        item.setStyleReviewHeartCount(object.getString(""));
+                        item.setStyleReviewGrade(object.getString(""));
+                        item.setReviewStyleID(object.getInt(""));
+//                        item.setStyleReviewPicture(object.getString());
+
+                        favoriteDetailRecyclerViewAdapter.addItem(item);
+                        favoriteDetailRecyclerViewAdapter.notifyDataSetChanged();
+                    }
+
+                } catch (JSONException e) {
+//                    e.printStackTrace();
+                }
 
             }
         }, new Response.ErrorListener() {

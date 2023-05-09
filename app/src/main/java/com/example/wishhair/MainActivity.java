@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.wishhair.MyPage.ConfigFragment;
 import com.example.wishhair.MyPage.MyPageFragment;
 import com.example.wishhair.MyPage.MyPointList;
-import com.example.wishhair.MyPage.MyStyleFragment;
 
 import com.example.wishhair.MyPage.RefundFragment;
 import com.example.wishhair.favorite.FavoriteDetail;
@@ -33,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private final RecommendFragment recommendFragment = new RecommendFragment();
     private final ReviewFragment reviewFragment = new ReviewFragment();
     private final MyPageFragment myPageFragment = new MyPageFragment();
-    private final MyStyleFragment myStyleFragment = new MyStyleFragment();
     private final ConfigFragment configFragment = new ConfigFragment();
     private final MyPointList myPointList = new MyPointList();
     private final FavoriteFragment favoriteFragment = new FavoriteFragment();
@@ -96,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
                 transaction.replace(R.id.MainLayout, myPageFragment).commitAllowingStateLoss();
                 break;
             case 3:
-                transaction.replace(R.id.MainLayout, myStyleFragment).commitAllowingStateLoss();
                 break;
             case 4:
                 transaction.replace(R.id.MainLayout, favoriteDetail).commitAllowingStateLoss();
