@@ -3,9 +3,12 @@ package com.example.wishhair.sign;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.MainActivity;
+import com.example.wishhair.OauthCallBackActivity;
 import com.example.wishhair.R;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 //        find passwd
         Button btn_findPassword = findViewById(R.id.btn_findPassword);
         btn_findPassword.setOnClickListener(view -> {
-            Intent intent = new Intent(LoginActivity.this, FindPasswordActivity.class);
+            Intent intent = new Intent(LoginActivity.this, OauthCallBackActivity.class);
             startActivity(intent);
         });
     }

@@ -1,13 +1,19 @@
 package com.example.wishhair.home;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +25,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.CustomTokenHandler;
 import com.example.wishhair.faceFunc.FaceFuncActivity;
 import com.example.wishhair.R;
 import com.example.wishhair.TagFuncActivity;
 import com.example.wishhair.sign.UrlConst;
+import com.google.gson.JsonObject;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -34,7 +43,7 @@ import me.relex.circleindicator.CircleIndicator3;
 
 public class HomeFragment extends Fragment {
 
-    private static final String URL = UrlConst.URL + "api/";
+    private static final String URL = UrlConst.URL + "/api/";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -62,6 +71,11 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(requireContext(), TagFuncActivity.class);
             startActivity(intent);
         });
+
+//        accessTk
+        CustomTokenHandler customTokenHandler = new CustomTokenHandler(requireActivity());
+        String accessToken = customTokenHandler.getAccessToken();
+
 
 //        HotReview
         ArrayList<HomeItems> hotReviewItems = new ArrayList<>();
