@@ -7,6 +7,7 @@ public class HeartlistItem {
     ImageView HeartlistPicture;
     String HeartlistGrade, HeartlistHeartcount;
     String HeartlistStyleName, HeartlistReviewerNickname;
+    String[] HashTags;
     int HeartlistReviewID;
 
 //    public HeartlistItem(ImageView imageView, TextView grade, TextView count, TextView StyleName) {
@@ -63,5 +64,13 @@ public class HeartlistItem {
 
     public void setHeartlistReviewID(int heartlistReviewID) {
         HeartlistReviewID = heartlistReviewID;
+    }
+
+    public String[] getHashTags() {
+        return HashTags;
+    }
+
+    public void setHashTags(String[] hashTags) {
+        HashTags = hashTags;
     }
 }

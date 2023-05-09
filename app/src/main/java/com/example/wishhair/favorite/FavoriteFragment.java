@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -56,6 +57,7 @@ public class FavoriteFragment extends Fragment {
     RecyclerView recyclerView;
     FavoriteAdapter adapter;
     Button btn;
+    int targetStyleId;
 
     private SharedPreferences loginSP;
     final static private String url = UrlConst.URL + "/api/hair_style/wish";
@@ -119,28 +121,39 @@ public class FavoriteFragment extends Fragment {
 
         adapter.setOnItemClickListener(new FavoriteAdapter.OnItemClickListener() {
             @Override
-            public void onItemClicked(int position, String data) {
-                Toast.makeText(getContext(),"position:" +position + " data:"+data, Toast.LENGTH_SHORT).show();
-                mainActivity.ChangeFragment(4);
+            public void onItemClicked(int position, int id, String stylename, String[] tags) {
+                Toast.makeText(getContext(),"position:" +position + " hairstyleid:"+id, Toast.LENGTH_SHORT).show();
+                targetStyleId = id;
+                Bundle bundle = new Bundle();
+                bundle.putString("hairStylename", stylename);
+                bundle.putStringArray("tags", tags);
+                bundle.putInt("hairStyleId", id);
+
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                FavoriteDetail favoriteDetail = new FavoriteDetail();
+                favoriteDetail.setArguments(bundle);
+                transaction.replace(R.id.MainLayout, favoriteDetail);
+                transaction.commit();
             }
         });
 
-        FavoriteRequest(accessToken);
+        FavoriteListRequest(accessToken);
         recyclerView.setAdapter(adapter);
     }
 
-    public void FavoriteRequest(String accessToken) {
+    public void FavoriteListRequest(String accessToken) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url , null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     JSONObject obj = new JSONObject(response.toString());
                     JSONArray jsonArray = obj.getJSONArray("result");
-                    for (int i=0;i<3;i++) {
+                    for (int i=0;i<jsonArray.length();i++) {
                         FavoriteItem item = new FavoriteItem();
                         JSONObject object = jsonArray.getJSONObject(i);
                         item.setFavoriteStyleName(object.getString("name"));
-                        Log.i("stylename response test", object.getString("name"));
+                        item.setFavoriteStyleId(object.getInt("hairStyleId"));
+                        Log.i("stylename response test", String.valueOf(object.getInt("hairStyleId")));
                         adapter.addItem(item);
                         adapter.notifyDataSetChanged();
                     }
@@ -198,5 +211,4 @@ public class FavoriteFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(jsonObjectRequest);
     }
-
 }

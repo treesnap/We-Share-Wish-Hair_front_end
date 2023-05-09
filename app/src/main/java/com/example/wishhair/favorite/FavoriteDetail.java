@@ -1,6 +1,7 @@
 package com.example.wishhair.favorite;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -9,16 +10,30 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.wishhair.R;
 import com.example.wishhair.review.detail.ImageSliderAdapter;
 import com.example.wishhair.sign.UrlConst;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import me.relex.circleindicator.CircleIndicator3;
 
@@ -37,10 +52,15 @@ public class FavoriteDetail extends Fragment {
         // Required empty public constructor
     }
     private SharedPreferences loginSP;
-    final static private String url_like_chk = UrlConst.URL + "/api/review/like";
+    final static private String url_favorite = UrlConst.URL + "/api/hair_style/wish/";
     final static private String url2 = UrlConst.URL + "/api";
 
     static private String accessToken;
+
+    int styleId;
+    ImageButton favoriteBtn;
+    TextView stylenameTv;
+    TextView hashtags;
 
     private ViewPager2 sliderViewPager;
     private CircleIndicator3 circleIndicator;
@@ -79,6 +99,9 @@ public class FavoriteDetail extends Fragment {
         View view = inflater.inflate(R.layout.favorite_detail, container, false);
         sliderViewPager = view.findViewById(R.id.favorite_detail_viewpager);
         circleIndicator = view.findViewById(R.id.favorite_detail_indicator);
+        favoriteBtn = view.findViewById(R.id.favorite_detail_heart_button);
+        stylenameTv = view.findViewById(R.id.favorite_detail_stylename);
+        hashtags = view.findViewById(R.id.favorite_detail_hashtag);
         return view;
     }
 
@@ -88,5 +111,78 @@ public class FavoriteDetail extends Fragment {
         sliderViewPager.setOffscreenPageLimit(1);
         sliderViewPager.setAdapter(new ImageSliderAdapter(getContext(), images));
         circleIndicator.setViewPager(sliderViewPager);
+
+        loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        accessToken = loginSP.getString("accessToken", "fail acc");
+
+        if (getArguments() != null) {
+            stylenameTv.setText(getArguments().getString("hairStylename"));
+            String[] tags = getArguments().getStringArray("tags");
+            String tag = "";
+            try {
+                for (int i = 0; i < tags.length; i++) {
+                    tag = tag + "#" + tags[i] + " ";
+                }
+            } catch (Exception e) {
+//                e.printStackTrace();
+            }
+
+            hashtags.setText(tag);
+            styleId = getArguments().getInt("hairStyleId");
+        }
+    }
+
+    public void FavoriteDetailRequest(String accessToken) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_favorite , null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+
+                return params;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(jsonObjectRequest);
+    }
+
+    public void FavoriteAddRequest(String accessToken) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url_favorite , null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+
+                return params;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(jsonObjectRequest);
     }
 }

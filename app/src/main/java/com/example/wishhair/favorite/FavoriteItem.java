@@ -6,6 +6,8 @@ import android.widget.TextView;
 public class FavoriteItem {
     ImageView FavoritePicture;
     String FavoriteGrade, FavoriteHeartcount, FavoriteStyleName;
+    int FavoriteStyleId;
+    String[] FavoriteHashtags;
 
 //    public FavoriteItem(ImageView imageView, TextView grade, TextView count) {
 //        FavoritePicture = imageView;
@@ -44,5 +46,21 @@ public class FavoriteItem {
 
     public void setFavoriteGrade(String FavoriteGrade) {
         FavoriteGrade = FavoriteGrade;
+    }
+
+    public int getFavoriteStyleId() {
+        return FavoriteStyleId;
+    }
+
+    public void setFavoriteStyleId(int favoriteStyleId) {
+        FavoriteStyleId = favoriteStyleId;
+    }
+
+    public String[] getFavoriteHashtags() {
+        return FavoriteHashtags;
+    }
+
+    public void setFavoriteHashtags(String[] favoriteHashtags) {
+        FavoriteHashtags = favoriteHashtags;
     }
 }

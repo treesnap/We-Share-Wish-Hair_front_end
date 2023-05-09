@@ -18,7 +18,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     private ArrayList<FavoriteItem> FavoriteItems = new ArrayList<FavoriteItem>();
 
     public interface OnItemClickListener {
-        void onItemClicked(int position, String data);
+        void onItemClicked(int position, int id, String stylename, String[] tags);
     }
 
     private OnItemClickListener itemClickListener;
@@ -30,9 +30,24 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView FavoriteStyleName, FavoriteHeartCount;
         public ImageView FavoriteStyleImage;
+        public int FavoriteStyleId;
+        public String[] FavoriteHashtags;
+        // 이미지도 넣어놔야될라나
 
         public TextView getFavoriteStyleName() {
             return FavoriteStyleName;
+        }
+
+        public int getFavoriteStyleId() {
+            return FavoriteStyleId;
+        }
+
+        public void setFavoriteStyleId(int favoriteStyleId) {
+            FavoriteStyleId = favoriteStyleId;
+        }
+
+        public String[] getFavoriteHashtags() {
+            return FavoriteHashtags;
         }
 
         ViewHolder(View view) {
@@ -45,12 +60,16 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String data = "";
+                    int id = -1;
+                    String stylename = "";
+                    String[] tags = {};
                     int pos = getAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
-                        data = getFavoriteStyleName().getText().toString();
+                        id = getFavoriteStyleId();
+                        stylename = getFavoriteStyleName().getText().toString();
+                        tags = getFavoriteHashtags();
                     }
-                    itemClickListener.onItemClicked(pos, data);
+                    itemClickListener.onItemClicked(pos, id, stylename, tags);
                 }
             });
         }
@@ -69,6 +88,9 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         FavoriteItem item = FavoriteItems.get(position);
         holder.FavoriteStyleName.setText(item.getFavoriteStyleName());
+        holder.FavoriteStyleId = item.getFavoriteStyleId();
+//        holder.FavoriteHashtags = item.getFavoriteHashtags();
+//        holder.FavoriteHeartCount.setText(item.getFavoriteHeartcount());
 
     }
 
