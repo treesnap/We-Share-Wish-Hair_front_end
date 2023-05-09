@@ -41,20 +41,46 @@
         android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/tagFunc_title"
         app:layout_constraintStart_toStartOf="parent"/>
-<!--TODO : 선택하는거 정리 -->
+<!--    hair length -->
     <RadioGroup
         android:id="@+id/tagFunc_hairLength"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="20dp"
+        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/tagFunc_message1"
         app:layout_constraintStart_toStartOf="parent" >
 
         <RadioButton
             android:id="@+id/tagFunc_hairLength_1"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp" />
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="@null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_length_long"
+            style="@style/tagsTextStyle"
+            android:checked="true"/>
+        <RadioButton
+            android:id="@+id/tagFunc_hairLength_2"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="@null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_length_middle"
+            style="@style/tagsTextStyle" />
+        <RadioButton
+            android:id="@+id/tagFunc_hairLength_3"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:button="@null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_length_short"
+            style="@style/tagsTextStyle" />
     </RadioGroup>
-
+<!--    perm -->
     <TextView
         android:id="@+id/tagFunc_message2"
         android:layout_width="wrap_content"
@@ -68,13 +94,36 @@
         app:layout_constraintTop_toBottomOf="@id/tagFunc_hairLength"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <RadioGroup
         android:id="@+id/tagFunc_perm"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="20dp"
+        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/tagFunc_message2"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" >
+
+        <RadioButton
+            android:id="@+id/tagFunc_perm_1"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="@null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_perm_O"
+            style="@style/tagsTextStyle"
+            android:checked="true"/>
+        <RadioButton
+            android:id="@+id/tagFunc_perm_2"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="@null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_perm_X"
+            style="@style/tagsTextStyle" />
+    </RadioGroup>
 
 <!--    image Tag -->
     <TextView
@@ -91,7 +140,7 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <LinearLayout
-        android:id="@+id/tagFunc_imageTags"
+        android:id="@+id/tagFunc_imageTags_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
@@ -99,14 +148,140 @@
         android:layout_marginEnd="20dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tagFunc_message3">
 
         <CheckBox
             android:id="@+id/tagFunc_imageTag_1"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_image_cute"
+            style="@style/tagsTextStyle" />
+        <CheckBox
+            android:id="@+id/tagFunc_imageTag_2"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_image_upstage"
+            style="@style/tagsTextStyle" />
+        <CheckBox
+            android:id="@+id/tagFunc_imageTag_3"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_image_neat"
+            style="@style/tagsTextStyle" />
+        <CheckBox
+            android:id="@+id/tagFunc_imageTag_4"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_image_common"
+            style="@style/tagsTextStyle" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/tagFunc_imageTags_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tagFunc_imageTags_1">
+
+        <CheckBox
+            android:id="@+id/tagFunc_imageTag_5"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_image_light"
+            style="@style/tagsTextStyle" />
+        <CheckBox
+            android:id="@+id/tagFunc_imageTag_6"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_image_heavy"
+            style="@style/tagsTextStyle" />
+        <CheckBox
+            android:id="@+id/tagFunc_imageTag_7"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_image_cool"
+            style="@style/tagsTextStyle" />
+        <CheckBox
+            android:id="@+id/tagFunc_imageTag_8"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_image_voluminous"
+            style="@style/tagsTextStyle" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/tagFunc_imageTags_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tagFunc_imageTags_2">
+
+        <CheckBox
+            android:id="@+id/tagFunc_imageTag_9"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_image_trendy"
+            style="@style/tagsTextStyle" />
+        <CheckBox
+            android:id="@+id/tagFunc_imageTag_10"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_image_formal"
+            style="@style/tagsTextStyle" />
+        <CheckBox
+            android:id="@+id/tagFunc_imageTag_11"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_image_manly"
+            style="@style/tagsTextStyle" />
+        <CheckBox
+            android:id="@+id/tagFunc_imageTag_12"
+            android:layout_width="56dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="13dp"
+            android:button="null"
+            android:background="@drawable/radio_button_custom"
+            android:text="@string/tag_image_soft"
+            style="@style/tagsTextStyle" />
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
