@@ -20,9 +20,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.sign.UrlConst;
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 public class OauthCallBackActivity extends AppCompatActivity {
 
@@ -42,15 +44,22 @@ public class OauthCallBackActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    String oauthUrl = response.getString("result");
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(oauthUrl));
+                    String clientId = response.getString("clientId");
+                    String redirectUri = response.getString("redirectUri");
+                    String scopes = response.getString("scope");
 
-                    startActivity(intent);
-                    AccountManager am = AccountManager.get(getApplicationContext());
+                    Log.d("clientId", clientId );
+                    Log.d("redirectUri", redirectUri );
+                    String scope1 = scopes.substring(2, 9);
+                    String scope2 = scopes.substring(12, 17);
+                    Log.d("scope", scope1 + " " + scope2);
+
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
             }
         }, new Response.ErrorListener() {
             @Override
