@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import com.android.volley.Request;
@@ -15,6 +16,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.home.HomeItems;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -57,8 +60,25 @@ public class TagResultActivity extends AppCompatActivity {
     }
 
     private void tagResultRequest(String accessToken) {
+        String selectedHairLength = getIntent().getStringExtra("selectedHairLength");
+        String selectedPerm = getIntent().getStringExtra("selectedPerm");
+        ArrayList<String> selectedImages = getIntent().getStringArrayListExtra("selectedImages");
+
+        JSONObject jsonObject = new JSONObject();
+        JSONArray imageTags = new JSONArray();
+        try {
+            jsonObject.put("hairLength", selectedHairLength);
+            jsonObject.put("perm", selectedPerm);
+            for (int i = 0; i < selectedImages.size(); i++) {
+                imageTags.put(selectedImages.get(i));
+            }
+            jsonObject.put("imageTags", imageTags);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d("json", jsonObject.toString());
         String URL = "";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
 //                TODO : 결과 파싱해서 recyclerView 설정

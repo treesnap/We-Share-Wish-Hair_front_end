@@ -155,7 +155,7 @@
             android:layout_width="56dp"
             android:layout_height="22dp"
             android:layout_marginEnd="13dp"
-            android:button="null"
+            android:button="@null"
             android:background="@drawable/radio_button_custom"
             android:text="@string/tag_image_cute"
             style="@style/tagsTextStyle" />
@@ -164,7 +164,7 @@
             android:layout_width="56dp"
             android:layout_height="22dp"
             android:layout_marginEnd="13dp"
-            android:button="null"
+            android:button="@null"
             android:background="@drawable/radio_button_custom"
             android:text="@string/tag_image_upstage"
             style="@style/tagsTextStyle" />
@@ -173,7 +173,7 @@
             android:layout_width="56dp"
             android:layout_height="22dp"
             android:layout_marginEnd="13dp"
-            android:button="null"
+            android:button="@null"
             android:background="@drawable/radio_button_custom"
             android:text="@string/tag_image_neat"
             style="@style/tagsTextStyle" />
@@ -182,7 +182,7 @@
             android:layout_width="56dp"
             android:layout_height="22dp"
             android:layout_marginEnd="13dp"
-            android:button="null"
+            android:button="@null"
             android:background="@drawable/radio_button_custom"
             android:text="@string/tag_image_common"
             style="@style/tagsTextStyle" />
@@ -203,7 +203,7 @@
             android:layout_width="56dp"
             android:layout_height="22dp"
             android:layout_marginEnd="13dp"
-            android:button="null"
+            android:button="@null"
             android:background="@drawable/radio_button_custom"
             android:text="@string/tag_image_light"
             style="@style/tagsTextStyle" />
@@ -212,7 +212,7 @@
             android:layout_width="56dp"
             android:layout_height="22dp"
             android:layout_marginEnd="13dp"
-            android:button="null"
+            android:button="@null"
             android:background="@drawable/radio_button_custom"
             android:text="@string/tag_image_heavy"
             style="@style/tagsTextStyle" />
@@ -221,7 +221,7 @@
             android:layout_width="56dp"
             android:layout_height="22dp"
             android:layout_marginEnd="13dp"
-            android:button="null"
+            android:button="@null"
             android:background="@drawable/radio_button_custom"
             android:text="@string/tag_image_cool"
             style="@style/tagsTextStyle" />
@@ -230,7 +230,7 @@
             android:layout_width="56dp"
             android:layout_height="22dp"
             android:layout_marginEnd="13dp"
-            android:button="null"
+            android:button="@null"
             android:background="@drawable/radio_button_custom"
             android:text="@string/tag_image_voluminous"
             style="@style/tagsTextStyle" />
@@ -251,7 +251,7 @@
             android:layout_width="56dp"
             android:layout_height="22dp"
             android:layout_marginEnd="13dp"
-            android:button="null"
+            android:button="@null"
             android:background="@drawable/radio_button_custom"
             android:text="@string/tag_image_trendy"
             style="@style/tagsTextStyle" />
@@ -260,7 +260,7 @@
             android:layout_width="56dp"
             android:layout_height="22dp"
             android:layout_marginEnd="13dp"
-            android:button="null"
+            android:button="@null"
             android:background="@drawable/radio_button_custom"
             android:text="@string/tag_image_formal"
             style="@style/tagsTextStyle" />
@@ -269,7 +269,7 @@
             android:layout_width="56dp"
             android:layout_height="22dp"
             android:layout_marginEnd="13dp"
-            android:button="null"
+            android:button="@null"
             android:background="@drawable/radio_button_custom"
             android:text="@string/tag_image_manly"
             style="@style/tagsTextStyle" />
@@ -278,7 +278,7 @@
             android:layout_width="56dp"
             android:layout_height="22dp"
             android:layout_marginEnd="13dp"
-            android:button="null"
+            android:button="@null"
             android:background="@drawable/radio_button_custom"
             android:text="@string/tag_image_soft"
             style="@style/tagsTextStyle" />
