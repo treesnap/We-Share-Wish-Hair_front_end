@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 transaction.replace(R.id.MainLayout, favoriteDetail).commitAllowingStateLoss();
                 break;
             case 5:
+                transaction.replace(R.id.MainLayout, favoriteFragment).commitAllowingStateLoss();
                 break;
             case 6:
                 break;

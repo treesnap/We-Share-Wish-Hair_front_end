@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -24,6 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.MainActivity;
 import com.example.wishhair.MyPage.items.HeartlistItem;
 import com.example.wishhair.R;
 import com.example.wishhair.review.detail.ImageSliderAdapter;
@@ -64,7 +66,8 @@ public class FavoriteDetail extends Fragment {
     ImageButton favoriteBtn;
     TextView stylenameTv;
     TextView hashtags;
-
+    MainActivity mainActivity;
+    private OnBackPressedCallback callback;
     private ViewPager2 sliderViewPager;
     private CircleIndicator3 circleIndicator;
     FavoriteDetailRecyclerViewAdapter favoriteDetailRecyclerViewAdapter;
@@ -85,6 +88,19 @@ public class FavoriteDetail extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mainActivity = (MainActivity) getActivity();
+        callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                mainActivity.ChangeFragment(5);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
