@@ -17,16 +17,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.wishhair.review.write.WriteReviewActivity;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
-    final static private String URL = UrlConst.URL + "/api/login";
+    final static private String URL = UrlConst.URL + "/api/auth/login";
 
     private EditText login_id, login_pw;
+    private boolean hasFaceShape;
+    private String userNickName, faceShapeTag;
 
     private SharedPreferences loginSP;
     //https://wonpaper.tistory.com/232
@@ -90,11 +90,19 @@ public class LoginActivity extends AppCompatActivity {
                 editor.putString("refreshToken", refreshToken);
                 editor.apply();
 
+                JSONObject userInfo = response.getJSONObject("userInfo");
+                userNickName = userInfo.getString("nickname");
+                hasFaceShape = userInfo.getBoolean("hasFaceShape");
+                faceShapeTag = userInfo.getString("faceShapeTag");
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("nickname", userNickName);
+            intent.putExtra("hasFaceShape", hasFaceShape);
+            intent.putExtra("faceShapeTag", faceShapeTag);
             startActivity(intent);
             finish();
         }, error -> {
