@@ -14,7 +14,11 @@ import com.example.wishhair.MyPage.PointHistory;
 import com.example.wishhair.R;
 import com.example.wishhair.sign.UrlConst;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class PointAdapter extends RecyclerView.Adapter<PointAdapter.ViewHolder> {
     private ArrayList<PointHistory> pointItems = new ArrayList<PointHistory>();
@@ -66,7 +70,8 @@ public class PointAdapter extends RecyclerView.Adapter<PointAdapter.ViewHolder> 
             holder.PointlistNum.setText("-" + item.getDealAmount());
             holder.PointlistNum.setTextColor(Color.RED);
         }
-        holder.PointlistDate.setText(item.getDealDate().toString());
+
+        holder.PointlistDate.setText(parseDate(item.getDealDate()));
     }
 
     @Override
@@ -79,6 +84,18 @@ public class PointAdapter extends RecyclerView.Adapter<PointAdapter.ViewHolder> 
     }
     public void setItems(ArrayList<PointHistory> items) {
         this.pointItems = items;
+    }
+    private String parseDate(String inputDate) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+
+        try {
+            Date date = inputFormat.parse(inputDate);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "failParseDate";
     }
 
 }

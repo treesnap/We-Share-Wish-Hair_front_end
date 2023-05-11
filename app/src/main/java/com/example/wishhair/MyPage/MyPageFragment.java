@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -50,6 +51,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,15 +63,20 @@ public class MyPageFragment extends Fragment {
     RecyclerDecoration recyclerDecoration;
 
     private SharedPreferences loginSP;
+    String accessToken;
     final static private String url = UrlConst.URL + "/api/logout";
     final static private String url2 = UrlConst.URL + "/api/user/my_page";
     final static private String url_wishlist = UrlConst.URL + "/api/hair_style/wish";
     final static private String url_withdraw = UrlConst.URL + "/api/user";
 
     static String testName = null;
+    static String mypoint;
+    ArrayList<HeartlistItem> list;
     TextView tv;
     TextView point_preview;
     ImageView userpicture;
+
+    private OnBackPressedCallback callback;
 
     public MyPageFragment() {
         // Required empty public constructor
@@ -79,6 +86,14 @@ public class MyPageFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mainActivity = (MainActivity) getActivity();
+        callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                mainActivity.onBackPressed();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
     }
 
     @Override
@@ -89,8 +104,6 @@ public class MyPageFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        String accessToken = loginSP.getString("accessToken", "fail acc");
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.mypage_toolbar);
 
@@ -98,13 +111,6 @@ public class MyPageFragment extends Fragment {
         ImageButton toMyPoint = view.findViewById(R.id.mypage_to_point);
         ImageButton withdrawBtn = view.findViewById(R.id.mypage_withdraw);
 
-        HeartlistRecyclerView = view.findViewById(R.id.HeartlistRecyclerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        HeartlistRecyclerView.setLayoutManager(layoutManager);
-
-        adapter = new MyPageRecyclerViewAdapter();
-
-        HeartlistRecyclerView.setAdapter(adapter);
 
         toConfig.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,8 +195,6 @@ public class MyPageFragment extends Fragment {
                 logout(accessToken);
             }
         });
-        myPageRequest(accessToken);
-        myPageRecyclerviewRequest(accessToken);
 
     }
 
@@ -201,6 +205,23 @@ public class MyPageFragment extends Fragment {
         tv = view.findViewById(R.id.mypage_nickname);
         point_preview = view.findViewById(R.id.mypage_point_preview);
         userpicture = view.findViewById(R.id.mypage_user_picture);
+
+        loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        accessToken = loginSP.getString("accessToken", "fail acc");
+
+        HeartlistRecyclerView = view.findViewById(R.id.HeartlistRecyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        HeartlistRecyclerView.setLayoutManager(layoutManager);
+
+        adapter = new MyPageRecyclerViewAdapter();
+
+        HeartlistRecyclerView.setAdapter(adapter);
+
+        tv.setText(testName+" 님");
+        point_preview.setText(mypoint+"P");
+
+        myPageRequest(accessToken);
+        myPageRecyclerviewRequest(accessToken);
         return view;
     }
 
@@ -254,11 +275,10 @@ public class MyPageFragment extends Fragment {
             public void onResponse(JSONObject response) {
                 try {
                     testName = response.getString("nickname");
-                    String mypoint = Integer.toString(response.optInt("point"));
-                    Log.i("받아온 거", testName);
-                    tv.setText(testName+" 님");
-                    point_preview.setText(mypoint+ "P");
+                    mypoint = Integer.toString(response.optInt("point"));
 
+                    tv.setText(testName+" 님");
+                    point_preview.setText(mypoint+"P");
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -287,17 +307,20 @@ public class MyPageFragment extends Fragment {
 
     //wishlist recyclerview request
     public void myPageRecyclerviewRequest(String accessToken) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_wishlist , null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url2 , null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     JSONObject obj = new JSONObject(response.toString());
-                    JSONArray jsonArray = obj.getJSONArray("result");
-                    for (int i=0;i<3;i++) {
+                    JSONArray jsonArray = obj.getJSONArray("reviews");
+                    for (int i=0;i<jsonArray.length();i++) {
                         HeartlistItem item = new HeartlistItem();
                         JSONObject object = jsonArray.getJSONObject(i);
-                        item.setHeartlistStyleName(object.getString("name"));
-                        Log.i("photo response test", object.getString("name"));
+                        item.setHeartlistStyleName(object.getString("hairStyleName"));
+                        item.setHeartlistReviewerNickname(object.getString("userNickname"));
+                        item.setHeartlistGrade(object.getString("score"));
+                        item.setHeartlistReviewID(object.getInt("reviewId"));
+//                        item.setHeartlistPicture(object.getString());
                         adapter.addItem(item);
                         adapter.notifyDataSetChanged();
                     }

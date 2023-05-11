@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +15,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.wishhair.MyPage.ConfigFragment;
 import com.example.wishhair.MyPage.MyPageFragment;
 import com.example.wishhair.MyPage.MyPointList;
-import com.example.wishhair.MyPage.MyStyleFragment;
 
 import com.example.wishhair.MyPage.RefundFragment;
 import com.example.wishhair.favorite.FavoriteDetail;
@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private final HomeFragment homeFragment = new HomeFragment();
     private final ReviewFragment reviewFragment = new ReviewFragment();
     private final MyPageFragment myPageFragment = new MyPageFragment();
-    private final MyStyleFragment myStyleFragment = new MyStyleFragment();
     private final ConfigFragment configFragment = new ConfigFragment();
     private final MyPointList myPointList = new MyPointList();
     private final FavoriteFragment favoriteFragment = new FavoriteFragment();
@@ -95,12 +94,12 @@ public class MainActivity extends AppCompatActivity {
                 transaction.replace(R.id.MainLayout, myPageFragment).commitAllowingStateLoss();
                 break;
             case 3:
-                transaction.replace(R.id.MainLayout, myStyleFragment).commitAllowingStateLoss();
                 break;
             case 4:
                 transaction.replace(R.id.MainLayout, favoriteDetail).commitAllowingStateLoss();
                 break;
             case 5:
+                transaction.replace(R.id.MainLayout, favoriteFragment).commitAllowingStateLoss();
                 break;
             case 6:
                 break;
@@ -117,5 +116,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // 뒤로 두번 누를 시 앱 종료
+    private long backpressedTime = 0;
+    public void  onBackPressed() {
+        if (System.currentTimeMillis() > backpressedTime + 2000) {
+            backpressedTime = System.currentTimeMillis();
+            Toast.makeText(this,"한번 더 누르시면 종료합니다.",Toast.LENGTH_SHORT).show();
+        } else if (System.currentTimeMillis() <= backpressedTime + 2000) {
+            finish();
+        }
+    }
 
 }

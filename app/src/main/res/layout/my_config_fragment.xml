@@ -41,18 +41,18 @@
             android:textStyle="bold"
             />
 
-        <EditText
+        <TextView
             android:id="@+id/config_input_email"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/border_mypage_input"
+            android:background="@drawable/border_mypage_tv_gray"
             android:paddingLeft="10dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="email@email.com"
+            android:text=""
+            android:gravity="left|center_vertical"
             />
 
         <TextView
@@ -67,18 +67,18 @@
             android:textStyle="bold"
             android:layout_marginTop="15dp"/>
 
-        <EditText
+        <TextView
             android:id="@+id/config_input_name"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/border_mypage_input"
+            android:background="@drawable/border_mypage_tv_gray"
             android:ems="10"
-            android:inputType="textPersonName"
             android:paddingLeft="10dp"
-            android:text="이름" />
+            android:text=""
+            android:gravity="left|center_vertical"/>
 
         <TextView
             android:id="@+id/config_tv_nickname"
@@ -164,6 +164,7 @@
             android:textStyle="bold" />
 
         <RadioGroup
+            android:id="@+id/config_radiobtn_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
