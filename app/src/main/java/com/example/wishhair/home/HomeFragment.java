@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.CustomTokenHandler;
 import com.example.wishhair.faceFunc.FaceFuncActivity;
@@ -53,10 +55,6 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.home_fragment, container, false);
 
-//      accessToken
-        CustomTokenHandler customTokenHandler = new CustomTokenHandler(requireActivity());
-        String accessToken = customTokenHandler.getAccessToken();
-
 //        title
         initTitle(v);
 
@@ -79,6 +77,9 @@ public class HomeFragment extends Fragment {
         });
 
 //        monthlyReview
+        //      accessToken
+        CustomTokenHandler customTokenHandler = new CustomTokenHandler(requireActivity());
+        String accessToken = customTokenHandler.getAccessToken();
         monthlyReviewRequest(accessToken);
 
         ViewPager2 monthlyReviewPager = v.findViewById(R.id.home_ViewPager_review_monthly);
@@ -137,31 +138,24 @@ public class HomeFragment extends Fragment {
     }
 
     private void monthlyReviewRequest(String accessToken) {
-        final String URL = UrlConst.URL + "api/review/month";
-        JsonArrayRequest monthlyRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        JSONObject object = response.getJSONObject(i);
+        final String URL = UrlConst.URL + "/api/review/month";
+        JsonObjectRequest monthlyRequest = new JsonObjectRequest(Request.Method.GET, URL, null, response -> {
+            try {
+                JSONArray jsonArray = response.getJSONArray("result");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    int reviewId = object.getInt("reviewId");
+                    String userNickname = object.getString("userNickname");
+                    String contents = object.getString("contents");
 
-                        int reviewId = object.getInt("reviewId");
-                        String userNickname = object.getString("userNickname");
-                        String contents = object.getString("contents");
-
-                        HomeItems newItem = new HomeItems(reviewId, userNickname, contents);
-                        monthlyReviewItems.add(newItem);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    HomeItems newItem = new HomeItems(reviewId, userNickname, contents);
+                    monthlyReviewItems.add(newItem);
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
 
-            }
-        }) {
+        }, error -> {Log.e("monthly request error", error.toString());}) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap();
@@ -170,7 +164,7 @@ public class HomeFragment extends Fragment {
             }
         };
 
-        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        RequestQueue queue = Volley.newRequestQueue(requireActivity());
         queue.add(monthlyRequest);
     }
 }
