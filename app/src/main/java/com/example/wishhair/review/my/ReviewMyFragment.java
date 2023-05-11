@@ -49,7 +49,7 @@ public class ReviewMyFragment extends Fragment {
                 tempTags.add("#tag ");
             }
             tempTags.add("tags");
-            ReviewItem newItem = new ReviewItem(images, "무슨무슨" + "펌", tempTags,
+            ReviewItem newItem = new ReviewItem(i, images, "무슨무슨" + "펌", tempTags,
                     "is a root vegetable, typically orange in color, though purple, black, red, white, and yellow cultivars exist,[2][3][4] all of which are domesticated forms of the wild carrot, Daucus carota, native to Europe and Southwestern Asia. The plant probably originated in Persia and was originally cultivated for its leaves and seeds. The most commonly eaten part of the plant is the taproot, although the stems and leaves are also eaten. The domestic carrot has been selectively bred for its enlarged, more palatable, less woody-textured taproot.",
                     "3.4", 500, "22.03.12");
             myReviewItems.add(newItem);
@@ -69,6 +69,7 @@ public class ReviewMyFragment extends Fragment {
         myReviewAdapter.setOnItemClickListener((v1, position) -> {
             Intent intent = new Intent(v1.getContext(), MyReviewDetailActivity.class);
             ReviewItem selectedItem = myReviewItems.get(position);
+            intent.putExtra("reviewId", selectedItem.getReviewId());
             intent.putExtra("hairStyleName", selectedItem.getHairStyleName());
             intent.putStringArrayListExtra("tags", selectedItem.getTags());
             intent.putExtra("score", selectedItem.getScore());

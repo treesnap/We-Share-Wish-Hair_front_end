@@ -12,6 +12,7 @@ import java.util.Locale;
 public class ReviewItem {
 
     // common
+    private int reviewId;
     private String hairStyleName;
     private ArrayList<String> tags;
     private int likes;
@@ -26,7 +27,8 @@ public class ReviewItem {
 
     public ReviewItem() {}
 
-    public ReviewItem(ArrayList<String> imageUrls, String hairStyleName, ArrayList<String> tags, String contents, String score, int likes, String createdDate) {
+    public ReviewItem(int reviewId, ArrayList<String> imageUrls, String hairStyleName, ArrayList<String> tags, String contents, String score, int likes, String createdDate) {
+        this.reviewId = reviewId;
         this.imageUrls = imageUrls;
         this.hairStyleName = hairStyleName;
         this.tags = tags;
@@ -34,6 +36,14 @@ public class ReviewItem {
         this.likes = likes;
         this.createdDate = createdDate;
         this.content = contents;
+    }
+
+    public int getReviewId() {
+        return reviewId;
+    }
+
+    public void setReviewId(int reviewId) {
+        this.reviewId = reviewId;
     }
 
     public String getUserNickName() {

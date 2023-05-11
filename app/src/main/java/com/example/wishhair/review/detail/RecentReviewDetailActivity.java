@@ -46,6 +46,8 @@ public class RecentReviewDetailActivity extends AppCompatActivity {
 
         circleIndicator.setViewPager(sliderViewPager);
 
+        int reviewId = getIntent().getIntExtra("reviewId", 0);
+
 //        content
         userNickname = findViewById(R.id.review_detail_userNickname);
         userNickname.setText(getIntent().getStringExtra("userNickname"));

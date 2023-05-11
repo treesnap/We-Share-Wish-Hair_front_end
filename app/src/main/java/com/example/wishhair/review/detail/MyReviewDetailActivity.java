@@ -41,6 +41,9 @@ public class MyReviewDetailActivity extends AppCompatActivity {
         CircleIndicator3 circleIndicator = findViewById(R.id.review_detail_my_indicator);
         circleIndicator.setViewPager(sliderViewPager);
 
+        int reviewId = getIntent().getIntExtra("reviewId", 0);
+        Log.d("reviewId", String.valueOf(reviewId));
+
         hairStyleName = findViewById(R.id.review_detail_my_hairStyleName);
         hairStyleName.setText(getIntent().getStringExtra("hairStyleName"));
 
