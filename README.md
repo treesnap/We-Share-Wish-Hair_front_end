@@ -3,7 +3,7 @@
 ### Separation Android Repository and Spring Sever Repository
 ### [Before Commits](https://github.com/EunChanNam/We-Share-Wish-Hair/tree/AND)
 
-#### tasks
+#### tasks - 0511
 1. 얼굴형, 태그포함 기능 서버연결
 2. 서버 연결 후 로딩화면 재구성
 3. 얼굴형 추천 여부에 따른 홈화면 UI 변경 
