@@ -17,13 +17,16 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.CustomTokenHandler;
 import com.example.wishhair.faceFunc.FaceFuncActivity;
 import com.example.wishhair.R;
 import com.example.wishhair.TagFuncActivity;
 import com.example.wishhair.sign.UrlConst;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -34,11 +37,9 @@ import me.relex.circleindicator.CircleIndicator3;
 
 public class HomeFragment extends Fragment {
 
-    private static final String URL = UrlConst.URL + "api/";
+    private final ArrayList<HomeItems> monthlyReviewItems = new ArrayList<>();
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+    public HomeFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,10 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.home_fragment, container, false);
+
+//      accessToken
+        CustomTokenHandler customTokenHandler = new CustomTokenHandler(requireActivity());
+        String accessToken = customTokenHandler.getAccessToken();
 
 //        faceFunc
         Button btn_faceFunc = v.findViewById(R.id.home_btn_faceFunc);
@@ -63,21 +68,16 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
-//        HotReview
-        ArrayList<HomeItems> hotReviewItems = new ArrayList<>();
-        //===============================dummy data===============================
-        for (int i = 0; i < 4; i++) {
-            HomeItems newHotItems = new HomeItems("현정", "바니바니바니바니 당근당근 바니바니바니바니 당근당긴 바니바니바니바니 당근 당근바니바니바니바니 당근 당근바니바니바니바니 당근 당근");
-            hotReviewItems.add(newHotItems);
-        }
+//        monthlyReview
+        monthlyReviewRequest(accessToken);
 
-        ViewPager2 hotReviewPager = v.findViewById(R.id.home_ViewPager_review_hot);
-        CircleIndicator3 hotIndicator = v.findViewById(R.id.home_circleIndicator);
+        ViewPager2 monthlyReviewPager = v.findViewById(R.id.home_ViewPager_review_monthly);
+        CircleIndicator3 monthlyIndicator = v.findViewById(R.id.home_circleIndicator);
 
-        hotReviewPager.setOffscreenPageLimit(1);
-        hotReviewPager.setAdapter(new HomeHotReviewAdapter(hotReviewItems));
+        monthlyReviewPager.setOffscreenPageLimit(1);
+        monthlyReviewPager.setAdapter(new HomeMonthlyReviewAdapter(monthlyReviewItems));
 
-        hotIndicator.setViewPager(hotReviewPager);
+        monthlyIndicator.setViewPager(monthlyReviewPager);
 
 //        recommend
         ArrayList<HomeItems> recommendItems = new ArrayList<>();
@@ -97,11 +97,25 @@ public class HomeFragment extends Fragment {
         return v;
     }
 
-    private void homeRequest(String accessToken) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, null, new Response.Listener<JSONObject>() {
+    private void monthlyReviewRequest(String accessToken) {
+        final String URL = UrlConst.URL + "api/review/month";
+        JsonArrayRequest monthlyRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONArray response) {
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject object = response.getJSONObject(i);
 
+                        int reviewId = object.getInt("reviewId");
+                        String userNickname = object.getString("userNickname");
+                        String contents = object.getString("contents");
+
+                        HomeItems newItem = new HomeItems(reviewId, userNickname, contents);
+                        monthlyReviewItems.add(newItem);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -118,6 +132,6 @@ public class HomeFragment extends Fragment {
         };
 
         RequestQueue queue = Volley.newRequestQueue(requireContext());
-        queue.add(jsonObjectRequest);
+        queue.add(monthlyRequest);
     }
 }

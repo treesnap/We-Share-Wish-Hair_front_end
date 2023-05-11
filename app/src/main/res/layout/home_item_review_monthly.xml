@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="10dp"
     android:orientation="vertical"
     android:background="@color/unselect_blue">
@@ -13,7 +14,7 @@
             android:id="@+id/home_item_review_userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="userName"
+            tools:text="userName"
             android:textSize="20sp"
             android:textColor="@color/black"
             android:textStyle="bold"/>
@@ -21,7 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="님의 리뷰"
+            android:text="@string/review_monthly_message"
             android:textSize="20sp"
             android:textColor="@color/black"
             android:textStyle="bold"/>
@@ -29,14 +30,13 @@
 
 <!--    content -->
     <TextView
-        android:id="@+id/home_item_review_hot_content"
+        android:id="@+id/home_item_review_monthly_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="content"
+        tools:text="content"
         android:textSize="20sp"
         android:textColor="@color/black"
         android:ems="100"
         android:maxLines="2"
         android:ellipsize="end"/>
-
 </LinearLayout>

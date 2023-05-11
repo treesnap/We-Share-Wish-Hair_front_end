@@ -114,5 +114,6 @@
     <string name="tag_image_formal">포멀한</string>
     <string name="tag_image_manly">남성적인</string>
     <string name="tag_image_soft">부드러운</string>
+    <string name="review_monthly_message">님의 리뷰</string>
 
 </resources>
