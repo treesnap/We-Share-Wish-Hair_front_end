@@ -16,12 +16,14 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.CustomTokenHandler;
 import com.example.wishhair.faceFunc.FaceFuncActivity;
@@ -42,7 +44,10 @@ import me.relex.circleindicator.CircleIndicator3;
 public class HomeFragment extends Fragment {
 
     private final ArrayList<HomeItems> monthlyReviewItems = new ArrayList<>();
-    Button btn_tagFunc, btn_faceFunc, btn_faceFuncAgain;
+    private Button btn_tagFunc, btn_faceFunc, btn_faceFuncAgain;
+    private boolean hasFaceShape;
+    private String faceShapeTag;
+
     public HomeFragment() {}
 
     @Override
@@ -109,6 +114,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void initTitle(View v) {
+        hasFaceShape = false;
+        faceShapeTag = "";
+
         btn_tagFunc = v.findViewById(R.id.home_btn_tagFunc);
         btn_faceFunc = v.findViewById(R.id.home_btn_faceFunc);
         btn_faceFuncAgain = v.findViewById(R.id.home_btn_faceFuncAgain);
@@ -137,9 +145,38 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    private void homeRequest(String accessToken) {
+        String homeURL = UrlConst.URL + "/api/user/info";
+        JsonObjectRequest homeRequest = new JsonObjectRequest(Request.Method.GET, homeURL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    hasFaceShape = response.getBoolean("hasFaceShape");
+                    faceShapeTag = response.getString("faceShapeTag");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+                return params;
+            }
+        };
+
+    }
+
     private void monthlyReviewRequest(String accessToken) {
-        final String URL = UrlConst.URL + "/api/review/month";
-        JsonObjectRequest monthlyRequest = new JsonObjectRequest(Request.Method.GET, URL, null, response -> {
+        final String monthlyURL = UrlConst.URL + "/api/review/month";
+        JsonObjectRequest monthlyRequest = new JsonObjectRequest(Request.Method.GET, monthlyURL, null, response -> {
             try {
                 JSONArray jsonArray = response.getJSONArray("result");
                 for (int i = 0; i < jsonArray.length(); i++) {
