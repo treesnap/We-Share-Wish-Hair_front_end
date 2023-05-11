@@ -59,14 +59,14 @@ public class ReviewListFragment extends Fragment {
     private RadioGroup filter;
     private RadioButton filter_whole, filter_man, filter_woman;
     private RecyclerView recentRecyclerView;
-    RecentAdapter recentAdapter;
+    private RecentAdapter recentAdapter;
 
     //    sort
     private static String sort_selected = null;
     private static final String[] sortItems = {"최신 순", "오래된 순", "좋아요 순"};
 
 //    request
-    String accessToken;
+    private String accessToken;
 
     @Override
     public void onResume() {

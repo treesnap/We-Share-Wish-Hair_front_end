@@ -23,7 +23,8 @@ import me.relex.circleindicator.CircleIndicator3;
 public class MyReviewDetailActivity extends AppCompatActivity {
 
     private TextView hairStyleName, tags, score, likes, date, content;
-
+    private int reviewId;
+    private boolean isWriter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +33,16 @@ public class MyReviewDetailActivity extends AppCompatActivity {
         Button btn_back = findViewById(R.id.toolbar_btn_back);
         btn_back.setOnClickListener(view -> finish());
 
-//        image
+//        init
+        initContents();
+
+    }
+
+    private void initContents() {
+        reviewId = getIntent().getIntExtra("reviewId", 0);
+        isWriter = getIntent().getBooleanExtra("isWriter", false);
+
+        //        image
         ViewPager2 sliderViewPager = findViewById(R.id.review_detail_my_viewPager);
         sliderViewPager.setOffscreenPageLimit(1);
         ArrayList<String> imageUrls = getIntent().getStringArrayListExtra("imageUrls");
@@ -40,9 +50,6 @@ public class MyReviewDetailActivity extends AppCompatActivity {
 
         CircleIndicator3 circleIndicator = findViewById(R.id.review_detail_my_indicator);
         circleIndicator.setViewPager(sliderViewPager);
-
-        int reviewId = getIntent().getIntExtra("reviewId", 0);
-        Log.d("reviewId", String.valueOf(reviewId));
 
         hairStyleName = findViewById(R.id.review_detail_my_hairStyleName);
         hairStyleName.setText(getIntent().getStringExtra("hairStyleName"));
@@ -66,7 +73,6 @@ public class MyReviewDetailActivity extends AppCompatActivity {
 
         content = findViewById(R.id.review_detail_my_tv_content);
         content.setText(getIntent().getStringExtra("content"));
-
     }
 
     public void showMenu(View view) {

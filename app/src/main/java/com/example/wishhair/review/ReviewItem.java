@@ -1,12 +1,9 @@
 package com.example.wishhair.review;
 
-import android.graphics.Bitmap;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class ReviewItem {
@@ -25,9 +22,11 @@ public class ReviewItem {
     private String userNickName;
     private boolean isHeart;
 
+    private boolean iswriter;
+
     public ReviewItem() {}
 
-    public ReviewItem(int reviewId, ArrayList<String> imageUrls, String hairStyleName, ArrayList<String> tags, String contents, String score, int likes, String createdDate) {
+    public ReviewItem(int reviewId, ArrayList<String> imageUrls, String hairStyleName, ArrayList<String> tags, String contents, String score, int likes, String createdDate, boolean iswriter) {
         this.reviewId = reviewId;
         this.imageUrls = imageUrls;
         this.hairStyleName = hairStyleName;
@@ -36,6 +35,7 @@ public class ReviewItem {
         this.likes = likes;
         this.createdDate = createdDate;
         this.content = contents;
+        this.iswriter = iswriter;
     }
 
     public int getReviewId() {
@@ -129,5 +129,13 @@ public class ReviewItem {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public boolean isWriter() {
+        return iswriter;
+    }
+
+    public void setIsWriter(boolean writer) {
+        this.iswriter = writer;
     }
 }
