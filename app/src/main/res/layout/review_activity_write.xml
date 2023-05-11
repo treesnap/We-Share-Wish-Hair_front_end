@@ -8,7 +8,8 @@
     android:layout_width="match_parent">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:layout_marginBottom="70dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -137,15 +138,17 @@
         </LinearLayout>
     </ScrollView>
     <!--    submit -->
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/write_review_submit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
         android:layout_gravity="bottom"
         android:background="@drawable/border_sign_button"
-        android:text="@string/write_review_submit" />
+        android:text="@string/write_review_submit"
+        android:textStyle="bold"
+        android:textColor="@color/text_ivory"/>
 
 </FrameLayout>

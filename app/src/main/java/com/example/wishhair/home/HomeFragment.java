@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,7 +40,7 @@ import me.relex.circleindicator.CircleIndicator3;
 public class HomeFragment extends Fragment {
 
     private final ArrayList<HomeItems> monthlyReviewItems = new ArrayList<>();
-
+    Button btn_tagFunc, btn_faceFunc, btn_faceFuncAgain;
     public HomeFragment() {}
 
     @Override
@@ -55,16 +57,24 @@ public class HomeFragment extends Fragment {
         CustomTokenHandler customTokenHandler = new CustomTokenHandler(requireActivity());
         String accessToken = customTokenHandler.getAccessToken();
 
+//        title
+        initTitle(v);
+
 //        faceFunc
-        Button btn_faceFunc = v.findViewById(R.id.home_btn_faceFunc);
         btn_faceFunc.setOnClickListener(view -> {
             Intent intent = new Intent(requireContext(), FaceFuncActivity.class);
             startActivity(intent);
         });
+
 //        TagFunc
-        Button btn_tagFunc = v.findViewById(R.id.home_btn_tagFunc);
         btn_tagFunc.setOnClickListener(view -> {
             Intent intent = new Intent(requireContext(), TagFuncActivity.class);
+            startActivity(intent);
+        });
+
+//        faceFuncAgain
+        btn_faceFuncAgain.setOnClickListener(view -> {
+            Intent intent = new Intent(requireContext(), FaceFuncActivity.class);
             startActivity(intent);
         });
 
@@ -95,6 +105,35 @@ public class HomeFragment extends Fragment {
         recommendRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
 
         return v;
+    }
+
+    private void initTitle(View v) {
+        btn_tagFunc = v.findViewById(R.id.home_btn_tagFunc);
+        btn_faceFunc = v.findViewById(R.id.home_btn_faceFunc);
+        btn_faceFuncAgain = v.findViewById(R.id.home_btn_faceFuncAgain);
+
+        TextView hello, receivedText, settingMessage1, settingMessage2, settingMessage3;
+
+        hello = v.findViewById(R.id.home_tv_hello);
+        receivedText = v.findViewById(R.id.home_title_receivedText);
+        settingMessage1 = v.findViewById(R.id.home_tv_settingMessage1);
+        settingMessage2 = v.findViewById(R.id.home_tv_settingMessage2);
+        settingMessage3 = v.findViewById(R.id.home_tv_settingMessage3);
+
+//        TODO : 여부 받아오기
+        if (true) {
+            hello.setVisibility(View.GONE);
+//            TODO : 받아온 얼굴형 사용
+            receivedText.setText("달걀형");
+            settingMessage1.setText("에 어울리는");
+            settingMessage2.setText("헤어스타일은?");
+            settingMessage3.setVisibility(View.GONE);
+            btn_faceFunc.setVisibility(View.GONE);
+        } else {
+            receivedText.setText("현정");
+            btn_tagFunc.setVisibility(View.GONE);
+            btn_faceFuncAgain.setVisibility(View.GONE);
+        }
     }
 
     private void monthlyReviewRequest(String accessToken) {
