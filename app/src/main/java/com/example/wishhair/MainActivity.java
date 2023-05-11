@@ -3,6 +3,7 @@ package com.example.wishhair;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final FragmentManager fragmentManager = getSupportFragmentManager();
     private static FragmentTransaction fragmentTransaction;
-    private final HomeFragment homeFragment = new HomeFragment();
+    private HomeFragment homeFragment;
     private final ReviewFragment reviewFragment = new ReviewFragment();
     private final MyPageFragment myPageFragment = new MyPageFragment();
     private final ConfigFragment configFragment = new ConfigFragment();
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private final FavoriteDetail favoriteDetail = new FavoriteDetail();
     public static Context context;
 
+    private boolean hasFaceShape;
+    private String userNickName, faceShapeTag;
 
     final static private String url = UrlConst.URL + "/api/my_page";
 
@@ -47,10 +50,14 @@ public class MainActivity extends AppCompatActivity {
         context = getApplicationContext();
         setContentView(R.layout.activity_main);
 
+        userNickName = getIntent().getStringExtra("nickname");
+        hasFaceShape = getIntent().getBooleanExtra("hasFaceShape", false);
+        faceShapeTag = getIntent().getStringExtra("faceShapeTag");
+
+        homeFragment = HomeFragment.newInstance(userNickName, hasFaceShape, faceShapeTag);
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.MainLayout, homeFragment).commitAllowingStateLoss();
         getSupportFragmentManager().executePendingTransactions();
-
 
         BottomNavigationView BottomNavigation = findViewById(R.id.BottomNavigation);
         BottomNavigation.setOnItemSelectedListener(new BottomNavigationItemSelectedListener());

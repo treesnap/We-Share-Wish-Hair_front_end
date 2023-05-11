@@ -12,17 +12,17 @@ import com.example.wishhair.R;
 
 import java.util.ArrayList;
 
-public class HomeHotReviewAdapter extends RecyclerView.Adapter<HomeHotReviewAdapter.HotViewHolder> {
+public class HomeMonthlyReviewAdapter extends RecyclerView.Adapter<HomeMonthlyReviewAdapter.HotViewHolder> {
     private final ArrayList<HomeItems> items;
 
-    public HomeHotReviewAdapter( ArrayList<HomeItems> items) {
+    public HomeMonthlyReviewAdapter(ArrayList<HomeItems> items) {
         this.items = items;
     }
 
     @NonNull
     @Override
     public HotViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item_review_hot, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item_review_monthly, parent, false);
         return new HotViewHolder(view);
     }
 
@@ -45,7 +45,7 @@ public class HomeHotReviewAdapter extends RecyclerView.Adapter<HomeHotReviewAdap
             super(itemView);
 
             this.userName = itemView.findViewById(R.id.home_item_review_userName);
-            this.context_review = itemView.findViewById(R.id.home_item_review_hot_content);
+            this.context_review = itemView.findViewById(R.id.home_item_review_monthly_content);
         }
     }
 }

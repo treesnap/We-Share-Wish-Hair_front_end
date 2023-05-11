@@ -1,13 +1,23 @@
 package com.example.wishhair.home;
 
 public class HomeItems {
-//    hot review
+//    monthly review
+private int reviewId;
     private String username;
     private String context_review;
 
-    public HomeItems(String username, String context_review) {
+    public HomeItems(int reviewId, String username, String context_review) {
+        this.reviewId = reviewId;
         this.username = username;
         this.context_review = context_review;
+    }
+
+    public int getReviewId() {
+        return reviewId;
+    }
+
+    public void setReviewId(int reviewId) {
+        this.reviewId = reviewId;
     }
 
     public String getUsername() {

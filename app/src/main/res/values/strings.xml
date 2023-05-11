@@ -57,20 +57,23 @@
     <string name="write_review_message_1">시술은 만족스러우셨나요?</string>
     <string name="write_review_massage_2">시술에 대한 별점을 매겨주세요</string>
     <string name="write_review_massage_3">최소 5자, 최대 200자 사이로 작성해주세요</string>
-    <string name="write_review_submit">등록하기</string>
+    <string name="write_review_submit">리뷰 작성하기</string>
     <string name="write_review_message_4">• 헤어스타일명</string>
     <string name="write_review_message_5">• 사진</string>
     <string name="write_review_message_6">• 내용</string>
 
     <!--    home -->
     <string name="home_icon_notification">home_icon_notification</string>
-    <string name="home_message_1">안녕하세요,</string>
+    <string name="home_message_1">안녕하세요, </string>
     <string name="home_message_2">님!</string>
     <string name="home_message_3">얼굴형 분석에 참여해보세요.</string>
     <string name="home_message_4">AI 얼굴형 분석하러</string>
     <string name="home_message_5">GO!</string>
     <string name="home_message_6">이달의 추천 리뷰</string>
     <string name="home_message_7">님 만을 위한 추천</string>
+    <string name="home_btn_tagFunc">헤어스타일 추천받기</string>
+    <string name="home_btn_faceFuncAgain">얼굴형분석 다시하기</string>
+    <string name="review_monthly_message">님의 리뷰</string>
 
     <string name="xmlDisplay_username">userName</string>
     <string name="message_confirm">확인</string>
