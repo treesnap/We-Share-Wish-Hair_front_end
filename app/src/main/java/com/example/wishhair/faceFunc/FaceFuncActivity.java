@@ -20,6 +20,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.wishhair.FuncLoading;
 import com.example.wishhair.R;
 
 import java.io.FileNotFoundException;
@@ -33,7 +34,7 @@ public class FaceFuncActivity extends AppCompatActivity {
     private int selectImageView;
     private final List<String> imagePaths = new ArrayList<>();
 
-    private FaceFuncLoading loading;
+    private FuncLoading loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class FaceFuncActivity extends AppCompatActivity {
             setImageView(userImage4, 3);
         });
 
-        loading = new FaceFuncLoading(this);
+        loading = new FuncLoading(this);
         loading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         Button btn_submit = findViewById(R.id.func_btn_submit);
@@ -99,15 +100,15 @@ public class FaceFuncActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityResult.launch(intent);
-        Log.d("image List", imagePaths.toString());
+//        배경 남아서 못생겨지는거 임시방편
+        imageView.setBackground(null);
     }
 
     // TODO 사진 크기별로 이상하게 들어감
-//      사진 넣었을 때 배경이 남아서 못생겨짐
 //      이미지 uri list 에 넣어서 서버로 보내야함
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
+            new ActivityResultCallback<>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {

@@ -86,7 +86,33 @@
     <string name="faceResult_message_3">을 위한 추천 헤어스타일</string>
     <string name="faceResult_btn_finish">얼굴형 분석 끝내기</string>
     <string name="loading_message">AI가 얼굴형을 분석하고 있어요</string>
+
+    <!--    tag func -->
     <string name="tagFunc_title">헤어스타일 추천</string>
     <string name="tagFunc_message1">• 머리카락 기장</string>
+    <string name="tagFunc_message2">• 펌 유무</string>
+    <string name="tagFunc_message3">• 이미지</string>
+    <string name="tagFunc_btn_submit">헤어스타일 추천받기</string>
+
+    <string name="tagResult_btn_finish">헤어스타일 추천 종료</string>
+    <string name="tagResult_title">태그를 반영한 추천 헤어스타일</string>
+
+    <string name="tag_length_long">긴</string>
+    <string name="tag_length_middle">중간</string>
+    <string name="tag_length_short">짧은</string>
+    <string name="tag_perm_O">펌 O</string>
+    <string name="tag_perm_X">펌 X</string>
+    <string name="tag_image_cute">귀여운</string>
+    <string name="tag_image_upstage">도도한</string>
+    <string name="tag_image_neat">깔끔한</string>
+    <string name="tag_image_common">무난한</string>
+    <string name="tag_image_light">가벼운</string>
+    <string name="tag_image_heavy">무거운</string>
+    <string name="tag_image_cool">시원한</string>
+    <string name="tag_image_voluminous">볼륨있는</string>
+    <string name="tag_image_trendy">트렌디한</string>
+    <string name="tag_image_formal">포멀한</string>
+    <string name="tag_image_manly">남성적인</string>
+    <string name="tag_image_soft">부드러운</string>
 
 </resources>
