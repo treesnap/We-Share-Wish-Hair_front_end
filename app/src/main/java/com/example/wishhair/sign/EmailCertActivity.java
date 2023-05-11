@@ -119,6 +119,7 @@ public class EmailCertActivity extends AppCompatActivity {
 
         }, error -> {
             String message = getErrorMessage(error);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             Log.e("send error message", message);
         }) {
             @Override
