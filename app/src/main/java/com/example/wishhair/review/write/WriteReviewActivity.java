@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -64,9 +65,8 @@ public class WriteReviewActivity extends AppCompatActivity {
         CustomTokenHandler customTokenHandler = new CustomTokenHandler(this);
         String accessToken = customTokenHandler.getAccessToken();
 //        back
-        btn_back = findViewById(R.id.toolbar_btn_back);
+        btn_back = findViewById(R.id.write_review_btn_back);
         btn_back.setOnClickListener(view -> finish());
-
 //         hair Style info
         hairStyleSpinner = findViewById(R.id.write_review_spinner_hairStyle);
         getHairStyles(accessToken);
