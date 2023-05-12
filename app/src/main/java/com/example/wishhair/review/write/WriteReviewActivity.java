@@ -13,6 +13,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,26 +22,38 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.wishhair.CustomTokenHandler;
 import com.example.wishhair.R;
+import com.example.wishhair.sign.UrlConst;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class WriteReviewActivity extends AppCompatActivity {
     private static final String TAG = "WriteReviewActivity";
 
     private Button btn_addPicture, btn_back, btn_submit;
     private EditText editText_content;
+    private RatingBar ratingBar;
+
+    private final HashMap<Integer, String> hairStyles = new HashMap<>();
+    private ArrayAdapter<String> spinnerAdapter;
+    private Spinner hairStyleSpinner;
 
     private RecyclerView recyclerView;
     private WriteReviewAdapter writeReviewAdapter;
-
-    private final ArrayList<Uri> items = new ArrayList<>();
-
-    private RatingBar ratingBar;
-
     private final WriteRequestData writeRequestData = new WriteRequestData();
 
+    private final ArrayList<Uri> items = new ArrayList<>();
     private final ArrayList<String> itemPaths = new ArrayList<>();
 
     @Override
@@ -54,25 +68,35 @@ public class WriteReviewActivity extends AppCompatActivity {
         btn_back.setOnClickListener(view -> finish());
 
 //         hair Style info
-//        #TODO hair style info 받아오기
-        writeRequestData.setHairStyleId("10");
+        hairStyleSpinner = findViewById(R.id.write_review_spinner_hairStyle);
+        getHairStyles(accessToken);
 
 //        setHairStyle
-        int cntStyle = 10;
-        String[] hairStyles = {"물결펌", "물결펌", "물결펌", "물결펌", "물결펌", "물결펌"};
+        hairStyleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedName = parent.getItemAtPosition(position).toString();
 
-        Spinner hairStyleSpinner = findViewById(R.id.write_review_spinner_hairStyle);
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, hairStyles);
-        hairStyleSpinner.setAdapter(spinnerAdapter);
+                int selectedId = -1;
+                for (Map.Entry<Integer, String> entry : hairStyles.entrySet()) {
+                    if (entry.getValue().equals(selectedName)) {
+                        selectedId = entry.getKey();
+                        break;
+                    }
+                }
+                writeRequestData.setHairStyleId(selectedId);
+            }
 
-
-        recyclerView = findViewById(R.id.write_review_picture_recyclerView);
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
 
 //        RatingBar
         ratingBar = findViewById(R.id.write_review_ratingBar);
         ratingBar.setOnRatingBarChangeListener((ratingBar, choice, fromUser) -> writeRequestData.setRating(choice));
 
 //        addPicture
+        recyclerView = findViewById(R.id.write_review_picture_recyclerView);
         btn_addPicture = findViewById(R.id.write_review_addPicture);
         btn_addPicture.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
@@ -138,8 +162,7 @@ public class WriteReviewActivity extends AppCompatActivity {
         }
     }
 
-    private String getRealPathFromUri(Uri uri)
-    {
+    private String getRealPathFromUri(Uri uri) {
         String[] proj=  {MediaStore.Images.Media.DATA};
         CursorLoader cursorLoader = new CursorLoader(this,uri,proj,null,null,null);
         Cursor cursor = cursorLoader.loadInBackground();
@@ -149,6 +172,35 @@ public class WriteReviewActivity extends AppCompatActivity {
         String url = cursor.getString(columnIndex);
         cursor.close();
         return  url;
+    }
+
+    private void getHairStyles(String accessToken) {
+        String hairStylesUrl = UrlConst.URL + "/api/hair_style";
+        JsonObjectRequest hairStylesRequest = new JsonObjectRequest(Request.Method.GET, hairStylesUrl, null, response -> {
+            try {
+                JSONArray array = response.getJSONArray("result");
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject object = array.getJSONObject(i);
+                    Integer hairStyleId = object.getInt("hairStyleId");
+                    String hairStyleName = object.getString("hairStyleName");
+
+                    hairStyles.put(hairStyleId, hairStyleName);
+                }
+                spinnerAdapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, new ArrayList<>(hairStyles.values()));
+                hairStyleSpinner.setAdapter(spinnerAdapter);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }, error -> Log.e("hairStyleRequteError", error.toString())) { @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+                return params;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(hairStylesRequest);
     }
 
 }

@@ -44,10 +44,10 @@ public class Retrofit2MultipartUploader {
         this.context = context;
     }
 
-    public void uploadFiles(String hairStyleId, String score, String contents, ArrayList<String> filePaths, String accessToken) {
+    public void uploadFiles(int hairStyleId, String score, String contents, ArrayList<String> filePaths, String accessToken) {
         Log.d("requestData", hairStyleId + " / " + score + " / " + contents);
         Log.d("requestDataPhotos", filePaths.toString());
-        RequestBody hairIdBody = RequestBody.create(MediaType.parse("text/plain"), hairStyleId);
+        RequestBody hairIdBody = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(hairStyleId));
         RequestBody scoreBody = RequestBody.create(MediaType.parse("text/plain"), score);
         RequestBody contentsBody = RequestBody.create(MediaType.parse("text/plain"), contents);
 
@@ -72,10 +72,10 @@ public class Retrofit2MultipartUploader {
         }
 
         Call<ResponseBody> call = api.uploadFiles("bearer" + accessToken, parts, requestMap);
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                ((Activity)context).finish();
+                ((Activity) context).finish();
             }
 
             @Override
