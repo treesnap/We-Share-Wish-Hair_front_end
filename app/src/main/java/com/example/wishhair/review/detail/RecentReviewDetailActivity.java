@@ -48,6 +48,7 @@ public class RecentReviewDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.review_detail_activity_recent);
 
+//        #TODO : 서버에 좋아요 했다는 정보 전달
         btn_like = findViewById(R.id.review_detail_like);
         btn_like.setOnClickListener(view -> {
             isLike = !isLike;
