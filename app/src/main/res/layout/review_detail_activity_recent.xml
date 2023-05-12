@@ -171,11 +171,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/review_detail_btn_like"
+                <ImageView
+                    android:id="@+id/review_detail_like"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/heart_fill" />
+                    android:src="@drawable/heart_fill" />
                 <TextView
                     android:id="@+id/review_detail_tv_likes"
                     android:layout_width="wrap_content"
