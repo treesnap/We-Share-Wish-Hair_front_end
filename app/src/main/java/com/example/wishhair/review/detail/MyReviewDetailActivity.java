@@ -15,6 +15,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.wishhair.R;
+import com.example.wishhair.review.ReviewModifyActivity;
 
 import java.util.ArrayList;
 
@@ -87,7 +88,9 @@ public class MyReviewDetailActivity extends AppCompatActivity {
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_detail_modify:
-                Log.d("menu selectd", "modify");
+                Intent intent = new Intent(MyReviewDetailActivity.this, ReviewModifyActivity.class);
+                startActivity(intent);
+
                 return true;
             case R.id.menu_detail_delete:
                 Log.d("menu selectd", "delete");

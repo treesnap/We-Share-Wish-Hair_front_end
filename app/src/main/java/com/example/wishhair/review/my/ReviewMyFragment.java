@@ -65,23 +65,7 @@ public class ReviewMyFragment extends Fragment {
         RecyclerView myRecyclerView = v.findViewById(R.id.review_my_recyclerView);
         myReviewItems = new ArrayList<>();
 
-        //===============================dummy data===============================
-        ArrayList<String> images = new ArrayList<>();
-        images.add("https://wswh-storage.kr.object.ncloudstorage.com/d3f61f7f-f283-4867-a98d-a4e20ed3ea46.jpg");
-        images.add("https://wswh-storage.kr.object.ncloudstorage.com/d3f61f7f-f283-4867-a98d-a4e20ed3ea46.jpg");
-        for (int i = 0; i < 4; i++) {
-            ArrayList<String> tempTags = new ArrayList<>();
-            for (int j = 0; j < 4; j++) {
-                tempTags.add("#tag ");
-            }
-            tempTags.add("tags");
-            ReviewItem newItem = new ReviewItem(i, images, "무슨무슨" + "펌", tempTags,
-                    "is a root vegetable, typically orange in color, though purple, black, red, white, and yellow cultivars exist,[2][3][4] all of which are domesticated forms of the wild carrot, Daucus carota, native to Europe and Southwestern Asia. The plant probably originated in Persia and was originally cultivated for its leaves and seeds. The most commonly eaten part of the plant is the taproot, although the stems and leaves are also eaten. The domestic carrot has been selectively bred for its enlarged, more palatable, less woody-textured taproot.",
-                    "3.4", 500, "22.03.12", true);
-            myReviewItems.add(newItem);
-        }
-
-        myReviewAdapter = new MyReviewAdapter(myReviewItems);
+        myReviewAdapter = new MyReviewAdapter(myReviewItems, requireContext());
         myRecyclerView.setAdapter(myReviewAdapter);
 
 //        layout manager
