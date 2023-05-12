@@ -57,7 +57,7 @@ public class MyReviewAdapter extends RecyclerView.Adapter<MyReviewAdapter.ViewHo
         holder.hairStyle.setText(item.getHairStyleName());
         StringBuilder tags = new StringBuilder();
         for (int i = 0; i < item.getTags().size(); i++) {
-            tags.append(item.getTags().get(i));
+            tags.append("#").append(item.getTags().get(i)).append(" ");
         }
         holder.tags.setText(tags);
         holder.grade.setText(item.getScore());
