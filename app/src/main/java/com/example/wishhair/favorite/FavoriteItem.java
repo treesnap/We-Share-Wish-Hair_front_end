@@ -4,7 +4,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class FavoriteItem {
-    ImageView FavoritePicture;
+    String FavoritePicture;
     String FavoriteGrade, FavoriteHeartcount, FavoriteStyleName;
     int FavoriteStyleId;
     String[] FavoriteHashtags;
@@ -16,11 +16,11 @@ public class FavoriteItem {
 //    }
     public FavoriteItem() {}
 
-    public ImageView getFavoritePicture() {
+    public String getFavoritePicture() {
         return FavoritePicture;
     }
 
-    public void setFavoritePicture(ImageView FavoritePicture) {
+    public void setFavoritePicture(String FavoritePicture) {
         FavoritePicture = FavoritePicture;
     }
 

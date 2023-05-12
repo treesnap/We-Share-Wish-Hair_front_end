@@ -127,7 +127,7 @@ public class FavoriteFragment extends Fragment {
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new FavoriteAdapter();
+        adapter = new FavoriteAdapter(getContext());
 
         adapter.setOnItemClickListener(new FavoriteAdapter.OnItemClickListener() {
             @Override
@@ -163,7 +163,10 @@ public class FavoriteFragment extends Fragment {
                         JSONObject object = jsonArray.getJSONObject(i);
                         item.setFavoriteStyleName(object.getString("name"));
                         item.setFavoriteStyleId(object.getInt("hairStyleId"));
-                        Log.i("stylename response test", String.valueOf(object.getInt("hairStyleId")));
+                        JSONArray ImageUrls = object.getJSONArray("photos");
+                        JSONObject ImageUrl = ImageUrls.getJSONObject(0);
+                        item.setFavoritePicture(ImageUrl.getString("storeUrl"));
+
                         adapter.addItem(item);
                         adapter.notifyDataSetChanged();
                     }

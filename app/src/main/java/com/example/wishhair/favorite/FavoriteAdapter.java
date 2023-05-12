@@ -1,5 +1,6 @@
 package com.example.wishhair.favorite;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.wishhair.MyPage.items.PointItem;
 import com.example.wishhair.R;
 
@@ -16,9 +18,12 @@ import java.util.ArrayList;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
     private ArrayList<FavoriteItem> FavoriteItems = new ArrayList<FavoriteItem>();
-
+    Context context;
     public interface OnItemClickListener {
         void onItemClicked(int position, int id, String stylename, String[] tags);
+    }
+    public FavoriteAdapter(Context context) {
+        this.context = context;
     }
 
     private OnItemClickListener itemClickListener;
@@ -50,6 +55,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             return FavoriteHashtags;
         }
 
+
         ViewHolder(View view) {
             super(view);
 
@@ -73,6 +79,9 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                 }
             });
         }
+        public void bindContentImage(String imageUrl) {
+            Glide.with(context).load(imageUrl).into(FavoriteStyleImage);
+        };
     }
 
     @NonNull
@@ -89,9 +98,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         FavoriteItem item = FavoriteItems.get(position);
         holder.FavoriteStyleName.setText(item.getFavoriteStyleName());
         holder.FavoriteStyleId = item.getFavoriteStyleId();
+
+        if (item.getFavoritePicture() != null) {
+            holder.bindContentImage(item.getFavoritePicture());
+        }
 //        holder.FavoriteHashtags = item.getFavoriteHashtags();
 //        holder.FavoriteHeartCount.setText(item.getFavoriteHeartcount());
-
     }
 
     @Override
