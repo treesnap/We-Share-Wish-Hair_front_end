@@ -114,9 +114,12 @@ public class WriteReviewActivity extends AppCompatActivity {
         Retrofit2MultipartUploader uploader = new Retrofit2MultipartUploader(this);
         btn_submit = findViewById(R.id.write_review_submit);
         btn_submit.setOnClickListener(view -> {
-
             String contents = String.valueOf(editText_content.getText());
             writeRequestData.setContent(contents);
+
+            for (int i = 0; i < items.size(); i++) {
+                itemPaths.add(getRealPathFromUri(items.get(i)));
+            }
             uploader.uploadFiles(writeRequestData.getHairStyleId(), writeRequestData.getRating(), writeRequestData.getContent(), itemPaths, accessToken);
         });
 
@@ -136,8 +139,6 @@ public class WriteReviewActivity extends AppCompatActivity {
                 writeReviewAdapter = new WriteReviewAdapter(items, getApplicationContext());
                 recyclerView.setAdapter(writeReviewAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, true));
-
-                itemPaths.add(getRealPathFromUri(imageUri));
             } else { // 이미지 여러장
                 ClipData clipData = data.getClipData();
 //                이미지 선택 갯수 제한
@@ -149,7 +150,6 @@ public class WriteReviewActivity extends AppCompatActivity {
                         Uri imageUri = clipData.getItemAt(i).getUri();
                         try {
                             items.add(imageUri);
-                            itemPaths.add(getRealPathFromUri(imageUri));
                         } catch (Exception e) {
                             Log.e(TAG, "file select error", e);
                         }

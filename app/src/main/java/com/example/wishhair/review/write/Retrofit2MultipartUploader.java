@@ -75,7 +75,13 @@ public class Retrofit2MultipartUploader {
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                ((Activity) context).finish();
+                if (response.isSuccessful()) {
+                    ((Activity) context).finish();
+                }
+                else {
+                    Log.d("write error", response.toString());
+                }
+
             }
 
             @Override
