@@ -1,5 +1,6 @@
 package com.example.wishhair.review.detail;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -13,17 +14,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.wishhair.CustomTokenHandler;
 import com.example.wishhair.R;
 import com.example.wishhair.review.ReviewItem;
 import com.example.wishhair.review.ReviewModifyActivity;
+import com.example.wishhair.sign.UrlConst;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import me.relex.circleindicator.CircleIndicator3;
 
 public class MyReviewDetailActivity extends AppCompatActivity {
 
+    private String accessToken;
     private TextView tv_hairStyleName, tv_tags, tv_score, tv_likes, tv_date, tv_content;
 
 
@@ -45,6 +57,11 @@ public class MyReviewDetailActivity extends AppCompatActivity {
 //        init
         getIntentData();
         initContents();
+
+        //        accessToken
+        CustomTokenHandler customTokenHandler = new CustomTokenHandler(this);
+        accessToken = customTokenHandler.getAccessToken();
+
 
     }
 
@@ -112,10 +129,32 @@ public class MyReviewDetailActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.menu_detail_delete:
-                Log.d("menu selectd", "delete");
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("정말로 삭제하시겠습니까?")
+                        .setPositiveButton("예", (dialogInterface, i) -> {
+                            finish();
+                            reviewDeleteRequest(accessToken);
+                        })
+                        .setNegativeButton("아니요", (dialogInterface, i) -> {}).show();
                 return true;
             default:
                 return false;
         }
+    }
+
+    private void reviewDeleteRequest(String accessToken) {
+        String deleteUrl = UrlConst.URL + "/api/review/" + reviewId;
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, deleteUrl, null,
+                response -> Toast.makeText(this, "리뷰가 삭제되었습니다.", Toast.LENGTH_SHORT).show(),
+                error -> Log.e("deleteError", error.toString())){ @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+                return params;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
     }
 }
