@@ -9,6 +9,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
@@ -16,7 +17,7 @@ import retrofit2.http.Query;
 
 public interface ModifyApi {
     @Multipart
-    @POST("/api/review")
+    @PATCH("/api/review")
     Call<ResponseBody> modifyFiles(
             @Query("reviewId") int reviewId,
             @Header("Authorization") String token,

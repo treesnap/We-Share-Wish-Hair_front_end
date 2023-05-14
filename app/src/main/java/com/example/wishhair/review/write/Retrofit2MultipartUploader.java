@@ -94,8 +94,7 @@ public class Retrofit2MultipartUploader {
     }
 
     public void modifyFiles(int hairStyleId, String score, String contents, ArrayList<String> filePaths, String accessToken, int reviewId) {
-        Log.d("requestData", hairStyleId + " / " + score + " / " + contents);
-        Log.d("requestDataPhotos", filePaths.toString());
+        Log.d("ModifyData", hairStyleId + " / " + score + " / " + contents + "/ reviewId: " + reviewId);
         RequestBody hairIdBody = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(hairStyleId));
         RequestBody scoreBody = RequestBody.create(MediaType.parse("text/plain"), score);
         RequestBody contentsBody = RequestBody.create(MediaType.parse("text/plain"), contents);

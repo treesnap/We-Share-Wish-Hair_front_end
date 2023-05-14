@@ -185,7 +185,7 @@ public class ReviewModifyActivity extends AppCompatActivity {
 
                 for (Map.Entry<Integer, String> entry : hairStyles.entrySet()) {
                     if (entry.getValue().equals(reviewItem.getHairStyleName())) {
-                        writeRequestData.setReviewId(entry.getKey());
+                        writeRequestData.setHairStyleId(entry.getKey());
                         break;
                     }
                 }

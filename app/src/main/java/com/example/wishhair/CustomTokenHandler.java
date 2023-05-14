@@ -3,7 +3,6 @@ package com.example.wishhair;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 public class CustomTokenHandler {
     Activity activity;
@@ -15,9 +14,6 @@ public class CustomTokenHandler {
     }
 
     public String getAccessToken() {
-        String accessToken = sharedPreferences.getString("accessToken", "fail to get accessToken");
-        Log.d("getAccessToken", accessToken);
-
-        return accessToken;
+        return sharedPreferences.getString("accessToken", "fail to get accessToken");
     }
 }
