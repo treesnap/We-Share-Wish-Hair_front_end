@@ -192,7 +192,7 @@ public class WriteReviewActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-        }, error -> Log.e("hairStyleRequteError", error.toString())) { @Override
+        }, error -> Log.e("hairStyleRequestError", error.toString())) { @Override
             public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap();
                 params.put("Authorization", "bearer" + accessToken);

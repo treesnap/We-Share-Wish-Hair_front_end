@@ -15,6 +15,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.wishhair.R;
+import com.example.wishhair.review.ReviewItem;
 import com.example.wishhair.review.ReviewModifyActivity;
 
 import java.util.ArrayList;
@@ -23,9 +24,16 @@ import me.relex.circleindicator.CircleIndicator3;
 
 public class MyReviewDetailActivity extends AppCompatActivity {
 
-    private TextView hairStyleName, tags, score, likes, date, content;
-    private int reviewId;
+    private TextView tv_hairStyleName, tv_tags, tv_score, tv_likes, tv_date, tv_content;
+
+
+    private int reviewId, likes;
     private boolean isWriter;
+    private String hairStyleName, score, date, content;
+    private ArrayList<String> hashTags, imageUrls;
+
+    private ReviewItem myReviewDetailItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,45 +43,55 @@ public class MyReviewDetailActivity extends AppCompatActivity {
         btn_back.setOnClickListener(view -> finish());
 
 //        init
+        getIntentData();
         initContents();
 
     }
 
     private void initContents() {
-        reviewId = getIntent().getIntExtra("reviewId", 0);
-        isWriter = getIntent().getBooleanExtra("isWriter", false);
-
         //        image
         ViewPager2 sliderViewPager = findViewById(R.id.review_detail_my_viewPager);
         sliderViewPager.setOffscreenPageLimit(1);
-        ArrayList<String> imageUrls = getIntent().getStringArrayListExtra("imageUrls");
-        sliderViewPager.setAdapter(new ImageSliderAdapter(this, imageUrls));
+                sliderViewPager.setAdapter(new ImageSliderAdapter(this, imageUrls));
 
         CircleIndicator3 circleIndicator = findViewById(R.id.review_detail_my_indicator);
         circleIndicator.setViewPager(sliderViewPager);
 
-        hairStyleName = findViewById(R.id.review_detail_my_hairStyleName);
-        hairStyleName.setText(getIntent().getStringExtra("hairStyleName"));
+        tv_hairStyleName = findViewById(R.id.review_detail_my_hairStyleName);
+        tv_hairStyleName.setText(hairStyleName);
 
-        tags = findViewById(R.id.review_detail_my_tags);
-        ArrayList<String> hashTags = getIntent().getStringArrayListExtra("tags");
+        tv_tags = findViewById(R.id.review_detail_my_tags);
         StringBuilder stringTags = new StringBuilder();
         for (int i = 0; i < hashTags.size(); i++) {
             stringTags.append("#").append(hashTags.get(i)).append(" ");
         }
-        tags.setText(stringTags);
+        tv_tags.setText(stringTags);
 
-        score = findViewById(R.id.review_detail_my_tv_score);
-        score.setText(getIntent().getStringExtra("score"));
+        tv_score = findViewById(R.id.review_detail_my_tv_score);
+        tv_score.setText(score);
 
-        likes = findViewById(R.id.review_detail_my_tv_likes);
-        likes.setText(String.valueOf(getIntent().getIntExtra("likes", 0)));
+        tv_likes = findViewById(R.id.review_detail_my_tv_likes);
+        tv_likes.setText(String.valueOf(likes));
 
-        date = findViewById(R.id.review_detail_my_tv_date);
-        date.setText(getIntent().getStringExtra("date"));
+        tv_date = findViewById(R.id.review_detail_my_tv_date);
+        tv_date.setText(date);
 
-        content = findViewById(R.id.review_detail_my_tv_content);
-        content.setText(getIntent().getStringExtra("content"));
+        tv_content = findViewById(R.id.review_detail_my_tv_content);
+        tv_content.setText(content);
+    }
+
+    private void getIntentData() {
+        reviewId = getIntent().getIntExtra("reviewId", 0);
+        hairStyleName = getIntent().getStringExtra("hairStyleName");
+        imageUrls = getIntent().getStringArrayListExtra("imageUrls");
+        hashTags = getIntent().getStringArrayListExtra("tags");
+        content = getIntent().getStringExtra("content");
+        score = getIntent().getStringExtra("score");
+        likes = getIntent().getIntExtra("likes", 0);
+        date = getIntent().getStringExtra("date");
+        isWriter = getIntent().getBooleanExtra("isWriter", false);
+
+        myReviewDetailItem = new ReviewItem(reviewId, imageUrls, hairStyleName, hashTags, content, score, likes, date, isWriter);
     }
 
     public void showMenu(View view) {
@@ -89,8 +107,9 @@ public class MyReviewDetailActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_detail_modify:
                 Intent intent = new Intent(MyReviewDetailActivity.this, ReviewModifyActivity.class);
+                intent.putExtra("reviewItem", myReviewDetailItem);
                 startActivity(intent);
-
+                finish();
                 return true;
             case R.id.menu_detail_delete:
                 Log.d("menu selectd", "delete");

@@ -1,12 +1,14 @@
 package com.example.wishhair.review;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class ReviewItem {
+public class ReviewItem implements Serializable {
 
     // common
     private int reviewId;
@@ -22,11 +24,11 @@ public class ReviewItem {
     private String userNickName;
     private boolean isHeart;
 
-    private boolean iswriter;
+    private boolean isWriter;
 
     public ReviewItem() {}
 
-    public ReviewItem(int reviewId, ArrayList<String> imageUrls, String hairStyleName, ArrayList<String> tags, String contents, String score, int likes, String createdDate, boolean iswriter) {
+    public ReviewItem(int reviewId, ArrayList<String> imageUrls, String hairStyleName, ArrayList<String> tags, String contents, String score, int likes, String createdDate, boolean isWriter) {
         this.reviewId = reviewId;
         this.imageUrls = imageUrls;
         this.hairStyleName = hairStyleName;
@@ -35,7 +37,7 @@ public class ReviewItem {
         this.likes = likes;
         this.createdDate = createdDate;
         this.content = contents;
-        this.iswriter = iswriter;
+        this.isWriter = isWriter;
     }
 
     public int getReviewId() {
@@ -132,10 +134,34 @@ public class ReviewItem {
     }
 
     public boolean isWriter() {
-        return iswriter;
+        return isWriter;
     }
 
     public void setIsWriter(boolean writer) {
-        this.iswriter = writer;
+        this.isWriter = writer;
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.writeObject(reviewId);
+        out.writeObject(hairStyleName);
+        out.writeObject(tags);
+        out.writeObject(score);
+        out.writeObject(likes);
+        out.writeObject(createdDate);
+        out.writeObject(content);
+        out.writeObject(imageUrls);
+        out.writeObject(isWriter);
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        reviewId = (int) in.readObject();
+        hairStyleName = (String) in.readObject();
+        tags = (ArrayList<String>) in.readObject();
+        score = (String) in.readObject();
+        likes = (int) in.readObject();
+        createdDate = (String) in.readObject();
+        content = (String) in.readObject();
+        imageUrls = (ArrayList<String>) in.readObject();
+        isWriter = (boolean) in.readObject();
     }
 }

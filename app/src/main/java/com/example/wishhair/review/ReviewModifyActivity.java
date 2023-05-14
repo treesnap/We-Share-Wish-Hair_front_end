@@ -13,21 +13,31 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.wishhair.CustomTokenHandler;
 import com.example.wishhair.R;
 import com.example.wishhair.review.write.Retrofit2MultipartUploader;
 import com.example.wishhair.review.write.WriteRequestData;
 import com.example.wishhair.review.write.WriteReviewAdapter;
+import com.example.wishhair.sign.UrlConst;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReviewModifyActivity extends AppCompatActivity {
 
@@ -36,7 +46,6 @@ public class ReviewModifyActivity extends AppCompatActivity {
     private RatingBar ratingBar;
 
     private TextView hairStyleName;
-    private int hairStyleId;
 
     private RecyclerView recyclerView;
     private WriteReviewAdapter writeReviewAdapter;
@@ -45,6 +54,9 @@ public class ReviewModifyActivity extends AppCompatActivity {
     private final ArrayList<Uri> items = new ArrayList<>();
     private final ArrayList<String> itemPaths = new ArrayList<>();
 
+    private ReviewItem reviewItem;
+    private final HashMap<Integer, String> hairStyles = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,20 +64,34 @@ public class ReviewModifyActivity extends AppCompatActivity {
 //        accessToken
         CustomTokenHandler customTokenHandler = new CustomTokenHandler(this);
         String accessToken = customTokenHandler.getAccessToken();
+
+        reviewItem = (ReviewItem) getIntent().getSerializableExtra("reviewItem");
+
+        writeRequestData.setReviewId(reviewItem.getReviewId());
 //        back
         btn_back = findViewById(R.id.modify_review_btn_back);
         btn_back.setOnClickListener(view -> finish());
 
 //         hair Style
         hairStyleName = findViewById(R.id.modify_review_hairStyleName);
-        hairStyleId = 0;
+        hairStyleName.setText(reviewItem.getHairStyleName());
+
+        getHairStyles(accessToken);
 
 //        RatingBar
         ratingBar = findViewById(R.id.modify_review_ratingBar);
+        ratingBar.setRating(Float.parseFloat(reviewItem.getScore()));
+        writeRequestData.setRating(Float.parseFloat(reviewItem.getScore()));
         ratingBar.setOnRatingBarChangeListener((ratingBar, choice, fromUser) -> writeRequestData.setRating(choice));
 
-//        addPicture
+//        picture
         recyclerView = findViewById(R.id.modify_review_picture_recyclerView);
+
+        writeReviewAdapter = new WriteReviewAdapter(items, getApplicationContext());
+        recyclerView.setAdapter(writeReviewAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, true));
+
+//        addPicture
         btn_addPicture = findViewById(R.id.modify_review_addPicture);
         btn_addPicture.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
@@ -78,20 +104,20 @@ public class ReviewModifyActivity extends AppCompatActivity {
 
 //        content
         editText_content = findViewById(R.id.modify_review_content);
+        editText_content.setText(reviewItem.getContent());
 
 //        submit
         Retrofit2MultipartUploader uploader = new Retrofit2MultipartUploader(this);
         btn_submit = findViewById(R.id.modify_review_submit);
         btn_submit.setOnClickListener(view -> {
+            for (int i = 0; i < items.size(); i++) {
+                itemPaths.add(getRealPathFromUri(items.get(i)));
+            }
 
             String contents = String.valueOf(editText_content.getText());
             writeRequestData.setContent(contents);
-            uploader.uploadFiles(writeRequestData.getHairStyleId(), writeRequestData.getRating(), writeRequestData.getContent(), itemPaths, accessToken);
+            uploader.modifyFiles(writeRequestData.getHairStyleId(), writeRequestData.getRating(), writeRequestData.getContent(), itemPaths, accessToken, writeRequestData.getReviewId());
         });
-
-    }
-
-    private void reviewRequest(String accessToken) {
 
     }
 
@@ -109,8 +135,6 @@ public class ReviewModifyActivity extends AppCompatActivity {
                 writeReviewAdapter = new WriteReviewAdapter(items, getApplicationContext());
                 recyclerView.setAdapter(writeReviewAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, true));
-
-                itemPaths.add(getRealPathFromUri(imageUri));
             } else { // 이미지 여러장
                 ClipData clipData = data.getClipData();
 //                이미지 선택 갯수 제한
@@ -122,7 +146,6 @@ public class ReviewModifyActivity extends AppCompatActivity {
                         Uri imageUri = clipData.getItemAt(i).getUri();
                         try {
                             items.add(imageUri);
-                            itemPaths.add(getRealPathFromUri(imageUri));
                         } catch (Exception e) {
                             Log.e("modify photo error", "file select error", e);
                         }
@@ -145,5 +168,39 @@ public class ReviewModifyActivity extends AppCompatActivity {
         String url = cursor.getString(columnIndex);
         cursor.close();
         return  url;
+    }
+
+    private void getHairStyles(String accessToken) {
+        String hairStylesUrl = UrlConst.URL + "/api/hair_style";
+        JsonObjectRequest hairStylesRequest = new JsonObjectRequest(Request.Method.GET, hairStylesUrl, null, response -> {
+            try {
+                JSONArray array = response.getJSONArray("result");
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject object = array.getJSONObject(i);
+                    Integer hairStyleId = object.getInt("hairStyleId");
+                    String hairStyleName = object.getString("hairStyleName");
+
+                    hairStyles.put(hairStyleId, hairStyleName);
+                }
+
+                for (Map.Entry<Integer, String> entry : hairStyles.entrySet()) {
+                    if (entry.getValue().equals(reviewItem.getHairStyleName())) {
+                        writeRequestData.setReviewId(entry.getKey());
+                        break;
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }, error -> Log.e("hairStyleRequestError", error.toString())) { @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+                return params;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(hairStylesRequest);
     }
 }
