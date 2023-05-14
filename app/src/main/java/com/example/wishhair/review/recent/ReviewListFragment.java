@@ -59,14 +59,14 @@ public class ReviewListFragment extends Fragment {
     private RadioGroup filter;
     private RadioButton filter_whole, filter_man, filter_woman;
     private RecyclerView recentRecyclerView;
-    RecentAdapter recentAdapter;
+    private RecentAdapter recentAdapter;
 
     //    sort
     private static String sort_selected = null;
     private static final String[] sortItems = {"최신 순", "오래된 순", "좋아요 순"};
 
 //    request
-    String accessToken;
+    private String accessToken;
 
     @Override
     public void onResume() {
@@ -117,6 +117,7 @@ public class ReviewListFragment extends Fragment {
         recentAdapter.setOnItemClickListener((v1, position) -> {
             Intent intent = new Intent(v1.getContext(), RecentReviewDetailActivity.class);
             ReviewItem selectedItem = recentReviewItems.get(position);
+            intent.putExtra("reviewId", selectedItem.getReviewId());
             intent.putExtra("userNickname", selectedItem.getUserNickName());
             intent.putExtra("hairStyleName", selectedItem.getHairStyleName());
             intent.putStringArrayListExtra("tags", selectedItem.getTags());
@@ -144,70 +145,69 @@ public class ReviewListFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     private void reviewListRequest(String accessToken) {
-        final String URL_REVIEWLIST = UrlConst.URL + "/api/review";
+        final String URL_reviewList = UrlConst.URL + "/api/review";
         List<ReviewItem> requestItems = new ArrayList<>();
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_REVIEWLIST, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.d("reviewListRequest", response.toString());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_reviewList, null, response -> {
+            Log.d("reviewListRequest", response.toString());
 //                parse received data
-                String stringResponse = String.valueOf(response);
-                try {
-                    JSONObject jsonObject = new JSONObject(stringResponse);
-                    JSONArray resultArray = jsonObject.getJSONArray("result");
-                    for (int i = 0; i < resultArray.length(); i++) {
-                        ReviewItem receivedData = new ReviewItem();
-                        JSONObject resultObject = resultArray.getJSONObject(i);
+            String stringResponse = String.valueOf(response);
+            try {
+                JSONObject jsonObject = new JSONObject(stringResponse);
+                JSONArray resultArray = jsonObject.getJSONArray("result");
+                for (int i = 0; i < resultArray.length(); i++) {
+                    ReviewItem receivedData = new ReviewItem();
+                    JSONObject resultObject = resultArray.getJSONObject(i);
 //                        Log.d("resultObject", resultObject.toString());
-                        String userNickName = resultObject.getString("userNickname");
-                        String score = resultObject.getString("score");
-                        int likes = resultObject.getInt("likes");
-                        String content = resultObject.getString("contents");
-                        String createDate = resultObject.getString("createdDate");
-                        String hairStyleName = resultObject.getString("hairStyleName");
+                    int reviewId = resultObject.getInt("reviewId");
+                    String userNickName = resultObject.getString("userNickname");
+                    String score = resultObject.getString("score");
+                    int likes = resultObject.getInt("likes");
+                    String content = resultObject.getString("contents");
+                    String createDate = resultObject.getString("createdDate");
+                    String hairStyleName = resultObject.getString("hairStyleName");
 
-                        JSONArray hashTagsArray = resultObject.getJSONArray("hashTags");
-                        ArrayList<String> tags = new ArrayList<>();
-                        for (int j = 0; j < hashTagsArray.length(); j++) {
-                            JSONObject hasTagObject = hashTagsArray.getJSONObject(j);
-                            tags.add(hasTagObject.getString("tag"));
-                        }
-                        receivedData.setTags(tags);
-
-                        receivedData.setUserNickName(userNickName);
-                        receivedData.setScore(score);
-                        receivedData.setLikes(likes);
-                        receivedData.setCreatedDate(createDate);
-                        receivedData.setHairStyleName(hairStyleName);
-                        receivedData.setContent(content);
-
-                        JSONArray photosArray = resultObject.getJSONArray("photos");
-                        ArrayList<String> receivedUrls = new ArrayList<>();
-                        for (int j = 0; j < photosArray.length(); j++) {
-                            JSONObject photoObject = photosArray.getJSONObject(j);
-                            String imageUrl = photoObject.getString("storeUrl");
-
-                            receivedUrls.add(imageUrl);
-                        }
-                        receivedData.setImageUrls(receivedUrls);
-
-                        requestItems.add(receivedData);
+                    JSONArray hashTagsArray = resultObject.getJSONArray("hashTags");
+                    ArrayList<String> tags = new ArrayList<>();
+                    for (int j = 0; j < hashTagsArray.length(); j++) {
+                        JSONObject hasTagObject = hashTagsArray.getJSONObject(j);
+                        tags.add(hasTagObject.getString("tag"));
                     }
+                    receivedData.setTags(tags);
 
-                    JSONObject pagingObject = jsonObject.getJSONObject("paging");
-                    String contentSize = pagingObject.getString("contentSize");
-                    String page = pagingObject.getString("page");
-                    String hasNext = pagingObject.getString("hasNext");
-                    Log.d("paging", contentSize + " " + page + " " + hasNext);
+                    receivedData.setReviewId(reviewId);
+                    receivedData.setUserNickName(userNickName);
+                    receivedData.setScore(score);
+                    receivedData.setLikes(likes);
+                    receivedData.setCreatedDate(createDate);
+                    receivedData.setHairStyleName(hairStyleName);
+                    receivedData.setContent(content);
 
-                    recentReviewItems.clear();
-                    recentReviewItems.addAll(requestItems);
-                    recentAdapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    JSONArray photosArray = resultObject.getJSONArray("photos");
+                    ArrayList<String> receivedUrls = new ArrayList<>();
+                    for (int j = 0; j < photosArray.length(); j++) {
+                        JSONObject photoObject = photosArray.getJSONObject(j);
+                        String imageUrl = photoObject.getString("storeUrl");
+
+                        receivedUrls.add(imageUrl);
+                    }
+                    receivedData.setImageUrls(receivedUrls);
+
+                    requestItems.add(receivedData);
                 }
 
+                JSONObject pagingObject = jsonObject.getJSONObject("paging");
+                String contentSize = pagingObject.getString("contentSize");
+                String page = pagingObject.getString("page");
+                String hasNext = pagingObject.getString("hasNext");
+                Log.d("paging", contentSize + " " + page + " " + hasNext);
+
+                recentReviewItems.clear();
+                recentReviewItems.addAll(requestItems);
+                recentAdapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+
         }, error -> Log.e("reviewList error", error.toString())) { @Override
             public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap();

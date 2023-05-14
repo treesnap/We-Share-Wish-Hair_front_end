@@ -25,7 +25,8 @@ import retrofit2.Retrofit;
 public class Retrofit2MultipartUploader {
 
     private static final String TAG = "Uploader";
-    private final MyApi api;
+    private final NewApi api;
+    private final ModifyApi modifyApi;
     private final Context context;
 
     public Retrofit2MultipartUploader(Context context) {
@@ -40,14 +41,16 @@ public class Retrofit2MultipartUploader {
                 .baseUrl(UrlConst.URL)
                 .client(client)
                 .build();
-        api = retrofit.create(MyApi.class);
+        api = retrofit.create(NewApi.class);
+        modifyApi = retrofit.create(ModifyApi.class);
+
         this.context = context;
     }
 
-    public void uploadFiles(String hairStyleId, String score, String contents, ArrayList<String> filePaths, String accessToken) {
+    public void uploadFiles(int hairStyleId, String score, String contents, ArrayList<String> filePaths, String accessToken) {
         Log.d("requestData", hairStyleId + " / " + score + " / " + contents);
         Log.d("requestDataPhotos", filePaths.toString());
-        RequestBody hairIdBody = RequestBody.create(MediaType.parse("text/plain"), hairStyleId);
+        RequestBody hairIdBody = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(hairStyleId));
         RequestBody scoreBody = RequestBody.create(MediaType.parse("text/plain"), score);
         RequestBody contentsBody = RequestBody.create(MediaType.parse("text/plain"), contents);
 
@@ -72,10 +75,60 @@ public class Retrofit2MultipartUploader {
         }
 
         Call<ResponseBody> call = api.uploadFiles("bearer" + accessToken, parts, requestMap);
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                ((Activity)context).finish();
+                if (response.isSuccessful()) {
+                    ((Activity) context).finish();
+                } else {
+                    Log.d("write error", response.toString());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e(TAG + "fail", t.toString());
+            }
+        });
+    }
+
+    public void modifyFiles(int hairStyleId, String score, String contents, ArrayList<String> filePaths, String accessToken, int reviewId) {
+        Log.d("ModifyData", hairStyleId + " / " + score + " / " + contents + "/ reviewId: " + reviewId);
+        RequestBody hairIdBody = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(hairStyleId));
+        RequestBody scoreBody = RequestBody.create(MediaType.parse("text/plain"), score);
+        RequestBody contentsBody = RequestBody.create(MediaType.parse("text/plain"), contents);
+
+        HashMap<String, RequestBody> requestMap = new HashMap<>();
+        requestMap.put("hairStyleId", hairIdBody);
+        requestMap.put("score", scoreBody);
+        requestMap.put("contents", contentsBody);
+
+        ArrayList<MultipartBody.Part> parts = new ArrayList<>();
+        for (int i = 0; i < filePaths.size(); i++) {
+            // Uri 타입의 파일경로를 가지는 RequestBody 객체 생성
+            File file = new File(filePaths.get(i));
+            RequestBody fileBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+            // 사진 파일 이름
+            String fileName = "select photo" + i + ".jpg";
+            // RequestBody로 Multipart.Part 객체 생성
+            MultipartBody.Part files = MultipartBody.Part.createFormData("files", fileName, fileBody);
+
+            // 추가
+            parts.add(files);
+        }
+
+        Call<ResponseBody> call = modifyApi.modifyFiles(reviewId,"bearer" + accessToken, parts, requestMap);
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    ((Activity) context).finish();
+                } else {
+                    Log.d("write error", response.toString());
+                }
+
             }
 
             @Override

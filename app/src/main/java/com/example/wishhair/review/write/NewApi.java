@@ -13,7 +13,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 
-public interface MyApi {
+public interface NewApi {
     @Multipart
     @POST("/api/review")
     Call<ResponseBody> uploadFiles(

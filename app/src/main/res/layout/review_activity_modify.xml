@@ -2,8 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:hedgehog="http://schemas.android.com/apk/res-auto"
-    tools:context=".review.write.WriteReviewActivity"
+    tools:context=".review.ReviewModifyActivity"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
     <ScrollView
@@ -14,12 +13,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <!--    top bar -->
+            <!--    topBar -->
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize">
                 <Button
-                    android:id="@+id/write_review_btn_back"
+                    android:id="@+id/modify_review_btn_back"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@drawable/back"/>
@@ -27,7 +26,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/write_review_title"
+                    android:text="@string/review_detail_menu_modify"
                     android:textSize="25sp"
                     android:textStyle="bold"
                     android:textColor="@color/default_blue"/>
@@ -41,20 +40,26 @@
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="33dp"
                     android:layout_marginBottom="3dp"
                     android:text="@string/write_review_message_4"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"/>
 
-                <Spinner
-                    android:id="@+id/write_review_spinner_hairStyle"
+                <TextView
+                    android:id="@+id/modify_review_hairStyleName"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_marginTop="5dp"
-                    android:spinnerMode="dialog"
-                    android:background="@drawable/border_spinner_write"/>
+                    android:paddingStart="20dp"
+                    android:background="@drawable/border_sign_text"
+                    tools:text="펌펌펌"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    tools:ignore="RtlSymmetry" />
 
             </LinearLayout>
             <!--    <hr> -->
@@ -83,7 +88,7 @@
                     android:textSize="14sp"
                     android:textColor="@color/black"/>
                 <RatingBar
-                    android:id="@+id/write_review_ratingBar"
+                    android:id="@+id/modify_review_ratingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -115,7 +120,7 @@
                 android:layout_margin="20dp">
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/write_review_addPicture"
+                    android:id="@+id/modify_review_addPicture"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -124,7 +129,7 @@
                     android:contentDescription="@string/App_title_name"/>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/write_review_picture_recyclerView"
+                    android:id="@+id/modify_review_picture_recyclerView"
                     android:layout_weight="2"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -142,7 +147,7 @@
                 android:textColor="@color/black"/>
 
             <EditText
-                android:id="@+id/write_review_content"
+                android:id="@+id/modify_review_content"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_margin="20dp"
@@ -150,12 +155,11 @@
                 android:inputType="textMultiLine"
                 android:hint="@string/write_review_massage_3" />
 
-
         </LinearLayout>
     </ScrollView>
     <!--    submit -->
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/write_review_submit"
+        android:id="@+id/modify_review_submit"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginStart="20dp"

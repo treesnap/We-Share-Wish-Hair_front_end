@@ -1,4 +1,4 @@
-package com.example.wishhair.review.write;
+package com.example.wishhair.review;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,13 +13,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +26,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.CustomTokenHandler;
 import com.example.wishhair.R;
+import com.example.wishhair.review.write.Retrofit2MultipartUploader;
+import com.example.wishhair.review.write.WriteRequestData;
+import com.example.wishhair.review.write.WriteReviewAdapter;
 import com.example.wishhair.sign.UrlConst;
 
 import org.json.JSONArray;
@@ -39,16 +39,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WriteReviewActivity extends AppCompatActivity {
-    private static final String TAG = "WriteReviewActivity";
+public class ReviewModifyActivity extends AppCompatActivity {
 
     private Button btn_addPicture, btn_back, btn_submit;
     private EditText editText_content;
     private RatingBar ratingBar;
 
-    private final HashMap<Integer, String> hairStyles = new HashMap<>();
-    private ArrayAdapter<String> spinnerAdapter;
-    private Spinner hairStyleSpinner;
+    private TextView hairStyleName;
 
     private RecyclerView recyclerView;
     private WriteReviewAdapter writeReviewAdapter;
@@ -57,47 +54,45 @@ public class WriteReviewActivity extends AppCompatActivity {
     private final ArrayList<Uri> items = new ArrayList<>();
     private final ArrayList<String> itemPaths = new ArrayList<>();
 
+    private ReviewItem reviewItem;
+    private final HashMap<Integer, String> hairStyles = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.review_activity_write);
+        setContentView(R.layout.review_activity_modify);
 //        accessToken
         CustomTokenHandler customTokenHandler = new CustomTokenHandler(this);
         String accessToken = customTokenHandler.getAccessToken();
+
+        reviewItem = (ReviewItem) getIntent().getSerializableExtra("reviewItem");
+
+        writeRequestData.setReviewId(reviewItem.getReviewId());
 //        back
-        btn_back = findViewById(R.id.write_review_btn_back);
+        btn_back = findViewById(R.id.modify_review_btn_back);
         btn_back.setOnClickListener(view -> finish());
-//         hair Style info
-        hairStyleSpinner = findViewById(R.id.write_review_spinner_hairStyle);
+
+//         hair Style
+        hairStyleName = findViewById(R.id.modify_review_hairStyleName);
+        hairStyleName.setText(reviewItem.getHairStyleName());
+
         getHairStyles(accessToken);
 
-//        setHairStyle
-        hairStyleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedName = parent.getItemAtPosition(position).toString();
-
-                int selectedId = -1;
-                for (Map.Entry<Integer, String> entry : hairStyles.entrySet()) {
-                    if (entry.getValue().equals(selectedName)) {
-                        selectedId = entry.getKey();
-                        break;
-                    }
-                }
-                writeRequestData.setHairStyleId(selectedId);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
-        });
-
 //        RatingBar
-        ratingBar = findViewById(R.id.write_review_ratingBar);
+        ratingBar = findViewById(R.id.modify_review_ratingBar);
+        ratingBar.setRating(Float.parseFloat(reviewItem.getScore()));
+        writeRequestData.setRating(Float.parseFloat(reviewItem.getScore()));
         ratingBar.setOnRatingBarChangeListener((ratingBar, choice, fromUser) -> writeRequestData.setRating(choice));
 
+//        picture
+        recyclerView = findViewById(R.id.modify_review_picture_recyclerView);
+
+        writeReviewAdapter = new WriteReviewAdapter(items, getApplicationContext());
+        recyclerView.setAdapter(writeReviewAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, true));
+
 //        addPicture
-        recyclerView = findViewById(R.id.write_review_picture_recyclerView);
-        btn_addPicture = findViewById(R.id.write_review_addPicture);
+        btn_addPicture = findViewById(R.id.modify_review_addPicture);
         btn_addPicture.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
@@ -108,19 +103,20 @@ public class WriteReviewActivity extends AppCompatActivity {
         });
 
 //        content
-        editText_content = findViewById(R.id.write_review_content);
+        editText_content = findViewById(R.id.modify_review_content);
+        editText_content.setText(reviewItem.getContent());
 
 //        submit
         Retrofit2MultipartUploader uploader = new Retrofit2MultipartUploader(this);
-        btn_submit = findViewById(R.id.write_review_submit);
+        btn_submit = findViewById(R.id.modify_review_submit);
         btn_submit.setOnClickListener(view -> {
-            String contents = String.valueOf(editText_content.getText());
-            writeRequestData.setContent(contents);
-
             for (int i = 0; i < items.size(); i++) {
                 itemPaths.add(getRealPathFromUri(items.get(i)));
             }
-            uploader.uploadFiles(writeRequestData.getHairStyleId(), writeRequestData.getRating(), writeRequestData.getContent(), itemPaths, accessToken);
+
+            String contents = String.valueOf(editText_content.getText());
+            writeRequestData.setContent(contents);
+            uploader.modifyFiles(writeRequestData.getHairStyleId(), writeRequestData.getRating(), writeRequestData.getContent(), itemPaths, accessToken, writeRequestData.getReviewId());
         });
 
     }
@@ -151,7 +147,7 @@ public class WriteReviewActivity extends AppCompatActivity {
                         try {
                             items.add(imageUri);
                         } catch (Exception e) {
-                            Log.e(TAG, "file select error", e);
+                            Log.e("modify photo error", "file select error", e);
                         }
                     }
                     writeReviewAdapter = new WriteReviewAdapter(items, getApplicationContext());
@@ -186,8 +182,13 @@ public class WriteReviewActivity extends AppCompatActivity {
 
                     hairStyles.put(hairStyleId, hairStyleName);
                 }
-                spinnerAdapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, new ArrayList<>(hairStyles.values()));
-                hairStyleSpinner.setAdapter(spinnerAdapter);
+
+                for (Map.Entry<Integer, String> entry : hairStyles.entrySet()) {
+                    if (entry.getValue().equals(reviewItem.getHairStyleName())) {
+                        writeRequestData.setHairStyleId(entry.getKey());
+                        break;
+                    }
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -202,5 +203,4 @@ public class WriteReviewActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(hairStylesRequest);
     }
-
 }

@@ -2,7 +2,7 @@ package com.example.wishhair.home;
 
 public class HomeItems {
 //    monthly review
-private int reviewId;
+    private int reviewId;
     private String username;
     private String context_review;
 

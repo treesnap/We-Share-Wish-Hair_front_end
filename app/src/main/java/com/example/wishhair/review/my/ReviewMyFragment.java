@@ -1,5 +1,6 @@
 package com.example.wishhair.review.my;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,18 +14,40 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.wishhair.CustomTokenHandler;
 import com.example.wishhair.R;
 import com.example.wishhair.review.detail.MyReviewDetailActivity;
 import com.example.wishhair.review.detail.RecentReviewDetailActivity;
 import com.example.wishhair.review.ReviewItem;
+import com.example.wishhair.sign.UrlConst;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ReviewMyFragment extends Fragment {
 
     public ReviewMyFragment() {}
 
-    ArrayList<ReviewItem> myReviewItems;
+
+    private ArrayList<ReviewItem> myReviewItems;
+    private String accessToken;
+    private MyReviewAdapter myReviewAdapter;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        myReviewRequest(accessToken);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,26 +59,13 @@ public class ReviewMyFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.review_fragment_my, container, false);
 
+        CustomTokenHandler customTokenHandler = new CustomTokenHandler(requireActivity());
+        accessToken = customTokenHandler.getAccessToken();
+
         RecyclerView myRecyclerView = v.findViewById(R.id.review_my_recyclerView);
         myReviewItems = new ArrayList<>();
 
-        //===============================dummy data===============================
-        ArrayList<String> images = new ArrayList<>();
-        images.add("https://wswh-storage.kr.object.ncloudstorage.com/d3f61f7f-f283-4867-a98d-a4e20ed3ea46.jpg");
-        images.add("https://wswh-storage.kr.object.ncloudstorage.com/d3f61f7f-f283-4867-a98d-a4e20ed3ea46.jpg");
-        for (int i = 0; i < 4; i++) {
-            ArrayList<String> tempTags = new ArrayList<>();
-            for (int j = 0; j < 4; j++) {
-                tempTags.add("#tag ");
-            }
-            tempTags.add("tags");
-            ReviewItem newItem = new ReviewItem(images, "무슨무슨" + "펌", tempTags,
-                    "is a root vegetable, typically orange in color, though purple, black, red, white, and yellow cultivars exist,[2][3][4] all of which are domesticated forms of the wild carrot, Daucus carota, native to Europe and Southwestern Asia. The plant probably originated in Persia and was originally cultivated for its leaves and seeds. The most commonly eaten part of the plant is the taproot, although the stems and leaves are also eaten. The domestic carrot has been selectively bred for its enlarged, more palatable, less woody-textured taproot.",
-                    "3.4", 500, "22.03.12");
-            myReviewItems.add(newItem);
-        }
-
-        MyReviewAdapter myReviewAdapter = new MyReviewAdapter(myReviewItems);
+        myReviewAdapter = new MyReviewAdapter(myReviewItems, requireContext());
         myRecyclerView.setAdapter(myReviewAdapter);
 
 //        layout manager
@@ -69,6 +79,7 @@ public class ReviewMyFragment extends Fragment {
         myReviewAdapter.setOnItemClickListener((v1, position) -> {
             Intent intent = new Intent(v1.getContext(), MyReviewDetailActivity.class);
             ReviewItem selectedItem = myReviewItems.get(position);
+            intent.putExtra("reviewId", selectedItem.getReviewId());
             intent.putExtra("hairStyleName", selectedItem.getHairStyleName());
             intent.putStringArrayListExtra("tags", selectedItem.getTags());
             intent.putExtra("score", selectedItem.getScore());
@@ -76,9 +87,87 @@ public class ReviewMyFragment extends Fragment {
             intent.putExtra("date", selectedItem.getCreatedDate());
             intent.putExtra("content", selectedItem.getContent());
             intent.putStringArrayListExtra("imageUrls", selectedItem.getImageUrls());
+            intent.putExtra("isWriter", selectedItem.isWriter());
             startActivity(intent);
         });
 
         return v;
+    }
+
+    private void myReviewRequest(String accessToken) {
+        String myReviewUrl = UrlConst.URL + "/api/review/my";
+        List<ReviewItem> requestItems = new ArrayList<>();
+        @SuppressLint("NotifyDataSetChanged") JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, myReviewUrl, null, response -> {
+            Log.d("myReviewRequest", response.toString());
+            String stringResponse = String.valueOf(response);
+            try {
+                JSONObject jsonObject = new JSONObject(stringResponse);
+                JSONArray resultArray = jsonObject.getJSONArray("result");
+                for (int i = 0; i < resultArray.length(); i++) {
+                    ReviewItem receivedData = new ReviewItem();
+                    JSONObject resultObject = resultArray.getJSONObject(i);
+
+                    int reviewId = resultObject.getInt("reviewId");
+                    String hairStyleName = resultObject.getString("hairStyleName");
+                    String userNickName = resultObject.getString("userNickname");
+                    String score = resultObject.getString("score");
+                    String content = resultObject.getString("contents");
+                    String createDate = resultObject.getString("createdDate");
+                    int likes = resultObject.getInt("likes");
+                    boolean isWriter = resultObject.getBoolean("writer");
+
+                    JSONArray hashTagsArray = resultObject.getJSONArray("hashTags");
+                    ArrayList<String> tags = new ArrayList<>();
+                    for (int j = 0; j < hashTagsArray.length(); j++) {
+                        JSONObject hasTagObject = hashTagsArray.getJSONObject(j);
+                        tags.add(hasTagObject.getString("tag"));
+                    }
+                    receivedData.setTags(tags);
+
+                    receivedData.setReviewId(reviewId);
+                    receivedData.setUserNickName(userNickName);
+                    receivedData.setScore(score);
+                    receivedData.setLikes(likes);
+                    receivedData.setCreatedDate(createDate);
+                    receivedData.setHairStyleName(hairStyleName);
+                    receivedData.setContent(content);
+                    receivedData.setIsWriter(isWriter);
+
+                    JSONArray photosArray = resultObject.getJSONArray("photos");
+                    ArrayList<String> receivedUrls = new ArrayList<>();
+                    for (int j = 0; j < photosArray.length(); j++) {
+                        JSONObject photoObject = photosArray.getJSONObject(j);
+                        String imageUrl = photoObject.getString("storeUrl");
+
+                        receivedUrls.add(imageUrl);
+                    }
+                    receivedData.setImageUrls(receivedUrls);
+
+                    requestItems.add(receivedData);
+                }
+
+                JSONObject pagingObject = jsonObject.getJSONObject("paging");
+                String contentSize = pagingObject.getString("contentSize");
+                String page = pagingObject.getString("page");
+                String hasNext = pagingObject.getString("hasNext");
+                Log.d("paging", contentSize + " " + page + " " + hasNext);
+
+                myReviewItems.clear();
+                myReviewItems.addAll(requestItems);
+                myReviewAdapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }, error -> Log.e("myReviewRequestError", error.toString())) { @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+                return params;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        queue.add(request);
     }
 }

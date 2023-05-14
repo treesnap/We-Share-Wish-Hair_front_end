@@ -40,13 +40,10 @@ public class ReviewFragment extends Fragment {
         viewPager = v.findViewById(R.id.review_viewPager);
         viewPager.setAdapter(new ReviewPagerAdapter(getActivity()));
 
-        new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                TextView textView = new TextView(v.getContext());
-                textView.setText(tabs[position]);
-                tab.setCustomView(textView);
-            }
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            TextView textView = new TextView(v.getContext());
+            textView.setText(tabs[position]);
+            tab.setCustomView(textView);
         }).attach();
 
         return v;
