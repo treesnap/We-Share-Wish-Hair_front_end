@@ -7,6 +7,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,6 +23,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.CustomTokenHandler;
 import com.example.wishhair.R;
+import com.example.wishhair.TagFuncActivity;
+import com.example.wishhair.TagResultActivity;
 import com.example.wishhair.review.ReviewItem;
 import com.example.wishhair.review.ReviewModifyActivity;
 import com.example.wishhair.sign.UrlConst;
@@ -132,8 +135,9 @@ public class MyReviewDetailActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("정말로 삭제하시겠습니까?")
                         .setPositiveButton("예", (dialogInterface, i) -> {
-                            finish();
                             reviewDeleteRequest(accessToken);
+                            Handler handler = new Handler();
+                            handler.postDelayed(this::finish, 500);
                         })
                         .setNegativeButton("아니요", (dialogInterface, i) -> {}).show();
                 return true;
@@ -146,7 +150,7 @@ public class MyReviewDetailActivity extends AppCompatActivity {
         String deleteUrl = UrlConst.URL + "/api/review/" + reviewId;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, deleteUrl, null,
-                response -> Toast.makeText(this, "리뷰가 삭제되었습니다.", Toast.LENGTH_SHORT).show(),
+                response -> Toast.makeText(this, "리뷰가 삭제되었습니다.", Toast.LENGTH_LONG).show(),
                 error -> Log.e("deleteError", error.toString())){ @Override
             public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap();
