@@ -3,7 +3,6 @@ package com.example.wishhair.sign;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -25,7 +25,6 @@ import com.example.wishhair.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
 public class FindPasswordResultActivity extends AppCompatActivity {
@@ -33,6 +32,7 @@ public class FindPasswordResultActivity extends AppCompatActivity {
     private EditText ed_pw_input, ed_pw_config;
     private Drawable check_success, check_fail;
     private String pw_input, pw_config;
+    private FrameLayout view_done;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,13 +87,12 @@ public class FindPasswordResultActivity extends AppCompatActivity {
             }
         });
 
-        FrameLayout view_done = findViewById(R.id.find_password_view_done);
-        btn_next.setOnClickListener(view -> passwordRequest(pw_config));
-
+        String userEmail = getIntent().getStringExtra("inputEmail");
+        view_done = findViewById(R.id.find_password_view_done);
+        btn_next.setOnClickListener(view -> passwordRequest(userEmail, pw_config));
 
         Button btn_finish = findViewById(R.id.find_password_btn_done);
         btn_finish.setOnClickListener(view -> finish());
-
     }
 
     private boolean inputValidate() {
@@ -121,29 +120,36 @@ public class FindPasswordResultActivity extends AppCompatActivity {
         }
     }
 
-    private void passwordRequest(String newPassword) {
+    private void passwordRequest(String email, String newPassword) {
         String refreshUrl = UrlConst.URL + "/api/user/refresh/password";
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PATCH, refreshUrl, null, response -> {
-            Log.d("refresh", response.toString());
-        }, this::getErrorMessage);
+        JSONObject requestObject = new JSONObject();
+        try {
+            requestObject.put("email", email);
+            requestObject.put("newPassword", newPassword);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PATCH, refreshUrl, requestObject, response -> {
+            ed_pw_config.setEnabled(false);
+            ed_pw_input.setEnabled(false);
+            view_done.setVisibility(View.VISIBLE);}, this::getErrorMessage);
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
     }
 
-    private String getErrorMessage(VolleyError error) {
+    private void getErrorMessage(VolleyError error) {
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null && networkResponse.data != null) {
             String jsonError = new String(networkResponse.data);
             try {
                 JSONObject jsonObject = new JSONObject(jsonError);
-                Log.d("errorObject", jsonObject.toString());
-//                return jsonObject.getString("message");
+                Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        } else {
+            Log.e("getErrorMessage", "fail to get error message");
         }
-        Log.e("getErrorMessage", "fail to get error message");
-        return "null";
     }
-
 }
