@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +64,7 @@ public class ConfigPasswordFragment extends Fragment {
     private EditText config_password;
     private EditText config_new_password;
     private EditText config_verfication;
+    private TextView verification_Error;
 
     public ConfigPasswordFragment() {
         // Required empty public constructor
@@ -120,6 +123,7 @@ public class ConfigPasswordFragment extends Fragment {
         config_password = view.findViewById(R.id.config_password_input_previous);
         config_new_password = view.findViewById(R.id.config_password_input_new);
         config_verfication = view.findViewById(R.id.config_password_input_verification);
+        verification_Error = view.findViewById(R.id.config_password_tv_error);
         return view;
     }
 
@@ -147,6 +151,31 @@ public class ConfigPasswordFragment extends Fragment {
                 ConfigPasswordRequest(accessToken);
             }
         });
+
+        // 비밀번호 확인과 다를 때
+        config_verfication.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                verification_Error.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (config_new_password.getText().toString().equals(config_verfication.getText().toString())) {
+                    verification_Error.setVisibility(View.INVISIBLE);
+                    config_password_apply.setEnabled(true);
+                } else {
+                    verification_Error.setVisibility(View.VISIBLE);
+                    config_password_apply.setEnabled(false);
+                }
+            }
+        });
+
     }
 
     public void ConfigPasswordRequest(String accessToken) {
