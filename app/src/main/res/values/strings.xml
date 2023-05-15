@@ -41,6 +41,7 @@
     <string name="register_message_6">회원가입완료</string>
     <!-- find password -->
     <string name="find_password_message1">비밀번호 찾기</string>
+    <string name="find_password_message2">새로운 비밀번호를 입력해주세요</string>
     <!--    review -->
     <string name="review_filter_whole">전체</string>
     <string name="review_filter_man">남성</string>

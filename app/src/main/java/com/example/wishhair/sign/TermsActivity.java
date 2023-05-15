@@ -30,6 +30,7 @@ public class TermsActivity extends AppCompatActivity {
         btn_next.setOnClickListener(view -> {
             if (termMember.isChecked() && termInfo.isChecked() && termServe.isChecked()) {
                 Intent intent = new Intent(TermsActivity.this, EmailCertActivity.class);
+                intent.putExtra("pageRequest", "register");
                 startActivity(intent);
 //                    finish();
             } else {

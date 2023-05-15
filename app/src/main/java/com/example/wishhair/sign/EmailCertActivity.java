@@ -93,7 +93,13 @@ public class EmailCertActivity extends AppCompatActivity {
         btn_intent = findViewById(R.id.botBar_btn_next);
         btn_intent.setVisibility(View.INVISIBLE);
         btn_intent.setOnClickListener(view -> {
-            Intent intent = new Intent(EmailCertActivity.this, RegisterActivity.class);
+            String prePage = getIntent().getStringExtra("pageRequest");
+            Intent intent;
+            if (prePage.equals("register")) {
+                intent = new Intent(EmailCertActivity.this, RegisterActivity.class);
+            } else {
+                intent = new Intent(EmailCertActivity.this, FindPasswordResultActivity.class);
+            }
             intent.putExtra("inputEmail", ed_email.getText().toString());
             startActivity(intent);
 //            finish();
