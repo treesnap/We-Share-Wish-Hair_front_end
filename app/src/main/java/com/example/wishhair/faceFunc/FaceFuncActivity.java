@@ -20,6 +20,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.wishhair.CustomTokenHandler;
 import com.example.wishhair.FuncLoading;
 import com.example.wishhair.R;
 
@@ -45,20 +46,29 @@ public class FaceFuncActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.func_face_activity);
+//        accessToken
+        CustomTokenHandler customTokenHandler = new CustomTokenHandler(this);
+        String accessToken = customTokenHandler.getAccessToken();
 
+//        back
         Button btn_back = findViewById(R.id.func_btn_back);
         btn_back.setOnClickListener(view -> finish());
 
+//        selectUserImage
         userImage = findViewById(R.id.func_faceImage);
         userImage.setOnClickListener(view -> setImageView(userImage));
 
+//        loading
         loading = new FuncLoading(this);
         loading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+        FaceFuncUploader uploader = new FaceFuncUploader(this);
         Button btn_submit = findViewById(R.id.func_btn_submit);
         btn_submit.setOnClickListener(view -> {
+            uploader.uploadUserImages(imagePath, accessToken);
             loading.show();
             loadingTime();
+
         });
 
     }

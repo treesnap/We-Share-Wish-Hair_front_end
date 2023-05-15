@@ -5,12 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.wishhair.BuildConfig;
 import com.example.wishhair.sign.UrlConst;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -26,7 +27,7 @@ public class FaceFuncUploader {
     private final FaceFuncApi api;
     private final Context context;
 
-    public FaceFuncUploader(FaceFuncApi api, Context context) {
+    public FaceFuncUploader(Context context) {
         //로그를 보기 위한 Interceptor
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         if (BuildConfig.DEBUG) {
@@ -43,7 +44,6 @@ public class FaceFuncUploader {
     }
 
     public void uploadUserImages(String imagePath, String accessToken) {
-
         File file = new File(imagePath);
         RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
@@ -53,15 +53,16 @@ public class FaceFuncUploader {
         Call<ResponseBody> call = api.uploadImages("bearer" + accessToken, imagePart);
         call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                TODO 다음 페이지 연결
-                Intent intent = new Intent();
-                context.startActivity(intent);
-                ((Activity) context).finish();
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.d("faceUpload", "success");
+                } else {
+                    Log.e("faceUpload", "fail");
+                }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("Func Image Upload fail", t.toString());
             }
         });

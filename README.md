@@ -4,7 +4,9 @@
 ### [Before Commits](https://github.com/EunChanNam/We-Share-Wish-Hair/tree/AND)
 
 #### tasks - 0511
-1. 얼굴형, 태그포함 기능 서버연결
+1. 얼굴형, 태그포함 기능 서버연결 
+   1. spring에서 flask로 요청 예정
+   2. android에서는 spring으로 사진1장만 포함한 요청 보내면 됌
 2. 서버 연결 후 로딩화면 재구성 
 3. 리뷰 정렬
 4. 헤어스타일 서버에 찜했다는 정보 전달
