@@ -42,25 +42,22 @@ public class FaceFuncUploader {
         this.context = context;
     }
 
-    public void uploadUserImages(ArrayList<String> imagePaths, String accessToken) {
-        ArrayList<MultipartBody.Part> parts = new ArrayList<>();
-        for (int i = 0; i < imagePaths.size(); i++) {
-            File file = new File(imagePaths.get(i));
-            RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+    public void uploadUserImages(String imagePath, String accessToken) {
 
-            String fileName = "userImage" + i + ".jpg";
-            MultipartBody.Part imagePart = MultipartBody.Part.createFormData("files", fileName, imageBody);
+        File file = new File(imagePath);
+        RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
-            parts.add(imagePart);
-        }
-        Call<ResponseBody> call = api.uploadImages("bearer" + accessToken, parts);
-        call.enqueue(new Callback<ResponseBody>() {
+        String fileName = "userImage.jpg";
+        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("files", fileName, imageBody);
+
+        Call<ResponseBody> call = api.uploadImages("bearer" + accessToken, imagePart);
+        call.enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 //                TODO 다음 페이지 연결
                 Intent intent = new Intent();
                 context.startActivity(intent);
-                ((Activity)context).finish();
+                ((Activity) context).finish();
             }
 
             @Override

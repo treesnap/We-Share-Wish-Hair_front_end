@@ -25,14 +25,19 @@ import com.example.wishhair.R;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class FaceFuncActivity extends AppCompatActivity {
 
-    private ImageView settingImage, userImage1, userImage2, userImage3, userImage4;
-    private int selectImageView;
-    private final List<String> imagePaths = new ArrayList<>();
+    private ImageView userImage;
+    private String imagePath;
 
     private FuncLoading loading;
 
@@ -44,30 +49,8 @@ public class FaceFuncActivity extends AppCompatActivity {
         Button btn_back = findViewById(R.id.func_btn_back);
         btn_back.setOnClickListener(view -> finish());
 
-        imagePaths.add(0, null);
-        imagePaths.add(1, null);
-        imagePaths.add(2, null);
-        imagePaths.add(3, null);
-
-        userImage1 = findViewById(R.id.func_image_1);
-        userImage1.setOnClickListener(view -> {
-            setImageView(userImage1, 0);
-        });
-
-        userImage2 = findViewById(R.id.func_image_2);
-        userImage2.setOnClickListener(view -> {
-            setImageView(userImage2, 1);
-        });
-
-        userImage3 = findViewById(R.id.func_image_3);
-        userImage3.setOnClickListener(view -> {
-            setImageView(userImage3, 2);
-        });
-
-        userImage4 = findViewById(R.id.func_image_4);
-        userImage4.setOnClickListener(view -> {
-            setImageView(userImage4, 3);
-        });
+        userImage = findViewById(R.id.func_faceImage);
+        userImage.setOnClickListener(view -> setImageView(userImage));
 
         loading = new FuncLoading(this);
         loading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -89,13 +72,10 @@ public class FaceFuncActivity extends AppCompatActivity {
         }, 2000);
     }
 
-    private void setImageView(ImageView imageView, int position) {
-        selectImageView = position;
-        settingImage = imageView;
-
+    private void setImageView(ImageView imageView) {
 //        기존에 이미지 지움
         imageView.setImageDrawable(null);
-        imagePaths.set(selectImageView, null);
+        imagePath = null;
 
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
@@ -113,10 +93,10 @@ public class FaceFuncActivity extends AppCompatActivity {
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         Uri uri = result.getData().getData();
-                        imagePaths.set(selectImageView, getRealPathFromUri(uri));
+                        imagePath = getRealPathFromUri(uri);
                         try {
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                            settingImage.setImageBitmap(bitmap);
+                            userImage.setImageBitmap(bitmap);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         } catch (IOException e) {
@@ -127,8 +107,7 @@ public class FaceFuncActivity extends AppCompatActivity {
             }
     );
 
-    private String getRealPathFromUri(Uri uri)
-    {
+    private String getRealPathFromUri(Uri uri) {
         String[] proj=  {MediaStore.Images.Media.DATA};
         CursorLoader cursorLoader = new CursorLoader(this,uri,proj,null,null,null);
         Cursor cursor = cursorLoader.loadInBackground();

@@ -83,7 +83,7 @@
     <string name="message_cancel">취소</string>
 
     <!--    face func-->
-    <string name="func_message_1">사진 4장을 업로드해주세요 :)</string>
+    <string name="func_message_1">사진을 업로드해주세요 :)</string>
     <string name="func_message_2">정면을 보고 있는 사진을 업로드해주세요</string>
     <string name="func_message_btn_submit">얼굴형 분석하기</string>
     <!--    faceResult -->

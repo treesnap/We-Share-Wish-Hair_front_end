@@ -12,9 +12,9 @@ import retrofit2.http.Part;
 
 public interface FaceFuncApi {
     @Multipart
-    @POST("/api/")
+    @POST("/fileupload")
     Call<ResponseBody> uploadImages(
             @Header("Authorization") String token,
-            @Part()List<MultipartBody.Part> files
+            @Part()MultipartBody.Part file
             );
 }
