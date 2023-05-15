@@ -97,7 +97,7 @@ public class FavoriteDetail extends Fragment {
         callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                mainActivity.ChangeFragment(5);
+                mainActivity.onBackPressed();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);

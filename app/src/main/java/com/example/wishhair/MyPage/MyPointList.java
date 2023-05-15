@@ -105,7 +105,7 @@ public class MyPointList extends Fragment {
         callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                mainActivity.ChangeFragment(2);
+                mainActivity.onBackPressed();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);

@@ -116,42 +116,6 @@
             android:textSize="10sp"/>
 
         <TextView
-            android:id="@+id/config_tv_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="15dp"
-            android:text="• 비밀번호"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            />
-
-        <EditText
-            android:id="@+id/config_input_password"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/border_mypage_input"
-            android:paddingLeft="10dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="" />
-
-        <TextView
-            android:id="@+id/config_password_notice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="8~20자리의 영문/숫자/공백을 제외한 특수문자를 함께 입력해주세요"
-            android:textColor="@color/black"
-            android:textSize="10sp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="3dp"/>
-
-        <TextView
             android:id="@+id/config_tv_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -190,6 +154,18 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/config_to_password_btn"
+            android:layout_width="275dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:background="@drawable/point_btn"
+            android:text="비밀번호 변경"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="30dp"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/config_apply"
