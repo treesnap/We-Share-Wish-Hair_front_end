@@ -44,6 +44,9 @@ public class TagResultActivity extends AppCompatActivity {
         }
 
         TagResultAdapter tagResultAdapter = new TagResultAdapter(items, this);
+        tagResultAdapter.setOnItemClickListener((v1, position) -> {
+            HomeItems selectedItem = items.get(position);
+        });
 
         RecyclerView recyclerView = findViewById(R.id.tagResult_recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));

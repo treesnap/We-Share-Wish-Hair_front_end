@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.wishhair.R;
+import com.example.wishhair.faceFunc.FaceResultAdapter;
 
 import java.util.ArrayList;
 
@@ -22,6 +24,13 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<HomeRecommendAdap
     public HomeRecommendAdapter(ArrayList<HomeItems> items, Context context) {
         this.items = items;
         this.context = context;
+    }
+    public interface OnItemClickListener {
+        void onItemClick(View v, int position);
+    }
+    private HomeRecommendAdapter.OnItemClickListener listener = null;
+    public void setOnItemClickListener(HomeRecommendAdapter.OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -37,25 +46,15 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<HomeRecommendAdap
 
         holder.bindHairImage(item.getHairImage());
         holder.hairStyle.setText(item.getHairStyle());
-        holder.likes.setText(item.getLikes());
-
-        boolean isLike = item.getIsLike();
-        if (isLike) {
-            holder.like.setImageResource(R.drawable.heart_fill);
-        } else {
-            holder.like.setImageResource(R.drawable.heart_empty);
-        }
-        holder.like.setOnClickListener(view -> {
-            HomeItems clickItem = items.get(position);
-            boolean clickLike = clickItem.getIsLike();
-            clickItem.setIsLike(!clickLike);
-
-            if (clickItem.getIsLike()) {
-                holder.like.setImageResource(R.drawable.heart_fill);
-            } else {
-                holder.like.setImageResource(R.drawable.heart_empty);
+        holder.btn_view.setOnClickListener(view -> {
+            int position1 = holder.getAdapterPosition();
+            if (position1 != RecyclerView.NO_POSITION) {
+                if (listener != null) {
+                    listener.onItemClick(view, position1);
+                }
             }
         });
+
     }
 
     @Override
@@ -64,15 +63,15 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<HomeRecommendAdap
     }
 
     public class RecViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView hairImage, like;
-        private final TextView hairStyle, likes;
+        private final ImageView hairImage;
+        private final TextView hairStyle;
+        private final Button btn_view;
         public RecViewHolder(@NonNull View itemView) {
             super(itemView);
 
             this.hairImage = itemView.findViewById(R.id.home_item_rec_hairImage);
             this.hairStyle = itemView.findViewById(R.id.home_item_rec_hairStyle);
-            this.likes = itemView.findViewById(R.id.home_item_rec_heartCount);
-            this.like = itemView.findViewById(R.id.home_item_rec_likeImageView);
+            this.btn_view = itemView.findViewById(R.id.home_item_rec_btn_view);
         }
         public void bindHairImage(String imageURL) {
             Glide.with(context).load(imageURL).into(hairImage);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +27,14 @@ public class FaceResultAdapter extends RecyclerView.Adapter<FaceResultAdapter.Vi
         this.context = context;
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(View v, int position);
+    }
+    private FaceResultAdapter.OnItemClickListener listener = null;
+    public void setOnItemClickListener(FaceResultAdapter.OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -39,25 +48,15 @@ public class FaceResultAdapter extends RecyclerView.Adapter<FaceResultAdapter.Vi
 
         holder.bindHairImage(item.getHairImage());
         holder.hairStyle.setText(item.getHairStyle());
-        holder.likes.setText(item.getLikes());
-
-        boolean isLike = item.getIsLike();
-        if (isLike) {
-            holder.like.setImageResource(R.drawable.heart_fill);
-        } else {
-            holder.like.setImageResource(R.drawable.heart_empty);
-        }
-        holder.like.setOnClickListener(view -> {
-            HomeItems clickItem = faceResultItems.get(position);
-            boolean clickLike = clickItem.getIsLike();
-            clickItem.setIsLike(!clickLike);
-
-            if (clickItem.getIsLike()) {
-                holder.like.setImageResource(R.drawable.heart_fill);
-            } else {
-                holder.like.setImageResource(R.drawable.heart_empty);
+        holder.btn_view.setOnClickListener(view -> {
+            int position1 = holder.getAdapterPosition();
+            if (position1 != RecyclerView.NO_POSITION) {
+                if (listener != null) {
+                    listener.onItemClick(view, position1);
+                }
             }
         });
+
     }
 
     @Override
@@ -66,15 +65,15 @@ public class FaceResultAdapter extends RecyclerView.Adapter<FaceResultAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView hairImage, like;
-        private final TextView hairStyle, likes;
+        private final ImageView hairImage;
+        private final TextView hairStyle;
+        private final Button btn_view;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.hairImage = itemView.findViewById(R.id.home_item_rec_hairImage);
             this.hairStyle = itemView.findViewById(R.id.home_item_rec_hairStyle);
-            this.likes = itemView.findViewById(R.id.home_item_rec_heartCount);
-            this.like = itemView.findViewById(R.id.home_item_rec_likeImageView);
+            this.btn_view = itemView.findViewById(R.id.home_item_rec_btn_view);
         }
 
         public void bindHairImage(String imageURL) {

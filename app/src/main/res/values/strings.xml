@@ -77,6 +77,7 @@
     <string name="home_btn_tagFunc">헤어스타일 추천받기</string>
     <string name="home_btn_faceFuncAgain">얼굴형분석 다시하기</string>
     <string name="review_monthly_message">님의 리뷰</string>
+    <string name="home_item_rec_btn">상세보기 〉</string>
 
     <string name="xmlDisplay_username">userName</string>
     <string name="message_confirm">확인</string>
@@ -120,5 +121,6 @@
     <string name="tag_image_formal">포멀한</string>
     <string name="tag_image_manly">남성적인</string>
     <string name="tag_image_soft">부드러운</string>
+
 
 </resources>
