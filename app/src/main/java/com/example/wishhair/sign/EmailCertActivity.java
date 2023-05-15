@@ -1,5 +1,6 @@
 package com.example.wishhair.sign;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -47,6 +48,13 @@ public class EmailCertActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_activity_email_cert);
 
+//        title
+        String prePage = getIntent().getStringExtra("pageRequest");
+        TextView title = findViewById(R.id.sign_cert_title);
+        if (prePage.equals("findPassword")) {
+            title.setText("비밀번호 찾기");
+        }
+
 //        back
         Button btn_back = findViewById(R.id.botBar_btn_back);
         btn_back.setOnClickListener(view -> finish());
@@ -91,12 +99,17 @@ public class EmailCertActivity extends AppCompatActivity {
 
 //        intent Page
         btn_intent = findViewById(R.id.botBar_btn_next);
-        btn_intent.setVisibility(View.INVISIBLE);
+//        btn_intent.setVisibility(View.INVISIBLE);
         btn_intent.setOnClickListener(view -> {
-            Intent intent = new Intent(EmailCertActivity.this, RegisterActivity.class);
+            Intent intent;
+            if (prePage.equals("register")) {
+                intent = new Intent(EmailCertActivity.this, RegisterActivity.class);
+            } else {
+                intent = new Intent(EmailCertActivity.this, FindPasswordResultActivity.class);
+            }
             intent.putExtra("inputEmail", ed_email.getText().toString());
             startActivity(intent);
-//            finish();
+            finish();
         });
     }
 

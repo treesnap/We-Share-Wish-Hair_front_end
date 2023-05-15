@@ -33,7 +33,7 @@
     <string name="register_message_3">• 닉네임</string>
     <string name="register_condition_nickname">2~8자리의 공백을 제외한 영문/한글/숫자를 입력해주세요</string>
     <string name="register_message_4">• 비밀번호</string>
-    <string name="register_condition_password">8~20자리의 영문/한글/특수문자를 함께 입력해주세요</string>
+    <string name="register_condition_password">8~20자리의 영문/숫자/특수문자를 함께 입력해주세요</string>
     <string name="register_message_5">• 성별</string>
     <string name="register_message_sex">성별 :</string>
     <string name="register_text_sex_man">남성</string>
@@ -41,7 +41,9 @@
     <string name="register_message_6">회원가입완료</string>
     <!-- find password -->
     <string name="find_password_message1">비밀번호 찾기</string>
-    <string name="find_password_message2">아이디 확인 후 비밀번호를 \n 확인할 수 있습니다.</string>
+    <string name="find_password_message2">새로운 비밀번호를 입력해주세요</string>
+    <string name="find_password_message3">한번 더 입력해주세요</string>
+    <string name="find_password_message4">비밀번호 수정 완료</string>
     <!--    review -->
     <string name="review_filter_whole">전체</string>
     <string name="review_filter_man">남성</string>

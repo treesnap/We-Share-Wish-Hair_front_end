@@ -56,7 +56,8 @@ public class LoginActivity extends AppCompatActivity {
 //        find passwd
         Button btn_findPassword = findViewById(R.id.btn_findPassword);
         btn_findPassword.setOnClickListener(view -> {
-            Intent intent = new Intent(LoginActivity.this, FindPasswordActivity.class);
+            Intent intent = new Intent(LoginActivity.this, EmailCertActivity.class);
+            intent.putExtra("pageRequest", "findPassword");
             startActivity(intent);
         });
     }

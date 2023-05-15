@@ -72,8 +72,7 @@
             android:paddingEnd="10dp"
             android:autofillHints="name"
             android:background="@drawable/border_sign_text"
-            android:inputType="textPersonName"
-            android:drawableEnd="@drawable/sign_check_success"/>
+            android:inputType="textPersonName" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -109,8 +108,7 @@
             android:paddingEnd="10dp"
             android:background="@drawable/border_sign_text"
             android:importantForAutofill="no"
-            android:inputType="textPersonName"
-            android:drawableEnd="@drawable/sign_check_success"/>
+            android:inputType="textPersonName" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -119,7 +117,7 @@
             android:textColor="@color/black"
             android:textSize="11sp" />
     </LinearLayout>
-    <!--    nickname -->
+    <!--    password -->
     <LinearLayout
         android:id="@+id/sign_register_password"
         android:layout_width="match_parent"
@@ -146,8 +144,7 @@
             android:paddingEnd="10dp"
             android:background="@drawable/border_sign_text"
             android:importantForAutofill="no"
-            android:inputType="textPassword"
-            android:drawableEnd="@drawable/sign_check_success"/>
+            android:inputType="textPassword" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
