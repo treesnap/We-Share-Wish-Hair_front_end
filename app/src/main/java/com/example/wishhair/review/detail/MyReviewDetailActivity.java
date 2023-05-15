@@ -23,13 +23,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.CustomTokenHandler;
 import com.example.wishhair.R;
-import com.example.wishhair.TagFuncActivity;
-import com.example.wishhair.TagResultActivity;
 import com.example.wishhair.review.ReviewItem;
 import com.example.wishhair.review.ReviewModifyActivity;
 import com.example.wishhair.sign.UrlConst;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
