@@ -6,13 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
-import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,13 +17,16 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.NetworkResponse;
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -43,10 +41,10 @@ import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ConfigFragment#newInstance} factory method to
+ * Use the {@link ConfigPasswordFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ConfigFragment extends Fragment {
+public class ConfigPasswordFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,22 +58,17 @@ public class ConfigFragment extends Fragment {
     MainActivity mainActivity;
     private OnBackPressedCallback callback;
     private SharedPreferences loginSP;
-    final static private String url = UrlConst.URL + "/api/user";
+    final static private String url = UrlConst.URL + "/api/user/password";
     static private String accessToken;
-    Button config_apply;
-    EditText configNickname;
-    RadioButton btnMan;
-    RadioButton btnWoman;
-    RadioGroup btnGroup;
-    String sexAfter;
-    Button config_to_passwordConfig;
+    private Button config_password_apply;
+    private EditText config_password;
+    private EditText config_new_password;
+    private EditText config_verfication;
+    private TextView verification_Error;
 
-
-    public ConfigFragment() {
+    public ConfigPasswordFragment() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -102,8 +95,8 @@ public class ConfigFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static ConfigFragment newInstance(String param1, String param2) {
-        ConfigFragment fragment = new ConfigFragment();
+    public static ConfigPasswordFragment newInstance(String param1, String param2) {
+        ConfigPasswordFragment fragment = new ConfigPasswordFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -125,13 +118,12 @@ public class ConfigFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.my_config_fragment, container, false);
-        config_apply = view.findViewById(R.id.config_apply);
-        configNickname = view.findViewById(R.id.config_input_nickname);
-        btnMan = view.findViewById(R.id.config_radiobtn_sex_man);
-        btnWoman = view.findViewById(R.id.config_radiobtn_sex_woman);
-        btnGroup = view.findViewById(R.id.config_radiobtn_group);
-        config_to_passwordConfig = view.findViewById(R.id.config_to_password_btn);
+        View view = inflater.inflate(R.layout.my_config_password_config_fragment, container, false);
+        config_password_apply = view.findViewById(R.id.config_password_apply);
+        config_password = view.findViewById(R.id.config_password_input_previous);
+        config_new_password = view.findViewById(R.id.config_password_input_new);
+        config_verfication = view.findViewById(R.id.config_password_input_verification);
+        verification_Error = view.findViewById(R.id.config_password_tv_error);
         return view;
     }
 
@@ -153,55 +145,49 @@ public class ConfigFragment extends Fragment {
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         accessToken = loginSP.getString("accessToken", "fail acc");
 
-//        ImageButton btn = view.findViewById(R.id.modify_commit_button);
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ModifyRequest(accessToken);
-//            }
-//        });
-
-        config_apply.setOnClickListener(new View.OnClickListener() {
+        config_password_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ConfigRequest(accessToken);
-
+                ConfigPasswordRequest(accessToken);
             }
         });
-        btnGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+        // 비밀번호 확인과 다를 때
+        config_verfication.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                RadioButton btn = btnGroup.findViewById(i);
-                switch (i) {
-                    case R.id.config_radiobtn_sex_man -> {
-                        sexAfter = "MAN";
-                        break;
-                    }
-                    case R.id.config_radiobtn_sex_woman -> {
-                        sexAfter = "WOMAN";
-                        break;
-                    }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                verification_Error.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (config_new_password.getText().toString().equals(config_verfication.getText().toString())) {
+                    verification_Error.setVisibility(View.INVISIBLE);
+                    config_password_apply.setEnabled(true);
+                } else {
+                    verification_Error.setVisibility(View.VISIBLE);
+                    config_password_apply.setEnabled(false);
                 }
             }
         });
-        config_to_passwordConfig.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mainActivity.ChangeFragment(6);
-                Log.d("changeFragment", "to password config");
-            }
-        });
+
     }
 
-    public void ConfigRequest(String accessToken) {
-        String nickname_after = configNickname.getText().toString();
+    public void ConfigPasswordRequest(String accessToken) {
+        String password_new = config_new_password.getText().toString();
+        String password_old = config_password.getText().toString();
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put("nickname",nickname_after);
-            obj.put("sex", sexAfter);
+            obj.put("oldPassword",password_old);
+            obj.put("newPassword",password_new);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PATCH, url , obj, new Response.Listener<JSONObject>() {
 
@@ -211,6 +197,8 @@ public class ConfigFragment extends Fragment {
                 View v = LayoutInflater.from(getContext()).inflate(R.layout.mypage_config_dialog, getView().findViewById(R.id.dialog_config_layout));
                 myAlertBuilder.setView(v);
                 AlertDialog alertDialog = myAlertBuilder.create();
+                TextView tv = v.findViewById(R.id.dialog_config_tv);
+                tv.setText("비밀번호 변경 완료 !");
 
                 v.findViewById(R.id.dialog_config_OKbtn).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -236,24 +224,14 @@ public class ConfigFragment extends Fragment {
                 switch (errorCode) {
                     case 400:
                         // Bad Request 에러 처리
-                        break;
-                    case 401:
-                        // Unauthorized 에러 처리
-                        // 헤더 미포함 시, 로그인이 필요합니다
-                        break;
-                    case 404:
-                        // Not Found 에러 처리
-                        break;
-                    case 409:
-                        // 닉네임 중복
-                        AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(getContext(), R.style.ConfigAlertDialogTheme);
-                        View v = LayoutInflater.from(getContext()).inflate(R.layout.mypage_config_dialog, getView().findViewById(R.id.dialog_config_layout));
-                        myAlertBuilder.setView(v);
-                        AlertDialog alertDialog = myAlertBuilder.create();
+                        AlertDialog.Builder myAlertBuilder_err400 = new AlertDialog.Builder(getContext(), R.style.ConfigAlertDialogTheme);
+                        View v_err400 = LayoutInflater.from(getContext()).inflate(R.layout.mypage_config_dialog, getView().findViewById(R.id.dialog_config_layout));
+                        myAlertBuilder_err400.setView(v_err400);
+                        AlertDialog alertDialog = myAlertBuilder_err400.create();
 
-                        TextView dialogTv = v.findViewById(R.id.dialog_config_tv);
-                        dialogTv.setText("동일한 닉네임이 존재합니다 !");
-                        v.findViewById(R.id.dialog_config_OKbtn).setOnClickListener(new View.OnClickListener() {
+                        TextView dialogTv = v_err400.findViewById(R.id.dialog_config_tv);
+                        dialogTv.setText("기존 비밀번호가 일치하지 않습니다");
+                        v_err400.findViewById(R.id.dialog_config_OKbtn).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 alertDialog.dismiss();
@@ -266,6 +244,13 @@ public class ConfigFragment extends Fragment {
                         }
                         // Alert를 생성해주고 보여주는 메소드(show를 선언해야 Alert가 생성됨)
                         alertDialog.show();
+                        break;
+                    case 401:
+                        // Unauthorized 에러 처리
+                        // 헤더 미포함 시, 로그인이 필요합니다
+                        break;
+                    case 404:
+                        // Not Found 에러 처리
                         break;
                     default:
                         // 기타 에러 처리
@@ -293,6 +278,4 @@ public class ConfigFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(jsonObjectRequest);
     }
-
-
 }

@@ -9,11 +9,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
 import com.example.wishhair.MyPage.ConfigFragment;
+import com.example.wishhair.MyPage.ConfigPasswordFragment;
 import com.example.wishhair.MyPage.MyPageFragment;
 import com.example.wishhair.MyPage.MyPointList;
 
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private final FavoriteFragment favoriteFragment = new FavoriteFragment();
     private final RefundFragment refundFragment = new RefundFragment();
     private final FavoriteDetail favoriteDetail = new FavoriteDetail();
+    private final ConfigPasswordFragment configPasswordFragment = new ConfigPasswordFragment();
     public static Context context;
 
     private boolean hasFaceShape;
@@ -109,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 transaction.replace(R.id.MainLayout, favoriteFragment).commitAllowingStateLoss();
                 break;
             case 6:
+                transaction.replace(R.id.MainLayout, configPasswordFragment).commitAllowingStateLoss();
                 break;
             case 7:
                 transaction.replace(R.id.MainLayout, myPointList).commitAllowingStateLoss();
@@ -123,15 +127,46 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    // 뒤로 두번 누를 시 앱 종료
+    // 특정 프래그먼트에서 뒤로 두번 누를 시 앱 종료 및 프래그먼트 전환
     private long backpressedTime = 0;
     public void  onBackPressed() {
-        if (System.currentTimeMillis() > backpressedTime + 2000) {
-            backpressedTime = System.currentTimeMillis();
-            Toast.makeText(this,"한번 더 누르시면 종료합니다.",Toast.LENGTH_SHORT).show();
-        } else if (System.currentTimeMillis() <= backpressedTime + 2000) {
-            finish();
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment currentFragment = fm.findFragmentById(R.id.MainLayout);
+        Log.d("currentFragment", currentFragment.toString());
+
+        // 현재 프래그먼트가 navigation bar 4개 프래그먼트일 때 2회 누를 시 종료
+        if (currentFragment instanceof HomeFragment || currentFragment instanceof  MyPageFragment ||
+            currentFragment instanceof FavoriteFragment || currentFragment instanceof ReviewFragment) {
+            if (System.currentTimeMillis() > backpressedTime + 1000) {
+                backpressedTime = System.currentTimeMillis();
+                Toast.makeText(this, "한번 더 누르시면 종료합니다.", Toast.LENGTH_SHORT).show();
+            } else if (System.currentTimeMillis() <= backpressedTime + 2000) {
+                finish();
+            }
         }
+        // 그 외 프래그먼트 일 때 뒤로 가기
+        else {
+            switch (currentFragment.getClass().getSimpleName()) {
+                case "ConfigFragment":
+                    ChangeFragment(2);
+                    break;
+                case "ConfigPasswordFragment":
+                    ChangeFragment(8);
+                    break;
+                case "MyPointList":
+                    ChangeFragment(2);
+                    break;
+                case "RefundFragment":
+                    ChangeFragment(7);
+                    break;
+                case "FavoriteDetail":
+                    ChangeFragment(5);
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 
 }

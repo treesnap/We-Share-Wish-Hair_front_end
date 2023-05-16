@@ -81,7 +81,7 @@ public class RefundFragment extends Fragment {
         callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                mainActivity.ChangeFragment(7);
+                mainActivity.onBackPressed();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);

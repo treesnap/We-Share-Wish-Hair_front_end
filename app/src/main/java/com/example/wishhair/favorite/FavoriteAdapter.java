@@ -1,5 +1,6 @@
 package com.example.wishhair.favorite;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.wishhair.MyPage.items.PointItem;
 import com.example.wishhair.R;
 
@@ -16,9 +18,12 @@ import java.util.ArrayList;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
     private ArrayList<FavoriteItem> FavoriteItems = new ArrayList<FavoriteItem>();
-
+    Context context;
     public interface OnItemClickListener {
-        void onItemClicked(int position, int id, String stylename, String[] tags);
+        void onItemClicked(int position, int id, String stylename, String[] tags, ArrayList<String> arrayList);
+    }
+    public FavoriteAdapter(Context context) {
+        this.context = context;
     }
 
     private OnItemClickListener itemClickListener;
@@ -32,7 +37,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         public ImageView FavoriteStyleImage;
         public int FavoriteStyleId;
         public String[] FavoriteHashtags;
-        // 이미지도 넣어놔야될라나
+        public ArrayList<String> FavoriteStyleImageUrls;
 
         public TextView getFavoriteStyleName() {
             return FavoriteStyleName;
@@ -50,6 +55,14 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             return FavoriteHashtags;
         }
 
+        public ArrayList<String> getFavoriteStyleImageUrls() {
+            return FavoriteStyleImageUrls;
+        }
+
+        public void setFavoriteStyleImageUrls(ArrayList<String> favoriteStyleImageUrls) {
+            FavoriteStyleImageUrls = favoriteStyleImageUrls;
+        }
+
         ViewHolder(View view) {
             super(view);
 
@@ -63,16 +76,21 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                     int id = -1;
                     String stylename = "";
                     String[] tags = {};
+                    ArrayList<String> arrayList = new ArrayList<>();
                     int pos = getAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
                         id = getFavoriteStyleId();
                         stylename = getFavoriteStyleName().getText().toString();
                         tags = getFavoriteHashtags();
+                        arrayList = getFavoriteStyleImageUrls();
                     }
-                    itemClickListener.onItemClicked(pos, id, stylename, tags);
+                    itemClickListener.onItemClicked(pos, id, stylename, tags, arrayList);
                 }
             });
         }
+        public void bindContentImage(String imageUrl) {
+            Glide.with(context).load(imageUrl).into(FavoriteStyleImage);
+        };
     }
 
     @NonNull
@@ -89,9 +107,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         FavoriteItem item = FavoriteItems.get(position);
         holder.FavoriteStyleName.setText(item.getFavoriteStyleName());
         holder.FavoriteStyleId = item.getFavoriteStyleId();
+
+        if (item.getFavoritePicture() != null) {
+            holder.bindContentImage(item.getFavoritePicture());
+        }
 //        holder.FavoriteHashtags = item.getFavoriteHashtags();
 //        holder.FavoriteHeartCount.setText(item.getFavoriteHeartcount());
-
     }
 
     @Override

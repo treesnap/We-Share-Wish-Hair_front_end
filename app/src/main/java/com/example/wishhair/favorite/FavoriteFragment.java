@@ -127,17 +127,18 @@ public class FavoriteFragment extends Fragment {
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new FavoriteAdapter();
+        adapter = new FavoriteAdapter(getContext());
 
         adapter.setOnItemClickListener(new FavoriteAdapter.OnItemClickListener() {
             @Override
-            public void onItemClicked(int position, int id, String stylename, String[] tags) {
+            public void onItemClicked(int position, int id, String stylename, String[] tags, ArrayList<String> arrayList) {
                 Toast.makeText(getContext(),"position:" +position + " hairstyleid:"+id, Toast.LENGTH_SHORT).show();
                 targetStyleId = id;
                 Bundle bundle = new Bundle();
                 bundle.putString("hairStylename", stylename);
                 bundle.putStringArray("tags", tags);
                 bundle.putInt("hairStyleId", id);
+                bundle.putStringArrayList("ImageUrls", arrayList);
 
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 FavoriteDetail favoriteDetail = new FavoriteDetail();
@@ -163,7 +164,18 @@ public class FavoriteFragment extends Fragment {
                         JSONObject object = jsonArray.getJSONObject(i);
                         item.setFavoriteStyleName(object.getString("name"));
                         item.setFavoriteStyleId(object.getInt("hairStyleId"));
-                        Log.i("stylename response test", String.valueOf(object.getInt("hairStyleId")));
+
+                        JSONArray ImageUrls = object.getJSONArray("photos");
+                        ArrayList<String> arrayList = new ArrayList<>();
+                        item.setFavoritePictureUrls(arrayList);
+                        for (int j=0;j<ImageUrls.length();j++) {
+                            JSONObject ImageUrl = ImageUrls.getJSONObject(j);
+                            item.addFavoritePictureUrls(ImageUrl.getString("storeUrl"));
+                            if (j==0) {
+                                item.setFavoritePicture(ImageUrl.getString("storeUrl"));
+                            }
+                        }
+                        Log.d("imageurl request", item.getFavoritePictureUrls().toString());
                         adapter.addItem(item);
                         adapter.notifyDataSetChanged();
                     }
