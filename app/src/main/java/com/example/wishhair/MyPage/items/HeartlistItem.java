@@ -4,7 +4,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class HeartlistItem {
-    ImageView HeartlistPicture;
+    String HeartlistPicture;
     String HeartlistGrade, HeartlistHeartcount;
     String HeartlistStyleName, HeartlistReviewerNickname;
     String[] HashTags;
@@ -17,14 +17,6 @@ public class HeartlistItem {
 //        HeartlistStyleName = StyleName;
 //    }
     public HeartlistItem() {}
-
-    public ImageView getHeartlistPicture() {
-        return HeartlistPicture;
-    }
-
-    public void setHeartlistPicture(ImageView heartlistPicture) {
-        HeartlistPicture = heartlistPicture;
-    }
 
     public String getHeartlistHeartcount() {
         return HeartlistHeartcount;
@@ -72,5 +64,13 @@ public class HeartlistItem {
 
     public void setHashTags(String[] hashTags) {
         HashTags = hashTags;
+    }
+
+    public String getHeartlistPicture() {
+        return HeartlistPicture;
+    }
+
+    public void setHeartlistPicture(String heartlistPicture) {
+        HeartlistPicture = heartlistPicture;
     }
 }

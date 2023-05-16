@@ -20,7 +20,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     private ArrayList<FavoriteItem> FavoriteItems = new ArrayList<FavoriteItem>();
     Context context;
     public interface OnItemClickListener {
-        void onItemClicked(int position, int id, String stylename, String[] tags);
+        void onItemClicked(int position, int id, String stylename, String[] tags, ArrayList<String> arrayList);
     }
     public FavoriteAdapter(Context context) {
         this.context = context;
@@ -37,7 +37,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         public ImageView FavoriteStyleImage;
         public int FavoriteStyleId;
         public String[] FavoriteHashtags;
-        // 이미지도 넣어놔야될라나
+        public ArrayList<String> FavoriteStyleImageUrls;
 
         public TextView getFavoriteStyleName() {
             return FavoriteStyleName;
@@ -55,6 +55,13 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             return FavoriteHashtags;
         }
 
+        public ArrayList<String> getFavoriteStyleImageUrls() {
+            return FavoriteStyleImageUrls;
+        }
+
+        public void setFavoriteStyleImageUrls(ArrayList<String> favoriteStyleImageUrls) {
+            FavoriteStyleImageUrls = favoriteStyleImageUrls;
+        }
 
         ViewHolder(View view) {
             super(view);
@@ -69,13 +76,15 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                     int id = -1;
                     String stylename = "";
                     String[] tags = {};
+                    ArrayList<String> arrayList = new ArrayList<>();
                     int pos = getAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
                         id = getFavoriteStyleId();
                         stylename = getFavoriteStyleName().getText().toString();
                         tags = getFavoriteHashtags();
+                        arrayList = getFavoriteStyleImageUrls();
                     }
-                    itemClickListener.onItemClicked(pos, id, stylename, tags);
+                    itemClickListener.onItemClicked(pos, id, stylename, tags, arrayList);
                 }
             });
         }

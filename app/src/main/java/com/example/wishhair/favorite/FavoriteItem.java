@@ -3,7 +3,10 @@ package com.example.wishhair.favorite;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class FavoriteItem {
+    ArrayList<String> FavoritePictureUrls;
     String FavoritePicture;
     String FavoriteGrade, FavoriteHeartcount, FavoriteStyleName;
     int FavoriteStyleId;
@@ -62,5 +65,16 @@ public class FavoriteItem {
 
     public void setFavoriteHashtags(String[] favoriteHashtags) {
         FavoriteHashtags = favoriteHashtags;
+    }
+
+    public ArrayList<String> getFavoritePictureUrls() {
+        return FavoritePictureUrls;
+    }
+
+    public void setFavoritePictureUrls(ArrayList<String> favoritePictureUrls) {
+        FavoritePictureUrls = favoritePictureUrls;
+    }
+    public void addFavoritePictureUrls(String s){
+        FavoritePictureUrls.add(s);
     }
 }

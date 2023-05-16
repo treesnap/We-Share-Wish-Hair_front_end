@@ -213,7 +213,7 @@ public class MyPageFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         HeartlistRecyclerView.setLayoutManager(layoutManager);
 
-        adapter = new MyPageRecyclerViewAdapter();
+        adapter = new MyPageRecyclerViewAdapter(getContext());
 
         HeartlistRecyclerView.setAdapter(adapter);
 
@@ -320,7 +320,10 @@ public class MyPageFragment extends Fragment {
                         item.setHeartlistReviewerNickname(object.getString("userNickname"));
                         item.setHeartlistGrade(object.getString("score"));
                         item.setHeartlistReviewID(object.getInt("reviewId"));
-//                        item.setHeartlistPicture(object.getString());
+
+                        JSONArray imageUrls = object.getJSONArray("photos");
+                        item.setHeartlistPicture(imageUrls.getJSONObject(0).getString("storeUrl"));
+
                         adapter.addItem(item);
                         adapter.notifyDataSetChanged();
                     }
