@@ -94,8 +94,7 @@ public class FaceFuncActivity extends AppCompatActivity {
         imageView.setBackground(null);
     }
 
-    // TODO 사진 크기별로 이상하게 들어감
-//      이미지 uri list 에 넣어서 서버로 보내야함
+    // TODO 사진 사이즈 별로 다르게 들어감
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<>() {

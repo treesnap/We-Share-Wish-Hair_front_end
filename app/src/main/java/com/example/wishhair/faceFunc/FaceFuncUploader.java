@@ -2,7 +2,6 @@ package com.example.wishhair.faceFunc;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -48,14 +47,14 @@ public class FaceFuncUploader {
         RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
         String fileName = "userImage.jpg";
-        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("files", fileName, imageBody);
+        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("file", fileName, imageBody);
 
         Call<ResponseBody> call = api.uploadImages("bearer" + accessToken, imagePart);
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    Log.d("faceUpload", "success");
+//                    TODO : 성공 응답 넘기기
                 } else {
                     Log.e("faceUpload", "fail");
                 }
