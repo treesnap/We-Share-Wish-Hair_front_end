@@ -37,12 +37,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class ReviewListFragment extends Fragment {
 // recyclerView 내용 업데이트 및 갱신
@@ -227,10 +232,52 @@ public class ReviewListFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 sort_selected = sortItems[position];
+                if (sort_selected.equals(sortItems[0])) { //최신순 정렬
+                    sort_latest();
+                } else if (sort_selected.equals(sortItems[1])) { //오래된 순 정렬
+                    sort_old();
+                } else if (sort_selected.equals(sortItems[2])) { // 좋아요 순 정렬
 // https://recipes4dev.tistory.com/79
-                Comparator<ReviewItem> likeDesc = (item1, item2) -> (item2.getLikes() - item1.getLikes());
-                Collections.sort(recentReviewItems, likeDesc);
-                recentAdapter.notifyDataSetChanged();
+                    Comparator<ReviewItem> likeDesc = (item1, item2) -> (item2.getLikes() - item1.getLikes());
+                    Collections.sort(recentReviewItems, likeDesc);
+                    recentAdapter.notifyDataSetChanged();
+                }
+            }
+
+            private void sort_old() {
+                Collections.sort(recentReviewItems, new Comparator<>() {
+                    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+
+                    @Override
+                    public int compare(ReviewItem item1, ReviewItem item2) {
+                        try {
+                            Date date1 = dateFormat.parse(item1.getCreatedDate());
+                            Date date2 = dateFormat.parse(item2.getCreatedDate());
+                            return Objects.requireNonNull(date1).compareTo(date2);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        return 0;
+                    }
+                });
+            }
+
+            private void sort_latest() {
+                Collections.sort(recentReviewItems, new Comparator<>() {
+                    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+
+                    @Override
+                    public int compare(ReviewItem item1, ReviewItem item2) {
+                        try {
+                            Date date1 = dateFormat.parse(item1.getCreatedDate());
+                            Date date2 = dateFormat.parse(item2.getCreatedDate());
+                            return Objects.requireNonNull(date2).compareTo(date1);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        return 0;
+                    }
+                });
             }
 
             @Override
