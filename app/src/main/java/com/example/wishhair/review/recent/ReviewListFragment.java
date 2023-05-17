@@ -140,7 +140,6 @@ public class ReviewListFragment extends Fragment {
 
         Spinner spinner_sort = v.findViewById(R.id.review_fragment_spinner_sort);
         sort_select(spinner_sort);
-//        TODO 정렬 기준으로 받아오기
 
         return v;
     }
@@ -223,12 +222,12 @@ public class ReviewListFragment extends Fragment {
         requestQueue.add(jsonObjectRequest);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void sort_select(Spinner spinner_sort) {
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, sortItems);
         spinner_sort.setAdapter(spinnerAdapter);
 
         spinner_sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 sort_selected = sortItems[position];
@@ -237,16 +236,16 @@ public class ReviewListFragment extends Fragment {
                 } else if (sort_selected.equals(sortItems[1])) { //오래된 순 정렬
                     sort_old();
                 } else if (sort_selected.equals(sortItems[2])) { // 좋아요 순 정렬
-// https://recipes4dev.tistory.com/79
+//                    TODO : 좋아요 데이터가 없어서 테스트 못함
                     Comparator<ReviewItem> likeDesc = (item1, item2) -> (item2.getLikes() - item1.getLikes());
                     Collections.sort(recentReviewItems, likeDesc);
-                    recentAdapter.notifyDataSetChanged();
                 }
+                recentAdapter.notifyDataSetChanged();
             }
 
             private void sort_old() {
                 Collections.sort(recentReviewItems, new Comparator<>() {
-                    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+                    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
 
                     @Override
                     public int compare(ReviewItem item1, ReviewItem item2) {
@@ -264,7 +263,7 @@ public class ReviewListFragment extends Fragment {
 
             private void sort_latest() {
                 Collections.sort(recentReviewItems, new Comparator<>() {
-                    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+                    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
 
                     @Override
                     public int compare(ReviewItem item1, ReviewItem item2) {

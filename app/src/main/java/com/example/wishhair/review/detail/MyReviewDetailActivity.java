@@ -27,8 +27,12 @@ import com.example.wishhair.review.ReviewItem;
 import com.example.wishhair.review.ReviewModifyActivity;
 import com.example.wishhair.sign.UrlConst;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import me.relex.circleindicator.CircleIndicator3;
@@ -97,6 +101,19 @@ public class MyReviewDetailActivity extends AppCompatActivity {
         tv_content.setText(content);
     }
 
+    private String parseDate(String inputDate) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+
+        try {
+            Date date = inputFormat.parse(inputDate);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "failParseDate";
+    }
+
     private void getIntentData() {
         reviewId = getIntent().getIntExtra("reviewId", 0);
         hairStyleName = getIntent().getStringExtra("hairStyleName");
@@ -105,7 +122,7 @@ public class MyReviewDetailActivity extends AppCompatActivity {
         content = getIntent().getStringExtra("content");
         score = getIntent().getStringExtra("score");
         likes = getIntent().getIntExtra("likes", 0);
-        date = getIntent().getStringExtra("date");
+        date = parseDate(getIntent().getStringExtra("date"));
         isWriter = getIntent().getBooleanExtra("isWriter", false);
 
         myReviewDetailItem = new ReviewItem(reviewId, imageUrls, hairStyleName, hashTags, content, score, likes, date, isWriter);

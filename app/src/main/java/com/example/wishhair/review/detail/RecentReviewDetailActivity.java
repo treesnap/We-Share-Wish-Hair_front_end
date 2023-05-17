@@ -19,8 +19,12 @@ import com.example.wishhair.sign.UrlConst;
 
 import org.json.JSONException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import me.relex.circleindicator.CircleIndicator3;
@@ -92,11 +96,24 @@ public class RecentReviewDetailActivity extends AppCompatActivity {
         likes.setText(String.valueOf(getIntent().getIntExtra("likes", 0)));
 
         date = findViewById(R.id.review_detail_tv_date);
-        date.setText(getIntent().getStringExtra("date"));
+        date.setText(parseDate(getIntent().getStringExtra("date")));
 
         content = findViewById(R.id.review_detail_tv_content);
         content.setText(getIntent().getStringExtra("content"));
+    }
+
+    private String parseDate(String inputDate) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+
+        try {
+            Date date = inputFormat.parse(inputDate);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+        return "failParseDate";
+    }
 
     private void isLikeRequest(String accessToken) {
         String likeUrl = UrlConst.URL + "/api/review/like/" + reviewId;
