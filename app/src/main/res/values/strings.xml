@@ -77,13 +77,14 @@
     <string name="home_btn_tagFunc">헤어스타일 추천받기</string>
     <string name="home_btn_faceFuncAgain">얼굴형분석 다시하기</string>
     <string name="review_monthly_message">님의 리뷰</string>
+    <string name="home_item_rec_btn">상세보기 〉</string>
 
     <string name="xmlDisplay_username">userName</string>
     <string name="message_confirm">확인</string>
     <string name="message_cancel">취소</string>
 
     <!--    face func-->
-    <string name="func_message_1">사진 4장을 업로드해주세요 :)</string>
+    <string name="func_message_1">사진을 업로드해주세요 :)</string>
     <string name="func_message_2">정면을 보고 있는 사진을 업로드해주세요</string>
     <string name="func_message_btn_submit">얼굴형 분석하기</string>
     <!--    faceResult -->
@@ -120,5 +121,6 @@
     <string name="tag_image_formal">포멀한</string>
     <string name="tag_image_manly">남성적인</string>
     <string name="tag_image_soft">부드러운</string>
+
 
 </resources>

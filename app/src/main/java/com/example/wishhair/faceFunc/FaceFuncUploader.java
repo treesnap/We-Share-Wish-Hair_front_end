@@ -1,16 +1,16 @@
 package com.example.wishhair.faceFunc;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.wishhair.BuildConfig;
+import com.example.wishhair.UploadCallback;
 import com.example.wishhair.sign.UrlConst;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -26,7 +26,7 @@ public class FaceFuncUploader {
     private final FaceFuncApi api;
     private final Context context;
 
-    public FaceFuncUploader(FaceFuncApi api, Context context) {
+    public FaceFuncUploader(Context context) {
         //로그를 보기 위한 Interceptor
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         if (BuildConfig.DEBUG) {
@@ -42,32 +42,24 @@ public class FaceFuncUploader {
         this.context = context;
     }
 
-    public void uploadUserImages(ArrayList<String> imagePaths, String accessToken) {
-        ArrayList<MultipartBody.Part> parts = new ArrayList<>();
-        for (int i = 0; i < imagePaths.size(); i++) {
-            File file = new File(imagePaths.get(i));
-            RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+    public void uploadUserImages(String imagePath, String accessToken, UploadCallback callback) {
+        File file = new File(imagePath);
+        RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
-            String fileName = "userImage" + i + ".jpg";
-            MultipartBody.Part imagePart = MultipartBody.Part.createFormData("files", fileName, imageBody);
+        String fileName = "userImage.jpg";
+        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("file", fileName, imageBody);
 
-            parts.add(imagePart);
-        }
-        Call<ResponseBody> call = api.uploadImages("bearer" + accessToken, parts);
-        call.enqueue(new Callback<ResponseBody>() {
+        Call<ResponseBody> call = api.uploadImages("bearer" + accessToken, imagePart);
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                TODO 다음 페이지 연결
-                Intent intent = new Intent();
-                context.startActivity(intent);
-                ((Activity)context).finish();
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                callback.onUploadCallback(response.isSuccessful());
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("Func Image Upload fail", t.toString());
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                callback.onUploadCallback(false);
             }
         });
-
     }
 }

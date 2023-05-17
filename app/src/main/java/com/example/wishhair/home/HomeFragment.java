@@ -46,6 +46,7 @@ public class HomeFragment extends Fragment {
     private RequestQueue queue;
 
     private final ArrayList<HomeItems> monthlyReviewItems = new ArrayList<>();
+    private ArrayList<HomeItems> recommendItems;
     private Button btn_tagFunc, btn_faceFunc, btn_faceFuncAgain;
     private boolean hasFaceShape;
     private String userNickName, faceShapeTag;
@@ -114,7 +115,7 @@ public class HomeFragment extends Fragment {
         TextView recUserName = v.findViewById(R.id.home_recommend_userName);
         recUserName.setText(userNickName);
 
-        ArrayList<HomeItems> recommendItems = new ArrayList<>();
+        recommendItems = new ArrayList<>();
         //===============================dummy data===============================
         String imageSample = "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg";
         for (int i = 0; i < 5; i++) {
@@ -124,6 +125,9 @@ public class HomeFragment extends Fragment {
 
         RecyclerView recommendRecyclerView = v.findViewById(R.id.home_recommend_recyclerView);
         HomeRecommendAdapter homeRecommendAdapter = new HomeRecommendAdapter(recommendItems, getContext());
+        homeRecommendAdapter.setOnItemClickListener(((v1, position) -> {
+            HomeItems selectedItem = recommendItems.get(position);
+        }));
 
         recommendRecyclerView.setAdapter(homeRecommendAdapter);
         recommendRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));

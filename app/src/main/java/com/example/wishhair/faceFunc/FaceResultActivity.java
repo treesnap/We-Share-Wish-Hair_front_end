@@ -27,6 +27,8 @@ import java.util.Map;
 public class FaceResultActivity extends AppCompatActivity {
 
     private TextView userName, faceShape, faceShape_message;
+    //        homeItem 과 형식이 같아 재사용
+    private ArrayList<HomeItems> faceRecItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,8 @@ public class FaceResultActivity extends AppCompatActivity {
         Button btn_finish = findViewById(R.id.faceResult_btn_finish);
         btn_finish.setOnClickListener(view -> finish());
 
+        faceRecItems = new ArrayList<>();
+
         userName = findViewById(R.id.faceResult_userName);
         faceShape = findViewById(R.id.faceResult_faceShape);
         faceShape_message = findViewById(R.id.faceResult_faceShape_message);
@@ -47,16 +51,18 @@ public class FaceResultActivity extends AppCompatActivity {
         userName.setText("현정");
         faceShape.setText("달걀형");
         faceShape_message.setText("달걀형");
-//        homeItem 과 형식이 같아 재사용
-        ArrayList<HomeItems> faceRecItems = new ArrayList<>();
+
 //        dummyData
         String imageSample = "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg";
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
             HomeItems newItems = new HomeItems(imageSample, "물결펌", "876", false);
             faceRecItems.add(newItems);
         }
 
         FaceResultAdapter faceResultAdapter = new FaceResultAdapter(faceRecItems, this);
+        faceResultAdapter.setOnItemClickListener((v1, position) -> {
+            HomeItems selectedItem = faceRecItems.get(position);
+        });
 
         RecyclerView recyclerView = findViewById(R.id.faceResult_recyclerView);
         recyclerView.setAdapter(faceResultAdapter);

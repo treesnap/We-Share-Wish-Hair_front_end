@@ -7,14 +7,15 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 
 public interface FaceFuncApi {
     @Multipart
-    @POST("/api/")
+    @PATCH("/api/user/face_shape")
     Call<ResponseBody> uploadImages(
             @Header("Authorization") String token,
-            @Part()List<MultipartBody.Part> files
+            @Part()MultipartBody.Part file
             );
 }

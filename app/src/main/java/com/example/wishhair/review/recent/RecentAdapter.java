@@ -69,14 +69,11 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
             holder.isHeart.setImageResource(R.drawable.heart_empty);
         }
         holder.likes.setText(String.valueOf(item.getLikes()));
-        holder.viewContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int position = holder.getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    if (mListener != null) {
-                        mListener.onItemClick(view, position);
-                    }
+        holder.viewContent.setOnClickListener(view -> {
+            int position1 = holder.getAdapterPosition();
+            if (position1 != RecyclerView.NO_POSITION) {
+                if (mListener != null) {
+                    mListener.onItemClick(view, position1);
                 }
             }
         });
