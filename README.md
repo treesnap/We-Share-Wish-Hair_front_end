@@ -3,7 +3,7 @@
 ### Separation Android Repository and Spring Sever Repository
 ### [Before Commits](https://github.com/EunChanNam/We-Share-Wish-Hair/tree/AND)
 
-#### tasks - 0511
+#### tasks - 0517
 1. 얼굴형, 태그포함 기능 서버연결 
    1. spring 서버 연동 확인, flask 서버도 실행 후 테스트 필요
 2. 서버 연결 후 로딩화면 재구성 
