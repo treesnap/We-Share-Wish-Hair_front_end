@@ -1,12 +1,12 @@
 package com.example.wishhair.faceFunc;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.example.wishhair.BuildConfig;
+import com.example.wishhair.UploadCallback;
 import com.example.wishhair.sign.UrlConst;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 
@@ -42,7 +42,7 @@ public class FaceFuncUploader {
         this.context = context;
     }
 
-    public void uploadUserImages(String imagePath, String accessToken) {
+    public void uploadUserImages(String imagePath, String accessToken, UploadCallback callback) {
         File file = new File(imagePath);
         RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
@@ -53,18 +53,13 @@ public class FaceFuncUploader {
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-//                    TODO : 성공 응답 넘기기
-                } else {
-                    Log.e("faceUpload", "fail");
-                }
+                callback.onUploadCallback(response.isSuccessful());
             }
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                Log.e("Func Image Upload fail", t.toString());
+                callback.onUploadCallback(false);
             }
         });
-
     }
 }

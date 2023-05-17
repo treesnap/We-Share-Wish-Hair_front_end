@@ -14,7 +14,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
@@ -23,24 +22,31 @@ import android.widget.ImageView;
 import com.example.wishhair.CustomTokenHandler;
 import com.example.wishhair.FuncLoading;
 import com.example.wishhair.R;
+import com.example.wishhair.UploadCallback;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
-public class FaceFuncActivity extends AppCompatActivity {
+public class FaceFuncActivity extends AppCompatActivity implements UploadCallback {
 
     private ImageView userImage;
     private String imagePath;
 
+    private FaceFuncUploader uploader;
     private FuncLoading loading;
+
+    @Override
+    public void onUploadCallback(boolean isSuccess) {
+        if (isSuccess) {
+            loading.dismiss();
+            Intent intent = new Intent(FaceFuncActivity.this, FaceResultActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            loading.dismiss();
+            Log.e("loading", "fail, done");
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,25 +68,14 @@ public class FaceFuncActivity extends AppCompatActivity {
         loading = new FuncLoading(this);
         loading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        FaceFuncUploader uploader = new FaceFuncUploader(this);
+        uploader = new FaceFuncUploader(this);
         Button btn_submit = findViewById(R.id.func_btn_submit);
         btn_submit.setOnClickListener(view -> {
-            uploader.uploadUserImages(imagePath, accessToken);
+            uploader.uploadUserImages(imagePath, accessToken, this);
             loading.show();
-            loadingTime();
-
         });
-
     }
 
-    private void loadingTime() {
-        Handler handler = new Handler();
-        handler.postDelayed(() -> {
-            Intent intent = new Intent(FaceFuncActivity.this, FaceResultActivity.class);
-            startActivity(intent);
-            finish();
-        }, 2000);
-    }
 
     private void setImageView(ImageView imageView) {
 //        기존에 이미지 지움
