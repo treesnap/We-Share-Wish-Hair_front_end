@@ -1,6 +1,5 @@
 package com.example.wishhair.sign;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -24,7 +23,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.wishhair.CustomRetryPolicy;
+import com.example.wishhair.sign.token.CustomRetryPolicy;
 import com.example.wishhair.R;
 
 import org.json.JSONException;

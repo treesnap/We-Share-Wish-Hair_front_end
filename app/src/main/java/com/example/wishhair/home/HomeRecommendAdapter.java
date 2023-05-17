@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.wishhair.R;
-import com.example.wishhair.faceFunc.FaceResultAdapter;
 
 import java.util.ArrayList;
 

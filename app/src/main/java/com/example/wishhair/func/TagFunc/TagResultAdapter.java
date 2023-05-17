@@ -1,4 +1,4 @@
-package com.example.wishhair.faceFunc;
+package com.example.wishhair.func.TagFunc;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,21 +17,20 @@ import com.example.wishhair.home.HomeItems;
 
 import java.util.ArrayList;
 
-public class FaceResultAdapter extends RecyclerView.Adapter<FaceResultAdapter.ViewHolder> {
+public class TagResultAdapter extends RecyclerView.Adapter<TagResultAdapter.ViewHolder> {
 //    homeItem 과 형식이 같아 재사용
     private final ArrayList<HomeItems> faceResultItems;
     private final Context context;
 
-    public FaceResultAdapter(ArrayList<HomeItems> faceResultItems, Context context) {
+    public TagResultAdapter(ArrayList<HomeItems> faceResultItems, Context context) {
         this.faceResultItems = faceResultItems;
         this.context = context;
     }
-
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
-    private FaceResultAdapter.OnItemClickListener listener = null;
-    public void setOnItemClickListener(FaceResultAdapter.OnItemClickListener listener) {
+    private TagResultAdapter.OnItemClickListener listener = null;
+    public void setOnItemClickListener(TagResultAdapter.OnItemClickListener listener) {
         this.listener = listener;
     }
 

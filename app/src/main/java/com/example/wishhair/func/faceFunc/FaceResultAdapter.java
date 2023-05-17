@@ -1,4 +1,4 @@
-package com.example.wishhair;
+package com.example.wishhair.func.faceFunc;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,25 +12,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.wishhair.R;
 import com.example.wishhair.home.HomeItems;
-import com.example.wishhair.home.HomeRecommendAdapter;
 
 import java.util.ArrayList;
 
-public class TagResultAdapter extends RecyclerView.Adapter<TagResultAdapter.ViewHolder> {
+public class FaceResultAdapter extends RecyclerView.Adapter<FaceResultAdapter.ViewHolder> {
 //    homeItem 과 형식이 같아 재사용
     private final ArrayList<HomeItems> faceResultItems;
     private final Context context;
 
-    public TagResultAdapter(ArrayList<HomeItems> faceResultItems, Context context) {
+    public FaceResultAdapter(ArrayList<HomeItems> faceResultItems, Context context) {
         this.faceResultItems = faceResultItems;
         this.context = context;
     }
+
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
-    private TagResultAdapter.OnItemClickListener listener = null;
-    public void setOnItemClickListener(TagResultAdapter.OnItemClickListener listener) {
+    private FaceResultAdapter.OnItemClickListener listener = null;
+    public void setOnItemClickListener(FaceResultAdapter.OnItemClickListener listener) {
         this.listener = listener;
     }
 

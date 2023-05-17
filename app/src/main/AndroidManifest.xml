@@ -25,28 +25,28 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".TagResultActivity"
+            android:name=".func.TagFunc.TagResultActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".TagFuncActivity"
+            android:name=".func.TagFunc.TagFuncActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".faceFunc.FaceResultActivity"
+            android:name=".func.faceFunc.FaceResultActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".faceFunc.FaceFuncActivity"
+            android:name=".func.faceFunc.FaceFuncActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

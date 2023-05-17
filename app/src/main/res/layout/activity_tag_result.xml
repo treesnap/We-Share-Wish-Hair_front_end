@@ -10,7 +10,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".TagResultActivity">
+            tools:context=".func.TagFunc.TagResultActivity">
 
             <!--    top bar -->
             <androidx.appcompat.widget.Toolbar

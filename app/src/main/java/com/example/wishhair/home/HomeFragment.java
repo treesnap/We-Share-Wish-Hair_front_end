@@ -13,22 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.wishhair.CustomTokenHandler;
-import com.example.wishhair.faceFunc.FaceFuncActivity;
+import com.example.wishhair.sign.token.CustomTokenHandler;
+import com.example.wishhair.func.faceFunc.FaceFuncActivity;
 import com.example.wishhair.R;
-import com.example.wishhair.TagFuncActivity;
+import com.example.wishhair.func.TagFunc.TagFuncActivity;
 import com.example.wishhair.sign.UrlConst;
 
 import org.json.JSONArray;

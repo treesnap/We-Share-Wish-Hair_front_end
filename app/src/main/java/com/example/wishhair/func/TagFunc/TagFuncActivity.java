@@ -1,4 +1,4 @@
-package com.example.wishhair;
+package com.example.wishhair.func.TagFunc;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +13,9 @@ import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.example.wishhair.func.FuncLoading;
+import com.example.wishhair.R;
 
 import java.util.ArrayList;
 

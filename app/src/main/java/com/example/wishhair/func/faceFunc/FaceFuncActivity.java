@@ -1,4 +1,4 @@
-package com.example.wishhair.faceFunc;
+package com.example.wishhair.func.faceFunc;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -19,10 +19,10 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.wishhair.CustomTokenHandler;
-import com.example.wishhair.FuncLoading;
+import com.example.wishhair.sign.token.CustomTokenHandler;
+import com.example.wishhair.func.FuncLoading;
 import com.example.wishhair.R;
-import com.example.wishhair.UploadCallback;
+import com.example.wishhair.func.UploadCallback;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

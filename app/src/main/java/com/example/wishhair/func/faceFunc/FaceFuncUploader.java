@@ -1,12 +1,11 @@
-package com.example.wishhair.faceFunc;
+package com.example.wishhair.func.faceFunc;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.example.wishhair.BuildConfig;
-import com.example.wishhair.UploadCallback;
+import com.example.wishhair.func.UploadCallback;
 import com.example.wishhair.sign.UrlConst;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 

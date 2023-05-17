@@ -1,4 +1,4 @@
-package com.example.wishhair;
+package com.example.wishhair.func;
 
 import android.app.Dialog;
 import android.content.Context;

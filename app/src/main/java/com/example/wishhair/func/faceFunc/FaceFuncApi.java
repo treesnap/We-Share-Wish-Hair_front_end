@@ -1,4 +1,4 @@
-package com.example.wishhair.faceFunc;
+package com.example.wishhair.func.faceFunc;
 
 import java.util.List;
 
