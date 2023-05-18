@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.home.HomeRecommendAdapter;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
 import com.example.wishhair.home.HomeItems;
@@ -45,7 +46,7 @@ public class TagResultActivity extends AppCompatActivity {
 //            items.add(newItems);
 //        }
 
-        TagResultAdapter tagResultAdapter = new TagResultAdapter(items, this);
+        HomeRecommendAdapter tagResultAdapter = new HomeRecommendAdapter(items, this);
         tagResultAdapter.setOnItemClickListener((v1, position) -> {
             HomeItems selectedItem = items.get(position);
         });
@@ -53,7 +54,6 @@ public class TagResultActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.tagResult_recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setAdapter(tagResultAdapter);
-
 
         CustomTokenHandler customTokenHandler = new CustomTokenHandler(this);
         String accessToken = customTokenHandler.getAccessToken();

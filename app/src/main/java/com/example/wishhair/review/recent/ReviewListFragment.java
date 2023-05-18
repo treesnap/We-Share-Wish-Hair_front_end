@@ -182,9 +182,7 @@ public class ReviewListFragment extends Fragment {
                     ArrayList<String> receivedUrls = new ArrayList<>();
                     for (int j = 0; j < photosArray.length(); j++) {
                         JSONObject photoObject = photosArray.getJSONObject(j);
-                        String imageUrl = photoObject.getString("storeUrl");
-
-                        receivedUrls.add(imageUrl);
+                        receivedUrls.add(photoObject.getString("storeUrl"));
                     }
                     receivedData.setImageUrls(receivedUrls);
 

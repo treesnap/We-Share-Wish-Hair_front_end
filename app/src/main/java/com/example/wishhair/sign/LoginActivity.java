@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         login_pw = findViewById(R.id.ed_login_pw);
 
 //       TODO 평소 테스트 편하게 넘어가기 위해 login 정보 미리 삽입해놓음
-        login_id.setText("hamo35301@gmail.com");
+        login_id.setText("hath888@naver.com");
         login_pw.setText("1q2w3e4r!");
 
 //        login

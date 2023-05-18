@@ -43,7 +43,9 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<HomeRecommendAdap
     public void onBindViewHolder(@NonNull RecViewHolder holder, int position) {
         HomeItems item = items.get(position);
 
-        holder.bindHairImage(item.getHairImages().get(0));
+        if (item.getHairImages().size() > 0) {
+            holder.bindHairImage(item.getHairImages().get(0));
+        }
         holder.hairStyle.setText(item.getHairStyleName());
         holder.btn_view.setOnClickListener(view -> {
             int position1 = holder.getAdapterPosition();
