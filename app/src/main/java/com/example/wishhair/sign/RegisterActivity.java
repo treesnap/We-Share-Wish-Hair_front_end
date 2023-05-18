@@ -3,6 +3,7 @@ package com.example.wishhair.sign;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.R;
 
 import android.annotation.SuppressLint;
@@ -124,20 +125,9 @@ public class RegisterActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }, error -> {
-            NetworkResponse networkResponse = error.networkResponse;
-            if (networkResponse != null && networkResponse.data != null) {
-                String jsonError = new String(networkResponse.data);
-                try {
-                    JSONObject jsonObject = new JSONObject(jsonError);
-                    String message = jsonObject.getString("message");
-                    Log.e("register error", message);
-                    Toast.makeText(RegisterActivity.this.getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Log.e("Error", "Unknown error occurred.");
-            }
+            String message = GetErrorMessage.getErrorMessage(error);
+            Log.e("validate error message", message);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         });
 
         RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);

@@ -14,11 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.GetErrorMessage;
+import com.example.wishhair.hairItemAdapter;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.func.faceFunc.FaceFuncActivity;
 import com.example.wishhair.R;
@@ -38,12 +41,17 @@ import me.relex.circleindicator.CircleIndicator3;
 public class HomeFragment extends Fragment {
 
     private RequestQueue queue;
+    private String accessToken;
 
-    private final ArrayList<HomeItems> monthlyReviewItems = new ArrayList<>();
-    private ArrayList<HomeItems> recommendItems;
     private Button btn_tagFunc, btn_faceFunc, btn_faceFuncAgain;
     private boolean hasFaceShape;
     private String userNickName, faceShapeTag;
+
+    private final ArrayList<HomeItems> monthlyReviewItems = new ArrayList<>();
+
+    private ArrayList<HomeItems> recommendItems;
+    private hairItemAdapter homeRecommendAdapter;
+    private RecyclerView recommendRecyclerView;
 
     public HomeFragment() {}
 
@@ -68,7 +76,7 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.home_fragment, container, false);
         //      accessToken
         CustomTokenHandler customTokenHandler = new CustomTokenHandler(requireActivity());
-        String accessToken = customTokenHandler.getAccessToken();
+        accessToken = customTokenHandler.getAccessToken();
 
         queue = Volley.newRequestQueue(requireActivity());
 
@@ -94,7 +102,6 @@ public class HomeFragment extends Fragment {
         });
 
 //        monthlyReview
-
         monthlyReviewRequest(accessToken);
 
         ViewPager2 monthlyReviewPager = v.findViewById(R.id.home_ViewPager_review_monthly);
@@ -109,22 +116,10 @@ public class HomeFragment extends Fragment {
         TextView recUserName = v.findViewById(R.id.home_recommend_userName);
         recUserName.setText(userNickName);
 
+        recommendRecyclerView = v.findViewById(R.id.home_recommend_recyclerView);
+
         recommendItems = new ArrayList<>();
-        //===============================dummy data===============================
-        String imageSample = "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg";
-        for (int i = 0; i < 5; i++) {
-            HomeItems newRecItems = new HomeItems(imageSample, "hairStyle", "876", false);
-            recommendItems.add(newRecItems);
-        }
-
-        RecyclerView recommendRecyclerView = v.findViewById(R.id.home_recommend_recyclerView);
-        HomeRecommendAdapter homeRecommendAdapter = new HomeRecommendAdapter(recommendItems, getContext());
-        homeRecommendAdapter.setOnItemClickListener(((v1, position) -> {
-            HomeItems selectedItem = recommendItems.get(position);
-        }));
-
-        recommendRecyclerView.setAdapter(homeRecommendAdapter);
-        recommendRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        recommendRequest(accessToken);
 
         return v;
     }
@@ -180,7 +175,11 @@ public class HomeFragment extends Fragment {
                 e.printStackTrace();
             }
 
-        }, error -> Log.e("monthly request error", error.toString())) {
+        }, error -> {
+            String message = GetErrorMessage.getErrorMessage(error);
+            Log.e("validate error message", message);
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        }) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap();
@@ -190,5 +189,66 @@ public class HomeFragment extends Fragment {
         };
 
         queue.add(monthlyRequest);
+    }
+
+    private void recommendRequest(String accessToken) {
+        String recUrl = UrlConst.URL + "/api/hair_style/home";
+        JsonObjectRequest recRequest = new JsonObjectRequest(Request.Method.GET, recUrl, null, response -> {
+            Log.d("recResponse", response.toString());
+            String recResponse = String.valueOf(response);
+            try {
+                JSONObject result = new JSONObject(recResponse);
+                JSONArray resultArray = result.getJSONArray("result");
+                for (int i = 0; i < resultArray.length(); i++) {
+                    HomeItems item = new HomeItems();
+                    JSONObject itemObject = resultArray.getJSONObject(i);
+
+                    int hairStyleId = itemObject.getInt("hairStyleId");
+                    String hairStyleName = itemObject.getString("name");
+
+                    JSONArray photosArray = itemObject.getJSONArray("photos");
+                    ArrayList<String> photoUrls = new ArrayList<>();
+                    for (int j = 0; j < photosArray.length(); j++) {
+                        JSONObject photoObject = photosArray.getJSONObject(j);
+                        photoUrls.add(photoObject.getString("storeUrl"));
+                    }
+
+                    JSONArray hashTagsArray = itemObject.getJSONArray("hashTags");
+                    ArrayList<String> tags = new ArrayList<>();
+                    for (int j = 0; j < hashTagsArray.length(); j++) {
+                        JSONObject hasTagObject = hashTagsArray.getJSONObject(j);
+                        tags.add(hasTagObject.getString("tag"));
+                    }
+
+                    item.setHairStyleId(hairStyleId);
+                    item.setHairStyleName(hairStyleName);
+                    item.setHairImages(photoUrls);
+                    item.setTags(tags);
+
+                    recommendItems.add(item);
+                }
+                homeRecommendAdapter = new hairItemAdapter(recommendItems, getContext());
+                homeRecommendAdapter.setOnItemClickListener(((v1, position) -> {
+                    HomeItems selectedItem = recommendItems.get(position);
+                }));
+
+                recommendRecyclerView.setAdapter(homeRecommendAdapter);
+                recommendRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }, error -> {
+            String message = GetErrorMessage.getErrorMessage(error);
+            Log.e("validate error message", message);
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        }) { @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+                return params;
+            }
+        };
+        queue.add(recRequest);
     }
 }

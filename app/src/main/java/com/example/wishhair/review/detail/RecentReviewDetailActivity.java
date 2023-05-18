@@ -8,11 +8,14 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
 import com.example.wishhair.sign.UrlConst;
@@ -131,7 +134,7 @@ public class RecentReviewDetailActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }, error -> Log.e("recentIsLikeError", error.toString())) { @Override
+        }, this::printErrorMessage) { @Override
             public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap();
                 params.put("Authorization", "bearer" + accessToken);
@@ -149,7 +152,7 @@ public class RecentReviewDetailActivity extends AppCompatActivity {
 //            TODO : 좋아요 갯수 늘리기
             likeCount++;
             likes.setText(String.valueOf(likeCount));
-        }, error -> Log.e("likeError", error.toString())) {
+        }, this::printErrorMessage) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap();
@@ -167,7 +170,7 @@ public class RecentReviewDetailActivity extends AppCompatActivity {
 //            TODO : 좋아요 갯수 줄이기
             likeCount--;
             likes.setText(String.valueOf(likeCount));
-        }, error -> Log.e("likeError", error.toString())) {
+        }, this::printErrorMessage) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap();
@@ -176,6 +179,12 @@ public class RecentReviewDetailActivity extends AppCompatActivity {
             }
         };
         queue.add(request);
+    }
+
+    private void printErrorMessage(VolleyError error) {
+        String message = GetErrorMessage.getErrorMessage(error);
+        Log.e("validate error message", message);
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 }

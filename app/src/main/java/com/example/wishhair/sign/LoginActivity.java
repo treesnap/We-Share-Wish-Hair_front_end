@@ -5,6 +5,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.MainActivity;
 import com.example.wishhair.R;
 
@@ -39,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         login_pw = findViewById(R.id.ed_login_pw);
 
 //       TODO 평소 테스트 편하게 넘어가기 위해 login 정보 미리 삽입해놓음
-        login_id.setText("hamo35301@gmail.com");
+        login_id.setText("hath888@naver.com");
         login_pw.setText("1q2w3e4r!");
 
 //        login
@@ -107,18 +108,9 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }, error -> {
-            NetworkResponse networkResponse = error.networkResponse;
-            if (networkResponse != null && networkResponse.data != null) {
-                String jsonError = new String(networkResponse.data);
-                try {
-                    JSONObject jsonObject = new JSONObject(jsonError);
-                    String message = jsonObject.getString("message");
-                    Toast.makeText( getApplicationContext(), message, Toast.LENGTH_SHORT ).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                login_pw.setText("");
-            }
+            String message = GetErrorMessage.getErrorMessage(error);
+            Log.e("validate error message", message);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         });
 
         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);

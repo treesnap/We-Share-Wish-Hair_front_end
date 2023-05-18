@@ -20,6 +20,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.R;
 
 import org.json.JSONException;
@@ -133,23 +134,13 @@ public class FindPasswordResultActivity extends AppCompatActivity {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PATCH, refreshUrl, requestObject, response -> {
             ed_pw_config.setEnabled(false);
             ed_pw_input.setEnabled(false);
-            view_done.setVisibility(View.VISIBLE);}, this::getErrorMessage);
+            view_done.setVisibility(View.VISIBLE);}, error -> {
+            String message = GetErrorMessage.getErrorMessage(error);
+            Log.e("validate error message", message);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        });
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
     }
 
-    private void getErrorMessage(VolleyError error) {
-        NetworkResponse networkResponse = error.networkResponse;
-        if (networkResponse != null && networkResponse.data != null) {
-            String jsonError = new String(networkResponse.data);
-            try {
-                JSONObject jsonObject = new JSONObject(jsonError);
-                Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Log.e("getErrorMessage", "fail to get error message");
-        }
-    }
 }

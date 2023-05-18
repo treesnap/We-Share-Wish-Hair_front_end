@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -14,6 +15,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.GetErrorMessage;
+import com.example.wishhair.hairItemAdapter;
+import com.example.wishhair.sign.UrlConst;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
 import com.example.wishhair.home.HomeItems;
@@ -40,12 +44,12 @@ public class TagResultActivity extends AppCompatActivity {
         ArrayList<HomeItems> items = new ArrayList<>();
         //        dummyData
         String imageSample = "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg";
-        for (int i = 0; i < 5; i++) {
-            HomeItems newItems = new HomeItems(imageSample, "물결펌", "876", false);
-            items.add(newItems);
-        }
+//        for (int i = 0; i < 5; i++) {
+//            HomeItems newItems = new HomeItems(imageSample, "물결펌", "876", false);
+//            items.add(newItems);
+//        }
 
-        TagResultAdapter tagResultAdapter = new TagResultAdapter(items, this);
+        hairItemAdapter tagResultAdapter = new hairItemAdapter(items, this);
         tagResultAdapter.setOnItemClickListener((v1, position) -> {
             HomeItems selectedItem = items.get(position);
         });
@@ -53,7 +57,6 @@ public class TagResultActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.tagResult_recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setAdapter(tagResultAdapter);
-
 
         CustomTokenHandler customTokenHandler = new CustomTokenHandler(this);
         String accessToken = customTokenHandler.getAccessToken();
@@ -69,30 +72,22 @@ public class TagResultActivity extends AppCompatActivity {
         String selectedPerm = getIntent().getStringExtra("selectedPerm");
         ArrayList<String> selectedImages = getIntent().getStringArrayListExtra("selectedImages");
 
-        JSONObject jsonObject = new JSONObject();
-        JSONArray imageTags = new JSONArray();
-        try {
-            jsonObject.put("hairLength", selectedHairLength);
-            jsonObject.put("perm", selectedPerm);
-            for (int i = 0; i < selectedImages.size(); i++) {
-                imageTags.put(selectedImages.get(i));
-            }
-            jsonObject.put("imageTags", imageTags);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        StringBuilder query = new StringBuilder();
+        query.append("tags=").append(selectedHairLength).append("&");
+        query.append("tags=").append(selectedPerm).append("&");
+        for (int i = 0; i < selectedImages.size(); i++) {
+            query.append("tags=").append(selectedImages.get(i)).append("&");
         }
-        Log.d("json", jsonObject.toString());
-        String URL = "";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, jsonObject, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-//                TODO : 결과 파싱해서 recyclerView 설정
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        query.delete(query.length() - 1, query.length());
 
-            }
+        String tagResultUrl = UrlConst.URL + "/api/hair_style/recommend?" + query;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, tagResultUrl, null, response -> {
+//                TODO : 결과 파싱해서 recyclerView 설정
+            Log.d("tagResponse", response.toString());
+        }, error -> {
+            String message = GetErrorMessage.getErrorMessage(error);
+            Log.e("validate error message", message);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }) { @Override
             public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap();

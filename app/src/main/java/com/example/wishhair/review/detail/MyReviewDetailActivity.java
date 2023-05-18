@@ -21,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
 import com.example.wishhair.review.ReviewItem;
@@ -165,7 +166,11 @@ public class MyReviewDetailActivity extends AppCompatActivity {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, deleteUrl, null,
                 response -> Toast.makeText(this, "리뷰가 삭제되었습니다.", Toast.LENGTH_LONG).show(),
-                error -> Log.e("deleteError", error.toString())){ @Override
+                error -> {
+                    String message = GetErrorMessage.getErrorMessage(error);
+                    Log.e("validate error message", message);
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                }){ @Override
             public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap();
                 params.put("Authorization", "bearer" + accessToken);

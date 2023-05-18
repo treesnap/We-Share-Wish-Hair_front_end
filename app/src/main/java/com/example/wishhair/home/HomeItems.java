@@ -1,5 +1,7 @@
 package com.example.wishhair.home;
 
+import java.util.ArrayList;
+
 public class HomeItems {
 //    monthly review
     private int reviewId;
@@ -38,47 +40,51 @@ public class HomeItems {
 
     //    TODO: set recommend item
 //    recommend
-    private String hairImage;
-    private String hairStyle;
+    private int hairStyleId;
+    private ArrayList<String> hairImages;
+    private String hairStyleName;
+    private ArrayList<String> tags;
+
     private String likes;
-    private boolean isLike;
 
-    public HomeItems(String hairImage, String hairStyle, String likes, boolean isLike) {
-        this.hairImage = hairImage;
-        this.hairStyle = hairStyle;
-        this.likes = likes;
-        this.isLike = isLike;
+    public HomeItems() {}
+
+    public HomeItems(int hairStyleId, ArrayList<String> hairImages, String hairStyleName, ArrayList<String> tags) {
+        this.hairStyleId = hairStyleId;
+        this.hairImages = hairImages;
+        this.hairStyleName = hairStyleName;
+        this.tags = tags;
     }
 
-    public String getHairImage() {
-        return hairImage;
+    public int getHairStyleId() {
+        return hairStyleId;
     }
 
-    public void setHairImage(String hairImage) {
-        this.hairImage = hairImage;
+    public void setHairStyleId(int hairStyleId) {
+        this.hairStyleId = hairStyleId;
     }
 
-    public String getHairStyle() {
-        return hairStyle;
+    public ArrayList<String> getHairImages() {
+        return hairImages;
     }
 
-    public void setHairStyle(String hairStyle) {
-        this.hairStyle = hairStyle;
+    public void setHairImages(ArrayList<String> hairImages) {
+        this.hairImages = hairImages;
     }
 
-    public String getLikes() {
-        return likes;
+    public String getHairStyleName() {
+        return hairStyleName;
     }
 
-    public void setLikes(String likes) {
-        this.likes = likes;
+    public void setHairStyleName(String hairStyleName) {
+        this.hairStyleName = hairStyleName;
     }
 
-    public boolean getIsLike() {
-        return isLike;
+    public ArrayList<String> getTags() {
+        return tags;
     }
 
-    public void setIsLike(boolean like) {
-        isLike = like;
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
     }
 }
