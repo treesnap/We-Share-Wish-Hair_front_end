@@ -37,21 +37,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class ReviewListFragment extends Fragment {
-// recyclerView 내용 업데이트 및 갱신
-// https://kadosholy.tistory.com/55
-// https://velog.io/@yamamamo/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EC%A0%84%ED%99%94%EB%B2%88%ED%98%B8%EB%B6%80%EC%95%B12-%EB%A6%AC%EC%82%AC%EC%9D%B4%ED%81%B4%EB%9F%AC%EB%B7%B0-%EC%95%84%EC%9D%B4%ED%85%9C-%ED%81%B4%EB%A6%AD-%EC%88%98%EC%A0%95-%EC%82%AD%EC%A0%9C
 
-    public ReviewListFragment() {
-        // Required empty public constructor
-        }
+    public ReviewListFragment() {}
 
     private ArrayList<ReviewItem> recentReviewItems;
     private RadioGroup filter;
@@ -69,7 +69,6 @@ public class ReviewListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         //       request List data
         reviewListRequest(accessToken);
     }
@@ -135,7 +134,6 @@ public class ReviewListFragment extends Fragment {
 
         Spinner spinner_sort = v.findViewById(R.id.review_fragment_spinner_sort);
         sort_select(spinner_sort);
-//        TODO 정렬 기준으로 받아오기
 
         return v;
     }
@@ -218,19 +216,61 @@ public class ReviewListFragment extends Fragment {
         requestQueue.add(jsonObjectRequest);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void sort_select(Spinner spinner_sort) {
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, sortItems);
         spinner_sort.setAdapter(spinnerAdapter);
 
         spinner_sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 sort_selected = sortItems[position];
-// https://recipes4dev.tistory.com/79
-                Comparator<ReviewItem> likeDesc = (item1, item2) -> (item2.getLikes() - item1.getLikes());
-                Collections.sort(recentReviewItems, likeDesc);
+                if (sort_selected.equals(sortItems[0])) { //최신순 정렬
+                    sort_latest();
+                } else if (sort_selected.equals(sortItems[1])) { //오래된 순 정렬
+                    sort_old();
+                } else if (sort_selected.equals(sortItems[2])) { // 좋아요 순 정렬
+//                    TODO : 좋아요 데이터가 없어서 테스트 못함
+                    Comparator<ReviewItem> likeDesc = (item1, item2) -> (item2.getLikes() - item1.getLikes());
+                    Collections.sort(recentReviewItems, likeDesc);
+                }
                 recentAdapter.notifyDataSetChanged();
+            }
+
+            private void sort_old() {
+                Collections.sort(recentReviewItems, new Comparator<>() {
+                    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+
+                    @Override
+                    public int compare(ReviewItem item1, ReviewItem item2) {
+                        try {
+                            Date date1 = dateFormat.parse(item1.getCreatedDate());
+                            Date date2 = dateFormat.parse(item2.getCreatedDate());
+                            return Objects.requireNonNull(date1).compareTo(date2);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        return 0;
+                    }
+                });
+            }
+
+            private void sort_latest() {
+                Collections.sort(recentReviewItems, new Comparator<>() {
+                    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+
+                    @Override
+                    public int compare(ReviewItem item1, ReviewItem item2) {
+                        try {
+                            Date date1 = dateFormat.parse(item1.getCreatedDate());
+                            Date date2 = dateFormat.parse(item2.getCreatedDate());
+                            return Objects.requireNonNull(date2).compareTo(date1);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        return 0;
+                    }
+                });
             }
 
             @Override

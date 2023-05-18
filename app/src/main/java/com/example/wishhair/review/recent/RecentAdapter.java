@@ -15,7 +15,11 @@ import com.bumptech.glide.Glide;
 import com.example.wishhair.R;
 import com.example.wishhair.review.ReviewItem;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder> {
 
@@ -62,7 +66,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
         holder.tags.setText(tags);
         holder.nickname.setText(item.getUserNickName());
         holder.grade.setText(item.getScore());
-        holder.date.setText(item.getCreatedDate());
+        holder.date.setText(parseDate(item.getCreatedDate()));
         if (item.getIsHeart()){
             holder.isHeart.setImageResource(R.drawable.heart_fill);
         } else {
@@ -106,5 +110,18 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return reviewItems.size();
+    }
+
+    private String parseDate(String inputDate) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+
+        try {
+            Date date = inputFormat.parse(inputDate);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "failParseDate";
     }
 }
