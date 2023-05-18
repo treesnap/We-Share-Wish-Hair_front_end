@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.hairItemAdapter;
+import com.example.wishhair.sign.UrlConst;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
 import com.example.wishhair.home.HomeItems;
@@ -69,26 +70,19 @@ public class TagResultActivity extends AppCompatActivity {
         String selectedPerm = getIntent().getStringExtra("selectedPerm");
         ArrayList<String> selectedImages = getIntent().getStringArrayListExtra("selectedImages");
 
-        StringBuilder tags = new StringBuilder();
+        StringBuilder query = new StringBuilder();
+        query.append("tags=").append(selectedHairLength).append("&");
+        query.append("tags=").append(selectedPerm).append("&");
         for (int i = 0; i < selectedImages.size(); i++) {
-            tags.append(selectedImages.get(i)).append(" ");
+            query.append("tags=").append(selectedImages.get(i)).append("&");
         }
+        query.delete(query.length() - 1, query.length());
 
-        String query = selectedHairLength + " " + selectedPerm + " " + tags;
-        Log.d("query", query);
-
-        String tagResultUrl = "/api/hair_style/recommend";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, tagResultUrl, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
+        String tagResultUrl = UrlConst.URL + "/api/hair_style/recommend?" + query;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, tagResultUrl, null, response -> {
 //                TODO : 결과 파싱해서 recyclerView 설정
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) { @Override
+            Log.d("tagResponse", response.toString());
+        }, error -> {}) { @Override
             public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap();
                 params.put("Authorization", "bearer" + accessToken);
