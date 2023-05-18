@@ -14,11 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.hairItemAdapter;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.func.faceFunc.FaceFuncActivity;
@@ -83,7 +85,7 @@ public class HomeFragment extends Fragment {
 
 //        faceFunc
         btn_faceFunc.setOnClickListener(view -> {
-            Intent intent = new Intent(requireContext(), TagFuncActivity.class);
+            Intent intent = new Intent(requireContext(), FaceFuncActivity.class);
             startActivity(intent);
         });
 
@@ -173,7 +175,11 @@ public class HomeFragment extends Fragment {
                 e.printStackTrace();
             }
 
-        }, error -> Log.e("monthly request error", error.toString())) {
+        }, error -> {
+            String message = GetErrorMessage.getErrorMessage(error);
+            Log.e("validate error message", message);
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        }) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap();
@@ -232,7 +238,11 @@ public class HomeFragment extends Fragment {
                 e.printStackTrace();
             }
 
-        }, error -> Log.e("recRequestError", error.toString())) { @Override
+        }, error -> {
+            String message = GetErrorMessage.getErrorMessage(error);
+            Log.e("validate error message", message);
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        }) { @Override
             public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap();
                 params.put("Authorization", "bearer" + accessToken);

@@ -23,6 +23,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.sign.token.CustomRetryPolicy;
 import com.example.wishhair.R;
 
@@ -130,7 +131,7 @@ public class EmailCertActivity extends AppCompatActivity {
             }
 
         }, error -> {
-            String message = getErrorMessage(error);
+            String message = GetErrorMessage.getErrorMessage(error);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             Log.e("send error message", message);
         }) {
@@ -176,9 +177,9 @@ public class EmailCertActivity extends AppCompatActivity {
             ed_code.setCompoundDrawablesWithIntrinsicBounds(null, null, check_success, null);
             btn_intent.setVisibility(View.VISIBLE);
         }, error -> {
-            String message = getErrorMessage(error);
-            Log.e("validate error message", message);
             ed_code.setCompoundDrawablesWithIntrinsicBounds(null, null, check_fail, null);
+            String message = GetErrorMessage.getErrorMessage(error);
+            Log.e("validate error message", message);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }) {
             @Override
@@ -192,20 +193,5 @@ public class EmailCertActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         queue.add(jsonObjectRequest);
-    }
-
-    private String getErrorMessage(VolleyError error) {
-        NetworkResponse networkResponse = error.networkResponse;
-        if (networkResponse != null && networkResponse.data != null) {
-            String jsonError = new String(networkResponse.data);
-            try {
-                JSONObject jsonObject = new JSONObject(jsonError);
-                return jsonObject.getString("message");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        Log.e("getErrorMessage", "fail to get error message");
-        return "null";
     }
 }

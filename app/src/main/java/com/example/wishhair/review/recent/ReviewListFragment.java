@@ -21,11 +21,13 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
 import com.example.wishhair.review.ReviewItem;
@@ -202,7 +204,11 @@ public class ReviewListFragment extends Fragment {
                 e.printStackTrace();
             }
 
-        }, error -> Log.e("reviewList error", error.toString())) { @Override
+        }, error -> {
+            String message = GetErrorMessage.getErrorMessage(error);
+            Log.e("validate error message", message);
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        }) { @Override
             public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap();
                 params.put("Authorization", "bearer" + accessToken);

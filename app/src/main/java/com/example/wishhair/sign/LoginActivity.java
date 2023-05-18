@@ -5,6 +5,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.MainActivity;
 import com.example.wishhair.R;
 
@@ -107,18 +108,9 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }, error -> {
-            NetworkResponse networkResponse = error.networkResponse;
-            if (networkResponse != null && networkResponse.data != null) {
-                String jsonError = new String(networkResponse.data);
-                try {
-                    JSONObject jsonObject = new JSONObject(jsonError);
-                    String message = jsonObject.getString("message");
-                    Toast.makeText( getApplicationContext(), message, Toast.LENGTH_SHORT ).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                login_pw.setText("");
-            }
+            String message = GetErrorMessage.getErrorMessage(error);
+            Log.e("validate error message", message);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         });
 
         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);

@@ -5,8 +5,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -14,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.hairItemAdapter;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
@@ -81,11 +84,10 @@ public class FaceResultActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
 //                TODO : 결과 파싱해서 userName, faceShape, faceShape_message / recyclerView 설정
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
+        }, error -> {
+            String message = GetErrorMessage.getErrorMessage(error);
+            Log.e("validate error message", message);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }) { @Override
             public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap();
