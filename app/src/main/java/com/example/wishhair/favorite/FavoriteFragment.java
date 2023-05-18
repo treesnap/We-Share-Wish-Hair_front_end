@@ -63,7 +63,7 @@ public class FavoriteFragment extends Fragment {
 
     private SharedPreferences loginSP;
     final static private String url = UrlConst.URL + "/api/hair_style/wish";
-    final static private String url2 = UrlConst.URL + "/api/hair_style/wish/4";
+    final static private String url2 = UrlConst.URL + "/api/hair_style/wish/5";
 
     static private String accessToken;
 
@@ -219,7 +219,7 @@ public class FavoriteFragment extends Fragment {
     }
 
     public void testRequest(String accessToken) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url2 , null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url2, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -228,11 +228,7 @@ public class FavoriteFragment extends Fragment {
                     throw new RuntimeException(e);
                 }
             }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-            }
+        }, volleyError -> {
         }) {
 
             @Override

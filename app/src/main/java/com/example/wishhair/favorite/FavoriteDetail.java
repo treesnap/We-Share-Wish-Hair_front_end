@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -153,11 +154,13 @@ public class FavoriteDetail extends Fragment {
             hashtags.setText(tag);
             styleId = getArguments().getInt("hairStyleId");
             if (getArguments().getStringArrayList("ImageUrls") != null) {
-                images = getArguments().getStringArrayList("ImageUrls");
+//                images = getArguments().getStringArrayList("ImageUrls");
             }
             else
                 Log.d("ImageUrls transfer test", "is null");
         }
+        loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        accessToken = loginSP.getString("accessToken", "fail acc");
 
         // 찜 여부 확인
         FavoriteCheckRequest(accessToken);
@@ -166,22 +169,12 @@ public class FavoriteDetail extends Fragment {
         sliderViewPager.setAdapter(new ImageSliderAdapter(getContext(), images));
         circleIndicator.setViewPager(sliderViewPager);
 
-        loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        accessToken = loginSP.getString("accessToken", "fail acc");
-
         favoriteDetailRecyclerViewAdapter = new FavoriteDetailRecyclerViewAdapter();
         reviewRecyclerView.setAdapter(favoriteDetailRecyclerViewAdapter);
 
-        Log.d("wishcheck", String.valueOf(isWishing));
-        if (!isWishing) {
-            favoriteBtn.setImageResource(R.drawable.heart_fill_5);
-        } else {
-            favoriteBtn.setImageResource(R.drawable.heart_empty);
-            favoriteBtn.setBackgroundColor(Color.WHITE);
-        }
 
         favoriteBtn.setOnClickListener(view1 -> {
-            if (isWishing) {
+            if (!isWishing) {
                 FavoritePOSTRequest(accessToken);
                 favoriteBtn.setImageResource(R.drawable.heart_fill_5);
                 isWishing =! isWishing;
@@ -200,14 +193,24 @@ public class FavoriteDetail extends Fragment {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_favorite+styleId , null, response -> {
             try {
                 isWishing = response.getBoolean("isWishing");
+
+                if (isWishing) {
+                    favoriteBtn.setImageResource(R.drawable.heart_fill_5);
+                } else {
+                    favoriteBtn.setImageResource(R.drawable.heart_empty);
+                    favoriteBtn.setBackgroundColor(Color.WHITE);
+                }
+
             } catch (JSONException e) {
 //                    e.printStackTrace();
             }
         }, volleyError -> {
             int errorCode = volleyError.networkResponse != null ? volleyError.networkResponse.statusCode : -1;
+            Log.e("error message", getErrorMessage(volleyError));
             switch (errorCode) {
                 case 400:
                     // Bad Request 에러 처리
+
                     break;
                 case 401:
                     break;
@@ -261,6 +264,21 @@ public class FavoriteDetail extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(jsonObjectRequest);
     }
+    private String getErrorMessage(VolleyError error) {
+        NetworkResponse networkResponse = error.networkResponse;
+        if (networkResponse != null && networkResponse.data != null) {
+            String jsonError = new String(networkResponse.data);
+            try {
+                JSONObject jsonObject = new JSONObject(jsonError);
+                return jsonObject.getString("message");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        Log.e("getErrorMessage", "fail to get error message");
+        return "null";
+    }
+
 
     //favorite detail recyclerview request
 //    public void FavoriteDetailRecyclerViewRequest(String accessToken) {
