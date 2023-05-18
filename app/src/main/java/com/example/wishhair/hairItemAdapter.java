@@ -1,4 +1,4 @@
-package com.example.wishhair.home;
+package com.example.wishhair;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,23 +12,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.wishhair.R;
+import com.example.wishhair.home.HomeItems;
 
 import java.util.ArrayList;
 
-public class HomeRecommendAdapter extends RecyclerView.Adapter<HomeRecommendAdapter.RecViewHolder>{
+public class hairItemAdapter extends RecyclerView.Adapter<hairItemAdapter.RecViewHolder>{
     private final ArrayList<HomeItems> items;
     private final Context context;
 
-    public HomeRecommendAdapter(ArrayList<HomeItems> items, Context context) {
+    public hairItemAdapter(ArrayList<HomeItems> items, Context context) {
         this.items = items;
         this.context = context;
     }
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
-    private HomeRecommendAdapter.OnItemClickListener listener = null;
-    public void setOnItemClickListener(HomeRecommendAdapter.OnItemClickListener listener) {
+    private hairItemAdapter.OnItemClickListener listener = null;
+    public void setOnItemClickListener(hairItemAdapter.OnItemClickListener listener) {
         this.listener = listener;
     }
 

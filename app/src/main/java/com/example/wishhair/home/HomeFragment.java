@@ -19,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.hairItemAdapter;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.func.faceFunc.FaceFuncActivity;
 import com.example.wishhair.R;
@@ -47,7 +48,7 @@ public class HomeFragment extends Fragment {
     private final ArrayList<HomeItems> monthlyReviewItems = new ArrayList<>();
 
     private ArrayList<HomeItems> recommendItems;
-    private HomeRecommendAdapter homeRecommendAdapter;
+    private hairItemAdapter homeRecommendAdapter;
     private RecyclerView recommendRecyclerView;
 
     public HomeFragment() {}
@@ -220,7 +221,7 @@ public class HomeFragment extends Fragment {
 
                     recommendItems.add(item);
                 }
-                homeRecommendAdapter = new HomeRecommendAdapter(recommendItems, getContext());
+                homeRecommendAdapter = new hairItemAdapter(recommendItems, getContext());
                 homeRecommendAdapter.setOnItemClickListener(((v1, position) -> {
                     HomeItems selectedItem = recommendItems.get(position);
                 }));

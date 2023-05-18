@@ -14,7 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.wishhair.home.HomeRecommendAdapter;
+import com.example.wishhair.hairItemAdapter;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
 import com.example.wishhair.home.HomeItems;
@@ -46,7 +46,7 @@ public class TagResultActivity extends AppCompatActivity {
 //            items.add(newItems);
 //        }
 
-        HomeRecommendAdapter tagResultAdapter = new HomeRecommendAdapter(items, this);
+        hairItemAdapter tagResultAdapter = new hairItemAdapter(items, this);
         tagResultAdapter.setOnItemClickListener((v1, position) -> {
             HomeItems selectedItem = items.get(position);
         });
@@ -82,8 +82,9 @@ public class TagResultActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Log.d("json", jsonObject.toString());
-        String URL = "";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, jsonObject, new Response.Listener<JSONObject>() {
+
+        String tagResultUrl = "";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, tagResultUrl, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
 //                TODO : 결과 파싱해서 recyclerView 설정

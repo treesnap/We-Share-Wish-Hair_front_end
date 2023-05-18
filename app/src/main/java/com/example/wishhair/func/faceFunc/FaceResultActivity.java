@@ -14,7 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.wishhair.home.HomeRecommendAdapter;
+import com.example.wishhair.hairItemAdapter;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
 import com.example.wishhair.home.HomeItems;
@@ -60,7 +60,7 @@ public class FaceResultActivity extends AppCompatActivity {
 //            faceRecItems.add(newItems);
 //        }
 
-        HomeRecommendAdapter faceResultAdapter = new HomeRecommendAdapter(faceRecItems, this);
+        hairItemAdapter faceResultAdapter = new hairItemAdapter(faceRecItems, this);
         faceResultAdapter.setOnItemClickListener((v1, position) -> {
             HomeItems selectedItem = faceRecItems.get(position);
         });
@@ -75,8 +75,8 @@ public class FaceResultActivity extends AppCompatActivity {
     }
 
     private void faceResultRequest(String accessToken) {
-        String URL = "";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+        String faceResultUrl = "";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, faceResultUrl, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
 //                TODO : 결과 파싱해서 userName, faceShape, faceShape_message / recyclerView 설정
