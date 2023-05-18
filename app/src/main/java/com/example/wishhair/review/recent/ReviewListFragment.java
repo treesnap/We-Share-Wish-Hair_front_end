@@ -50,13 +50,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ReviewListFragment extends Fragment {
-// recyclerView 내용 업데이트 및 갱신
-// https://kadosholy.tistory.com/55
-// https://velog.io/@yamamamo/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EC%A0%84%ED%99%94%EB%B2%88%ED%98%B8%EB%B6%80%EC%95%B12-%EB%A6%AC%EC%82%AC%EC%9D%B4%ED%81%B4%EB%9F%AC%EB%B7%B0-%EC%95%84%EC%9D%B4%ED%85%9C-%ED%81%B4%EB%A6%AD-%EC%88%98%EC%A0%95-%EC%82%AD%EC%A0%9C
 
-    public ReviewListFragment() {
-        // Required empty public constructor
-        }
+    public ReviewListFragment() {}
 
     private ArrayList<ReviewItem> recentReviewItems;
     private RadioGroup filter;
@@ -74,7 +69,6 @@ public class ReviewListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         //       request List data
         reviewListRequest(accessToken);
     }
