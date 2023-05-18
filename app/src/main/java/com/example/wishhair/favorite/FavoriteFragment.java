@@ -170,11 +170,13 @@ public class FavoriteFragment extends Fragment {
                         item.setFavoritePictureUrls(arrayList);
                         for (int j=0;j<ImageUrls.length();j++) {
                             JSONObject ImageUrl = ImageUrls.getJSONObject(j);
-                            item.addFavoritePictureUrls(ImageUrl.getString("storeUrl"));
+//                            item.addFavoritePictureUrls(ImageUrl.getString("storeUrl"));
+                            arrayList.add(ImageUrl.getString("storeUrl"));
                             if (j==0) {
                                 item.setFavoritePicture(ImageUrl.getString("storeUrl"));
                             }
                         }
+                        item.setFavoritePictureUrls(arrayList);
                         Log.d("imageurl request", item.getFavoritePictureUrls().toString());
                         adapter.addItem(item);
                         adapter.notifyDataSetChanged();

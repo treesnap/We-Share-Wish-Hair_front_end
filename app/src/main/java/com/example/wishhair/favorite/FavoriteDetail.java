@@ -172,7 +172,8 @@ public class FavoriteDetail extends Fragment {
         if (!isWishing) {
             favoriteBtn.setImageResource(R.drawable.heart_fill_5);
         } else {
-            favoriteBtn.setImageResource(R.drawable.heart_empty2);
+            favoriteBtn.setImageResource(R.drawable.heart_empty);
+            favoriteBtn.setBackgroundColor(Color.WHITE);
         }
 
         favoriteBtn.setOnClickListener(new View.OnClickListener() {
