@@ -168,6 +168,7 @@ public class HomeFragment extends Fragment {
                     String receivedContents = object.getString("contents");
 
                     HomeItems newItem = new HomeItems(reviewId, receivedUserNickname, receivedContents);
+//                    TODO : 요청 보낼 때 마다 아이템 쌓임 버그
                     monthlyReviewItems.add(newItem);
                 }
             } catch (JSONException e) {
