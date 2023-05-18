@@ -54,34 +54,38 @@ public class FavoriteDetail extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public FavoriteDetail() {
-        // Required empty public constructor
-    }
-    private SharedPreferences loginSP;
+    public FavoriteDetail() {}
+
     final static private String url_favorite = UrlConst.URL + "/api/hair_style/wish/";
     final static private String url_favorite_chk = UrlConst.URL + "/api";
 
+//    accessToken
+    private SharedPreferences loginSP;
     static private String accessToken;
 
-    int styleId;
-    ImageButton favoriteBtn;
-    TextView stylenameTv;
-    TextView hashtags;
-    MainActivity mainActivity;
+    private MainActivity mainActivity;
+
+    private int styleId;
+    private boolean isWishing;
+
+    private ImageButton favoriteBtn;
+    private TextView styleNameTv, hashtags;
     private OnBackPressedCallback callback;
+
     private ViewPager2 sliderViewPager;
     private CircleIndicator3 circleIndicator;
-    FavoriteDetailRecyclerViewAdapter favoriteDetailRecyclerViewAdapter;
-    RecyclerView reviewRecyclerView;
-    boolean isWishing;
-    public ArrayList<String> images = new ArrayList<String>(
+
+    private FavoriteDetailRecyclerViewAdapter favoriteDetailRecyclerViewAdapter;
+    private RecyclerView reviewRecyclerView;
+
+    public ArrayList<String> images = new ArrayList<>(
             Arrays.asList(
-            "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg",
-            "https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg",
-            "https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg",
-            "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg",
-            "https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg"
-    ));
+                    "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg",
+                    "https://cdn.pixabay.com/photo/2020/11/04/15/29/coffee-beans-5712780_1280.jpg",
+                    "https://cdn.pixabay.com/photo/2020/03/08/21/41/landscape-4913841_1280.jpg",
+                    "https://cdn.pixabay.com/photo/2020/09/02/18/03/girl-5539094_1280.jpg",
+                    "https://cdn.pixabay.com/photo/2014/03/03/16/15/mosque-279015_1280.jpg"
+            ));
 
     public static FavoriteDetail newInstance(String param1, String param2) {
         FavoriteDetail fragment = new FavoriteDetail();
@@ -123,7 +127,7 @@ public class FavoriteDetail extends Fragment {
         sliderViewPager = view.findViewById(R.id.favorite_detail_viewpager);
         circleIndicator = view.findViewById(R.id.favorite_detail_indicator);
         favoriteBtn = view.findViewById(R.id.favorite_detail_heart_button);
-        stylenameTv = view.findViewById(R.id.favorite_detail_stylename);
+        styleNameTv = view.findViewById(R.id.favorite_detail_stylename);
         hashtags = view.findViewById(R.id.favorite_detail_hashtag);
         reviewRecyclerView = view.findViewById(R.id.favorite_detail_review_recyclerview);
         return view;
@@ -135,7 +139,7 @@ public class FavoriteDetail extends Fragment {
 
         // data transfer (FavoriteFragment -> FavoriteDetailFragment)
         if (getArguments() != null) {
-            stylenameTv.setText(getArguments().getString("hairStylename"));
+            styleNameTv.setText(getArguments().getString("hairStylename"));
             String[] tags = getArguments().getStringArray("tags");
             String tag = "";
             try {
@@ -176,55 +180,42 @@ public class FavoriteDetail extends Fragment {
             favoriteBtn.setBackgroundColor(Color.WHITE);
         }
 
-        favoriteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isWishing) {
-                    FavoritePOSTRequest(accessToken);
-                    favoriteBtn.setImageResource(R.drawable.heart_fill_5);
-                    isWishing =! isWishing;
-                    Log.d("favchk", "post");
-                } else {
-                    FavoriteDELETERequest(accessToken);
-                    favoriteBtn.setImageResource(R.drawable.heart_empty);
-                    favoriteBtn.setBackgroundColor(Color.WHITE);
-                    isWishing =! isWishing;
-                    Log.d("favchk", "delete");
-                }
+        favoriteBtn.setOnClickListener(view1 -> {
+            if (isWishing) {
+                FavoritePOSTRequest(accessToken);
+                favoriteBtn.setImageResource(R.drawable.heart_fill_5);
+                isWishing =! isWishing;
+                Log.d("favchk", "post");
+            } else {
+                FavoriteDELETERequest(accessToken);
+                favoriteBtn.setImageResource(R.drawable.heart_empty);
+                favoriteBtn.setBackgroundColor(Color.WHITE);
+                isWishing =! isWishing;
+                Log.d("favchk", "delete");
             }
         });
     }
 
     public void FavoriteCheckRequest(String accessToken) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_favorite+styleId , null, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    isWishing = response.getBoolean("isWishing");
-                } catch (JSONException e) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_favorite+styleId , null, response -> {
+            try {
+                isWishing = response.getBoolean("isWishing");
+            } catch (JSONException e) {
 //                    e.printStackTrace();
-                }
             }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                int errorCode = volleyError.networkResponse != null ? volleyError.networkResponse.statusCode : -1;
-                switch (errorCode) {
-                    case 400:
-                        // Bad Request 에러 처리
-                        break;
-                    case 401:
-                        Log.d("favorite check error", "error");
-                        break;
-                    case 404:
-                        // Not Found 에러 처리
-                        break;
-                }
+        }, volleyError -> {
+            int errorCode = volleyError.networkResponse != null ? volleyError.networkResponse.statusCode : -1;
+            switch (errorCode) {
+                case 400:
+                    // Bad Request 에러 처리
+                    break;
+                case 401:
+                    break;
+                case 404:
+                    // Not Found 에러 처리
+                    break;
             }
         }) {
-
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap();
@@ -240,23 +231,13 @@ public class FavoriteDetail extends Fragment {
 
     public void FavoritePOSTRequest(String accessToken) {
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url_favorite+styleId , null, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-            }
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url_favorite+styleId , null, response -> {
+        }, volleyError -> {
         }) {
-
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap();
                 params.put("Authorization", "bearer" + accessToken);
-
                 return params;
             }
         };
@@ -265,19 +246,9 @@ public class FavoriteDetail extends Fragment {
         queue.add(jsonObjectRequest);
     }
     public void FavoriteDELETERequest(String accessToken) {
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url_favorite+styleId , null, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-            }
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url_favorite+styleId , null, response -> {
+        }, volleyError -> {
         }) {
-
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap();
@@ -290,8 +261,6 @@ public class FavoriteDetail extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(jsonObjectRequest);
     }
-
-
 
     //favorite detail recyclerview request
 //    public void FavoriteDetailRecyclerViewRequest(String accessToken) {
