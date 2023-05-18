@@ -129,14 +129,17 @@ public class FavoriteFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new FavoriteAdapter(getContext());
 
+        FavoriteListRequest(accessToken);
+        recyclerView.setAdapter(adapter);
+
         adapter.setOnItemClickListener(new FavoriteAdapter.OnItemClickListener() {
             @Override
-            public void onItemClicked(int position, int id, String stylename, String[] tags, ArrayList<String> arrayList) {
+            public void onItemClicked(int position, int id, String stylename, ArrayList<String> tags, ArrayList<String> arrayList) {
                 Toast.makeText(getContext(),"position:" +position + " hairstyleid:"+id, Toast.LENGTH_SHORT).show();
                 targetStyleId = id;
                 Bundle bundle = new Bundle();
                 bundle.putString("hairStylename", stylename);
-                bundle.putStringArray("tags", tags);
+                bundle.putStringArrayList("tags", tags);
                 bundle.putInt("hairStyleId", id);
                 bundle.putStringArrayList("ImageUrls", arrayList);
 
@@ -148,8 +151,7 @@ public class FavoriteFragment extends Fragment {
             }
         });
 
-        FavoriteListRequest(accessToken);
-        recyclerView.setAdapter(adapter);
+
     }
 
     public void FavoriteListRequest(String accessToken) {
@@ -165,9 +167,17 @@ public class FavoriteFragment extends Fragment {
                         item.setFavoriteStyleName(object.getString("name"));
                         item.setFavoriteStyleId(object.getInt("hairStyleId"));
 
+                        JSONArray hashtags = object.getJSONArray("hashTags");
+                        ArrayList<String> tags = new ArrayList<>();
+                        for (int k=0;k<hashtags.length();k++) {
+                            JSONObject tag = hashtags.getJSONObject(k);
+                            tags.add(tag.getString("tag"));
+                        }
+                        item.setFavoriteHashtags(tags);
+                        Log.d("tag test", item.getFavoriteHashtags().toString());
+
                         JSONArray ImageUrls = object.getJSONArray("photos");
                         ArrayList<String> arrayList = new ArrayList<>();
-                        item.setFavoritePictureUrls(arrayList);
                         for (int j=0;j<ImageUrls.length();j++) {
                             JSONObject ImageUrl = ImageUrls.getJSONObject(j);
 //                            item.addFavoritePictureUrls(ImageUrl.getString("storeUrl"));
@@ -177,6 +187,7 @@ public class FavoriteFragment extends Fragment {
                             }
                         }
                         item.setFavoritePictureUrls(arrayList);
+
                         Log.d("imageurl request", item.getFavoritePictureUrls().toString());
                         adapter.addItem(item);
                         adapter.notifyDataSetChanged();

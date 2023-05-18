@@ -10,7 +10,7 @@ public class FavoriteItem {
     String FavoritePicture;
     String FavoriteGrade, FavoriteHeartcount, FavoriteStyleName;
     int FavoriteStyleId;
-    String[] FavoriteHashtags;
+    ArrayList<String> FavoriteHashtags;
 
 //    public FavoriteItem(ImageView imageView, TextView grade, TextView count) {
 //        FavoritePicture = imageView;
@@ -59,11 +59,11 @@ public class FavoriteItem {
         FavoriteStyleId = favoriteStyleId;
     }
 
-    public String[] getFavoriteHashtags() {
+    public ArrayList<String> getFavoriteHashtags() {
         return FavoriteHashtags;
     }
 
-    public void setFavoriteHashtags(String[] favoriteHashtags) {
+    public void setFavoriteHashtags(ArrayList<String> favoriteHashtags) {
         FavoriteHashtags = favoriteHashtags;
     }
 

@@ -18,9 +18,10 @@ import java.util.ArrayList;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
     private ArrayList<FavoriteItem> FavoriteItems = new ArrayList<FavoriteItem>();
+
     Context context;
     public interface OnItemClickListener {
-        void onItemClicked(int position, int id, String stylename, String[] tags, ArrayList<String> arrayList);
+        void onItemClicked(int position, int id, String stylename, ArrayList<String> tags, ArrayList<String> arrayList);
     }
     public FavoriteAdapter(Context context) {
         this.context = context;
@@ -36,7 +37,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         public TextView FavoriteStyleName, FavoriteHeartCount;
         public ImageView FavoriteStyleImage;
         public int FavoriteStyleId;
-        public String[] FavoriteHashtags;
+        public ArrayList<String> FavoriteHashtags;
         public ArrayList<String> FavoriteStyleImageUrls;
 
         public TextView getFavoriteStyleName() {
@@ -51,8 +52,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             FavoriteStyleId = favoriteStyleId;
         }
 
-        public String[] getFavoriteHashtags() {
+        public ArrayList<String> getFavoriteHashtags() {
             return FavoriteHashtags;
+        }
+
+        public void setFavoriteHashtags(ArrayList<String> favoriteHashtags) {
+            FavoriteHashtags = favoriteHashtags;
         }
 
         public ArrayList<String> getFavoriteStyleImageUrls() {
@@ -75,7 +80,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                 public void onClick(View view) {
                     int id = -1;
                     String stylename = "";
-                    String[] tags = {};
+                    ArrayList<String> tags = new ArrayList<>();
                     ArrayList<String> arrayList = new ArrayList<>();
                     int pos = getAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
@@ -107,6 +112,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         FavoriteItem item = FavoriteItems.get(position);
         holder.FavoriteStyleName.setText(item.getFavoriteStyleName());
         holder.FavoriteStyleId = item.getFavoriteStyleId();
+        holder.FavoriteStyleImageUrls = item.getFavoritePictureUrls();
+        holder.FavoriteHashtags = item.getFavoriteHashtags();
 
         if (item.getFavoritePicture() != null) {
             holder.bindContentImage(item.getFavoritePicture());

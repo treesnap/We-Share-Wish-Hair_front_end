@@ -140,11 +140,11 @@ public class FavoriteDetail extends Fragment {
         // data transfer (FavoriteFragment -> FavoriteDetailFragment)
         if (getArguments() != null) {
             styleNameTv.setText(getArguments().getString("hairStylename"));
-            String[] tags = getArguments().getStringArray("tags");
+            ArrayList<String> tags = getArguments().getStringArrayList("tags");
             String tag = "";
             try {
-                for (int i = 0; i < tags.length; i++) {
-                    tag = tag + "#" + tags[i] + " ";
+                for (int i = 0; i < tags.size(); i++) {
+                    tag = tag + "#" + tags.get(i) + " ";
                 }
             } catch (Exception e) {
 //                e.printStackTrace();
