@@ -46,8 +46,8 @@ public class FaceResultAdapter extends RecyclerView.Adapter<FaceResultAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         HomeItems item = faceResultItems.get(position);
 
-        holder.bindHairImage(item.getHairImage());
-        holder.hairStyle.setText(item.getHairStyle());
+        holder.bindHairImage(item.getHairImages().get(0));
+        holder.hairStyle.setText(item.getHairStyleName());
         holder.btn_view.setOnClickListener(view -> {
             int position1 = holder.getAdapterPosition();
             if (position1 != RecyclerView.NO_POSITION) {

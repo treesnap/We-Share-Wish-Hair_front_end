@@ -110,12 +110,7 @@ public class HomeFragment extends Fragment {
         recUserName.setText(userNickName);
 
         recommendItems = new ArrayList<>();
-        //===============================dummy data===============================
-        String imageSample = "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg";
-        for (int i = 0; i < 5; i++) {
-            HomeItems newRecItems = new HomeItems(imageSample, "hairStyle", "876", false);
-            recommendItems.add(newRecItems);
-        }
+        recommendRequest(accessToken);
 
         RecyclerView recommendRecyclerView = v.findViewById(R.id.home_recommend_recyclerView);
         HomeRecommendAdapter homeRecommendAdapter = new HomeRecommendAdapter(recommendItems, getContext());
@@ -190,5 +185,19 @@ public class HomeFragment extends Fragment {
         };
 
         queue.add(monthlyRequest);
+    }
+
+    private void recommendRequest(String accessToken) {
+        String recUrl = UrlConst.URL + "/api/hair_style/home";
+        JsonObjectRequest recRequest = new JsonObjectRequest(Request.Method.GET, recUrl, null, response -> {
+            Log.d("recResponse", response.toString());
+        }, error -> Log.e("recRequestError", error.toString())) { @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+                return params;
+            }
+        };
+        queue.add(recRequest);
     }
 }
