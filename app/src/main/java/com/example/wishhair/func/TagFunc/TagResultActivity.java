@@ -69,22 +69,16 @@ public class TagResultActivity extends AppCompatActivity {
         String selectedPerm = getIntent().getStringExtra("selectedPerm");
         ArrayList<String> selectedImages = getIntent().getStringArrayListExtra("selectedImages");
 
-        JSONObject jsonObject = new JSONObject();
-        JSONArray imageTags = new JSONArray();
-        try {
-            jsonObject.put("hairLength", selectedHairLength);
-            jsonObject.put("perm", selectedPerm);
-            for (int i = 0; i < selectedImages.size(); i++) {
-                imageTags.put(selectedImages.get(i));
-            }
-            jsonObject.put("imageTags", imageTags);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        StringBuilder tags = new StringBuilder();
+        for (int i = 0; i < selectedImages.size(); i++) {
+            tags.append(selectedImages.get(i)).append(" ");
         }
-        Log.d("json", jsonObject.toString());
 
-        String tagResultUrl = "";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, tagResultUrl, jsonObject, new Response.Listener<JSONObject>() {
+        String query = selectedHairLength + " " + selectedPerm + " " + tags;
+        Log.d("query", query);
+
+        String tagResultUrl = "/api/hair_style/recommend";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, tagResultUrl, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
 //                TODO : 결과 파싱해서 recyclerView 설정

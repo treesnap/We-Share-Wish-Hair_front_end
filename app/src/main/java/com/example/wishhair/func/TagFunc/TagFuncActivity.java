@@ -23,7 +23,7 @@ public class TagFuncActivity extends AppCompatActivity implements CompoundButton
 
     private FuncLoading loading;
     private String selectedHairLength, selectedPerm;
-
+//      #TODO  태그 하드코딩 >> enum 활용해서 수정 가능
 
     private CheckBox imageTag_1, imageTag_2, imageTag_3, imageTag_4, imageTag_5, imageTag_6, imageTag_7, imageTag_8, imageTag_9, imageTag_10, imageTag_11, imageTag_12;
     private final ArrayList<String> selectedImages = new ArrayList<>();
@@ -41,13 +41,13 @@ public class TagFuncActivity extends AppCompatActivity implements CompoundButton
         hairLength_2 = findViewById(R.id.tagFunc_hairLength_2);
         hairLength_3 = findViewById(R.id.tagFunc_hairLength_3);
 
-        selectedHairLength = hairLength_1.getText().toString();
+        selectedHairLength = "LONG";
         RadioGroup hairLengthGroup = findViewById(R.id.tagFunc_hairLength);
         hairLengthGroup.setOnCheckedChangeListener((radioGroup, checkId) -> {
             switch (checkId) {
-                case R.id.tagFunc_hairLength_1 -> selectedHairLength = hairLength_1.getText().toString();
-                case R.id.tagFunc_hairLength_2 -> selectedHairLength = hairLength_2.getText().toString();
-                case R.id.tagFunc_hairLength_3 -> selectedHairLength = hairLength_3.getText().toString();
+                case R.id.tagFunc_hairLength_1 -> selectedHairLength = "LONG";
+                case R.id.tagFunc_hairLength_2 -> selectedHairLength = "MEDIUM";
+                case R.id.tagFunc_hairLength_3 -> selectedHairLength = "SHORT";
             }
         });
 
@@ -56,12 +56,12 @@ public class TagFuncActivity extends AppCompatActivity implements CompoundButton
         perm_1 = findViewById(R.id.tagFunc_perm_1);
         perm_2 = findViewById(R.id.tagFunc_perm_2);
 
-        selectedPerm = perm_1.getText().toString();
+        selectedPerm = "PERM";
         RadioGroup permGroup = findViewById(R.id.tagFunc_perm);
         permGroup.setOnCheckedChangeListener(((radioGroup, checkId) -> {
             switch (checkId) {
-                case R.id.tagFunc_perm_1 -> selectedPerm = perm_1.getText().toString();
-                case R.id.tagFunc_perm_2 -> selectedPerm = perm_2.getText().toString();
+                case R.id.tagFunc_perm_1 -> selectedPerm = "PERM";
+                case R.id.tagFunc_perm_2 -> selectedPerm = "NO_PERM";
             }
         }));
 
@@ -86,90 +86,91 @@ public class TagFuncActivity extends AppCompatActivity implements CompoundButton
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
         int id = compoundButton.getId();
         switch (id) {
             case R.id.tagFunc_imageTag_1:
                 if (isChecked) {
-                    selectedImages.add(imageTag_1.getText().toString());
+                    selectedImages.add("CUTE");
                 } else {
-                    selectedImages.remove(imageTag_1.getText().toString());
+                    selectedImages.remove("CUTE");
                 }
                 break;
             case R.id.tagFunc_imageTag_2:
                 if (isChecked) {
-                    selectedImages.add(imageTag_2.getText().toString());
+                    selectedImages.add("UPSTAGE");
                 } else {
-                    selectedImages.remove(imageTag_2.getText().toString());
+                    selectedImages.remove("UPSTAGE");
                 }
                 break;
             case R.id.tagFunc_imageTag_3:
                 if (isChecked) {
-                    selectedImages.add(imageTag_3.getText().toString());
+                    selectedImages.add("NEAT");
                 } else {
-                    selectedImages.remove(imageTag_3.getText().toString());
+                    selectedImages.remove("NEAT");
                 }
                 break;
             case R.id.tagFunc_imageTag_4:
                 if (isChecked) {
-                    selectedImages.add(imageTag_4.getText().toString());
+                    selectedImages.add("COMMON");
                 } else {
-                    selectedImages.remove(imageTag_4.getText().toString());
+                    selectedImages.remove("COMMON");
                 }
                 break;
             case R.id.tagFunc_imageTag_5:
                 if (isChecked) {
-                    selectedImages.add(imageTag_5.getText().toString());
+                    selectedImages.add("LIGHT");
                 } else {
-                    selectedImages.remove(imageTag_5.getText().toString());
+                    selectedImages.remove("LIGHT");
                 }
                 break;
             case R.id.tagFunc_imageTag_6:
                 if (isChecked) {
-                    selectedImages.add(imageTag_6.getText().toString());
+                    selectedImages.add("HEAVY");
                 } else {
-                    selectedImages.remove(imageTag_6.getText().toString());
+                    selectedImages.remove("HEAVY");
                 }
                 break;
             case R.id.tagFunc_imageTag_7:
                 if (isChecked) {
-                    selectedImages.add(imageTag_7.getText().toString());
+                    selectedImages.add("COOL");
                 } else {
-                    selectedImages.remove(imageTag_7.getText().toString());
+                    selectedImages.remove("COOL");
                 }
                 break;
             case R.id.tagFunc_imageTag_8:
                 if (isChecked) {
-                    selectedImages.add(imageTag_8.getText().toString());
+                    selectedImages.add("VOLUMINOUS");
                 } else {
-                    selectedImages.remove(imageTag_8.getText().toString());
+                    selectedImages.remove("VOLUMINOUS");
                 }
                 break;
             case R.id.tagFunc_imageTag_9:
                 if (isChecked) {
-                    selectedImages.add(imageTag_9.getText().toString());
+                    selectedImages.add("TRENDY");
                 } else {
-                    selectedImages.remove(imageTag_9.getText().toString());
+                    selectedImages.remove("TRENDY");
                 }
                 break;
             case R.id.tagFunc_imageTag_10:
                 if (isChecked) {
-                    selectedImages.add(imageTag_10.getText().toString());
+                    selectedImages.add("FORMAL");
                 } else {
-                    selectedImages.remove(imageTag_10.getText().toString());
+                    selectedImages.remove("FORMAL");
                 }
                 break;
             case R.id.tagFunc_imageTag_11:
                 if (isChecked) {
-                    selectedImages.add(imageTag_11.getText().toString());
+                    selectedImages.add("MANLY");
                 } else {
-                    selectedImages.remove(imageTag_11.getText().toString());
+                    selectedImages.remove("MANLY");
                 }
                 break;
             case R.id.tagFunc_imageTag_12:
                 if (isChecked) {
-                    selectedImages.add(imageTag_12.getText().toString());
+                    selectedImages.add("SOFTY");
                 } else {
-                    selectedImages.remove(imageTag_12.getText().toString());
+                    selectedImages.remove("SOFTY");
                 }
                 break;
             default:

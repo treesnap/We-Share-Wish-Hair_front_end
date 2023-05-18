@@ -83,7 +83,7 @@ public class HomeFragment extends Fragment {
 
 //        faceFunc
         btn_faceFunc.setOnClickListener(view -> {
-            Intent intent = new Intent(requireContext(), FaceFuncActivity.class);
+            Intent intent = new Intent(requireContext(), TagFuncActivity.class);
             startActivity(intent);
         });
 
