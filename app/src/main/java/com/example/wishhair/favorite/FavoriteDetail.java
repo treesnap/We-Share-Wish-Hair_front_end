@@ -2,6 +2,7 @@ package com.example.wishhair.favorite;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -27,10 +28,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.MainActivity;
 import com.example.wishhair.MyPage.items.HeartlistItem;
 import com.example.wishhair.R;
+import com.example.wishhair.func.TagFunc.TagResultActivity;
 import com.example.wishhair.review.detail.ImageSliderAdapter;
+import com.example.wishhair.sign.LoginActivity;
+import com.example.wishhair.sign.RegisterActivity;
 import com.example.wishhair.sign.UrlConst;
 
 import org.json.JSONArray;
@@ -72,6 +77,7 @@ public class FavoriteDetail extends Fragment {
     private ImageButton favoriteBtn;
     private TextView styleNameTv, hashtags;
     private OnBackPressedCallback callback;
+    private boolean callbackFlag;
 
     private ViewPager2 sliderViewPager;
     private CircleIndicator3 circleIndicator;
@@ -104,7 +110,13 @@ public class FavoriteDetail extends Fragment {
         callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                mainActivity.onBackPressed();
+                if (callbackFlag) {
+                    Intent intent = new Intent(getActivity(), TagResultActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    mainActivity.onBackPressed();
+                }
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
@@ -140,6 +152,7 @@ public class FavoriteDetail extends Fragment {
 
         // data transfer (FavoriteFragment -> FavoriteDetailFragment)
         if (getArguments() != null) {
+            callbackFlag = false;
             styleNameTv.setText(getArguments().getString("hairStylename"));
             ArrayList<String> tags = getArguments().getStringArrayList("tags");
             String tag = "";
@@ -154,11 +167,12 @@ public class FavoriteDetail extends Fragment {
             hashtags.setText(tag);
             styleId = getArguments().getInt("hairStyleId");
             if (getArguments().getStringArrayList("ImageUrls") != null) {
-//                images = getArguments().getStringArrayList("ImageUrls");
+                images = getArguments().getStringArrayList("ImageUrls");
             }
             else
                 Log.d("ImageUrls transfer test", "is null");
         }
+
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         accessToken = loginSP.getString("accessToken", "fail acc");
 
@@ -206,7 +220,7 @@ public class FavoriteDetail extends Fragment {
             }
         }, volleyError -> {
             int errorCode = volleyError.networkResponse != null ? volleyError.networkResponse.statusCode : -1;
-            Log.e("error message", getErrorMessage(volleyError));
+            Log.e("error message", GetErrorMessage.getErrorMessage(volleyError));
             switch (errorCode) {
                 case 400:
                     // Bad Request 에러 처리
@@ -263,20 +277,6 @@ public class FavoriteDetail extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(jsonObjectRequest);
-    }
-    private String getErrorMessage(VolleyError error) {
-        NetworkResponse networkResponse = error.networkResponse;
-        if (networkResponse != null && networkResponse.data != null) {
-            String jsonError = new String(networkResponse.data);
-            try {
-                JSONObject jsonObject = new JSONObject(jsonError);
-                return jsonObject.getString("message");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        Log.e("getErrorMessage", "fail to get error message");
-        return "null";
     }
 
 

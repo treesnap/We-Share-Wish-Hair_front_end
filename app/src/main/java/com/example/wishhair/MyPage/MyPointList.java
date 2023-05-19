@@ -214,9 +214,6 @@ public class MyPointList extends Fragment {
                         item.setPointType(object.getString("pointType"));
                         item.setDealAmount(object.getInt("dealAmount"));
                         item.setPoint(object.getInt("point"));
-//                        LocalDateTime localDateTime = LocalDateTime.parse(object.getString("dealDate"),
-//                                DateTimeFormatter.ofPattern("yyyy.mm.dd."));
-//                        item.setDealDate(localDateTime.toString());
                         item.setDealDate(object.getString("dealDate"));
 
                         adapter.addItem(item);

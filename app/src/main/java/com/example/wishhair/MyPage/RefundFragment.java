@@ -164,7 +164,6 @@ public class RefundFragment extends Fragment {
 
             @Override
             public void onResponse(JSONObject response) {
-//                Log.i("Request", "success");
             }
         }, new Response.ErrorListener() {
 

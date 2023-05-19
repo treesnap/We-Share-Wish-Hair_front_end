@@ -55,11 +55,11 @@ public class FavoriteFragment extends Fragment {
     private String mParam2;
 
     private OnBackPressedCallback callback;
-    MainActivity mainActivity;
-    RecyclerView recyclerView;
-    FavoriteAdapter adapter;
-    Button btn;
-    int targetStyleId;
+    private MainActivity mainActivity;
+    private RecyclerView recyclerView;
+    private FavoriteAdapter adapter;
+    private Button btn;
+    private int targetStyleId;
 
     private SharedPreferences loginSP;
     final static private String url = UrlConst.URL + "/api/hair_style/wish";
@@ -174,21 +174,18 @@ public class FavoriteFragment extends Fragment {
                             tags.add(tag.getString("tag"));
                         }
                         item.setFavoriteHashtags(tags);
-                        Log.d("tag test", item.getFavoriteHashtags().toString());
 
                         JSONArray ImageUrls = object.getJSONArray("photos");
                         ArrayList<String> arrayList = new ArrayList<>();
                         for (int j=0;j<ImageUrls.length();j++) {
                             JSONObject ImageUrl = ImageUrls.getJSONObject(j);
-//                            item.addFavoritePictureUrls(ImageUrl.getString("storeUrl"));
                             arrayList.add(ImageUrl.getString("storeUrl"));
-                            if (j==0) {
-                                item.setFavoritePicture(ImageUrl.getString("storeUrl"));
-                            }
+//                            if (j==0) {
+//                                item.setFavoritePicture(ImageUrl.getString("storeUrl"));
+//                            }
                         }
                         item.setFavoritePictureUrls(arrayList);
 
-                        Log.d("imageurl request", item.getFavoritePictureUrls().toString());
                         adapter.addItem(item);
                         adapter.notifyDataSetChanged();
                     }
