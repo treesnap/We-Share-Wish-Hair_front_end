@@ -55,11 +55,11 @@ public class FavoriteFragment extends Fragment {
     private String mParam2;
 
     private OnBackPressedCallback callback;
-    MainActivity mainActivity;
-    RecyclerView recyclerView;
-    FavoriteAdapter adapter;
-    Button btn;
-    int targetStyleId;
+    private MainActivity mainActivity;
+    private RecyclerView recyclerView;
+    private FavoriteAdapter adapter;
+    private Button btn;
+    private int targetStyleId;
 
     private SharedPreferences loginSP;
     final static private String url = UrlConst.URL + "/api/hair_style/wish";

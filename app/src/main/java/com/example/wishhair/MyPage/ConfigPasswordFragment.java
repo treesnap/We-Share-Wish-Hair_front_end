@@ -61,9 +61,7 @@ public class ConfigPasswordFragment extends Fragment {
     final static private String url = UrlConst.URL + "/api/user/password";
     static private String accessToken;
     private Button config_password_apply;
-    private EditText config_password;
-    private EditText config_new_password;
-    private EditText config_verfication;
+    private EditText config_password, config_new_password, config_verfication;
     private TextView verification_Error;
 
     public ConfigPasswordFragment() {
@@ -83,18 +81,6 @@ public class ConfigPasswordFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment InformationModifyFragment.
-     */
-
-
-
-    // TODO: Rename and change types and number of parameters
     public static ConfigPasswordFragment newInstance(String param1, String param2) {
         ConfigPasswordFragment fragment = new ConfigPasswordFragment();
         Bundle args = new Bundle();
@@ -130,15 +116,12 @@ public class ConfigPasswordFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
         Toolbar toolbar = getView().findViewById(R.id.config_toolbar);
-
         toolbar.setNavigationIcon(R.drawable.back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mainActivity.ChangeFragment(2);
+                mainActivity.ChangeFragment(8);
             }
         });
 

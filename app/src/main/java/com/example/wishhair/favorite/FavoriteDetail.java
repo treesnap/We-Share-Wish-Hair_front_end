@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.MainActivity;
 import com.example.wishhair.MyPage.items.HeartlistItem;
 import com.example.wishhair.R;
@@ -159,6 +160,7 @@ public class FavoriteDetail extends Fragment {
             else
                 Log.d("ImageUrls transfer test", "is null");
         }
+
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         accessToken = loginSP.getString("accessToken", "fail acc");
 
@@ -206,7 +208,7 @@ public class FavoriteDetail extends Fragment {
             }
         }, volleyError -> {
             int errorCode = volleyError.networkResponse != null ? volleyError.networkResponse.statusCode : -1;
-            Log.e("error message", getErrorMessage(volleyError));
+            Log.e("error message", GetErrorMessage.getErrorMessage(volleyError));
             switch (errorCode) {
                 case 400:
                     // Bad Request 에러 처리
@@ -263,20 +265,6 @@ public class FavoriteDetail extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(jsonObjectRequest);
-    }
-    private String getErrorMessage(VolleyError error) {
-        NetworkResponse networkResponse = error.networkResponse;
-        if (networkResponse != null && networkResponse.data != null) {
-            String jsonError = new String(networkResponse.data);
-            try {
-                JSONObject jsonObject = new JSONObject(jsonError);
-                return jsonObject.getString("message");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        Log.e("getErrorMessage", "fail to get error message");
-        return "null";
     }
 
 

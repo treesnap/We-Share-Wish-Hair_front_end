@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,22 +39,15 @@ import com.example.wishhair.sign.UrlConst;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ConfigFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ConfigFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -62,20 +56,18 @@ public class ConfigFragment extends Fragment {
     private SharedPreferences loginSP;
     final static private String url = UrlConst.URL + "/api/user";
     static private String accessToken;
-    Button config_apply;
-    EditText configNickname;
-    RadioButton btnMan;
-    RadioButton btnWoman;
-    RadioGroup btnGroup;
-    String sexAfter;
-    Button config_to_passwordConfig;
+    private Button config_apply;
+    private EditText configNickname;
+    private RadioButton btnMan, btnWoman;
+    private RadioGroup btnGroup;
+    private String sexAfter, UserEmail, UserName;
+    private Button config_to_passwordConfig;
+    private TextView configUserName, configUserEmail;
 
 
     public ConfigFragment() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -90,18 +82,6 @@ public class ConfigFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment InformationModifyFragment.
-     */
-
-
-
-    // TODO: Rename and change types and number of parameters
     public static ConfigFragment newInstance(String param1, String param2) {
         ConfigFragment fragment = new ConfigFragment();
         Bundle args = new Bundle();
@@ -132,16 +112,15 @@ public class ConfigFragment extends Fragment {
         btnWoman = view.findViewById(R.id.config_radiobtn_sex_woman);
         btnGroup = view.findViewById(R.id.config_radiobtn_group);
         config_to_passwordConfig = view.findViewById(R.id.config_to_password_btn);
+        configUserEmail = view.findViewById(R.id.config_input_email);
+        configUserName = view.findViewById(R.id.config_input_name);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
         Toolbar toolbar = getView().findViewById(R.id.config_toolbar);
-
         toolbar.setNavigationIcon(R.drawable.back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,23 +128,21 @@ public class ConfigFragment extends Fragment {
                 mainActivity.ChangeFragment(2);
             }
         });
-
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         accessToken = loginSP.getString("accessToken", "fail acc");
 
-//        ImageButton btn = view.findViewById(R.id.modify_commit_button);
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ModifyRequest(accessToken);
-//            }
-//        });
+        // data transfer (MyPage -> Config)
+        if (getArguments() != null) {
+            UserEmail = getArguments().getString("userEmail");
+            UserName = getArguments().getString("userName");
+            configUserEmail.setText(UserEmail);
+            configUserName.setText(UserName);
+        }
 
         config_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ConfigRequest(accessToken);
-
             }
         });
         btnGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -188,7 +165,6 @@ public class ConfigFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mainActivity.ChangeFragment(6);
-                Log.d("changeFragment", "to password config");
             }
         });
     }

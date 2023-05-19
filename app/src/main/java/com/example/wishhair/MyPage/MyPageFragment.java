@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +44,7 @@ import com.example.wishhair.MainActivity;
 import com.example.wishhair.MyPage.adapters.MyPageRecyclerViewAdapter;
 import com.example.wishhair.MyPage.items.HeartlistItem;
 import com.example.wishhair.R;
+import com.example.wishhair.favorite.FavoriteDetail;
 import com.example.wishhair.sign.LoginActivity;
 import com.example.wishhair.sign.UrlConst;
 
@@ -57,24 +59,23 @@ import java.util.Map;
 
 public class MyPageFragment extends Fragment {
 
-    MainActivity mainActivity;
-    RecyclerView HeartlistRecyclerView;
-    MyPageRecyclerViewAdapter adapter;
-    RecyclerDecoration recyclerDecoration;
+    private MainActivity mainActivity;
+    private RecyclerView HeartlistRecyclerView;
+    private MyPageRecyclerViewAdapter adapter;
+    private RecyclerDecoration recyclerDecoration;
 
     private SharedPreferences loginSP;
-    String accessToken;
+    private String accessToken;
     final static private String url = UrlConst.URL + "/api/logout";
     final static private String url2 = UrlConst.URL + "/api/user/my_page";
     final static private String url_wishlist = UrlConst.URL + "/api/hair_style/wish";
     final static private String url_withdraw = UrlConst.URL + "/api/user";
 
     static String testName = null;
-    static String mypoint;
+    static String mypoint, UserEmail, UserName;
     ArrayList<HeartlistItem> list;
-    TextView tv;
-    TextView point_preview;
-    ImageView userpicture;
+    private TextView tv, point_preview;;
+    private ImageView userpicture;
 
     private OnBackPressedCallback callback;
 
@@ -115,7 +116,15 @@ public class MyPageFragment extends Fragment {
         toConfig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mainActivity.ChangeFragment(8);
+                Bundle UserInfoTransfer = new Bundle();
+                UserInfoTransfer.putString("userEmail", UserEmail);
+                UserInfoTransfer.putString("userName", UserName);
+
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                ConfigFragment configFragment = new ConfigFragment();
+                configFragment.setArguments(UserInfoTransfer);
+                transaction.replace(R.id.MainLayout, configFragment);
+                transaction.commit();
             }
         });
         toMyPoint.setOnClickListener(new View.OnClickListener() {
@@ -158,17 +167,6 @@ public class MyPageFragment extends Fragment {
                 alertDialog.show();
             }
         });
-
-//      Profile Picture Click Event
-//        userpicture.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(Intent.ACTION_PICK);
-//                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-//                intent.setAction(Intent.ACTION_PICK);
-//                activityResultLauncher.launch(intent);
-//            }
-//        });
 
 /*      HomeFragment로 이동하는 버튼 <불필요 시 삭제>
         toolbar.setNavigationIcon(R.drawable.back);
@@ -276,7 +274,8 @@ public class MyPageFragment extends Fragment {
                 try {
                     testName = response.getString("nickname");
                     mypoint = Integer.toString(response.optInt("point"));
-
+                    UserEmail = response.getString("email");
+                    UserName = response.getString("name");
                     tv.setText(testName+" 님");
                     point_preview.setText(mypoint+"P");
 
@@ -352,22 +351,6 @@ public class MyPageFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(jsonObjectRequest);
     }
-
-
-
-    public ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if(result.getResultCode() == Activity.RESULT_OK) {
-                        Intent intent = result.getData();
-                        Uri uri = intent.getData();
-                        userpicture.setImageURI(uri);
-                    }
-                }
-            }
-    );
 
     // 회원 탈퇴 Request
     public void WithdrawRequest(String accessToken) {
