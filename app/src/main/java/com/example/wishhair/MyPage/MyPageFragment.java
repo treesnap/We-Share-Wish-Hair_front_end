@@ -1,29 +1,21 @@
 package com.example.wishhair.MyPage;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,14 +36,12 @@ import com.example.wishhair.MainActivity;
 import com.example.wishhair.MyPage.adapters.MyPageRecyclerViewAdapter;
 import com.example.wishhair.MyPage.items.HeartlistItem;
 import com.example.wishhair.R;
-import com.example.wishhair.favorite.FavoriteDetail;
 import com.example.wishhair.sign.LoginActivity;
 import com.example.wishhair.sign.UrlConst;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,8 +57,8 @@ public class MyPageFragment extends Fragment {
     private SharedPreferences loginSP;
     private String accessToken;
     final static private String url = UrlConst.URL + "/api/logout";
-    final static private String url2 = UrlConst.URL + "/api/user/my_page";
-    final static private String url_wishlist = UrlConst.URL + "/api/hair_style/wish";
+    final static private String url_mypage = UrlConst.URL + "/api/user/my_page";
+    final static private String url_info = UrlConst.URL + "/api/user/info";
     final static private String url_withdraw = UrlConst.URL + "/api/user";
 
     static String testName = null;
@@ -111,8 +101,7 @@ public class MyPageFragment extends Fragment {
         ImageButton toConfig = view.findViewById(R.id.mypage_to_config);
         ImageButton toMyPoint = view.findViewById(R.id.mypage_to_point);
         ImageButton withdrawBtn = view.findViewById(R.id.mypage_withdraw);
-
-
+        transferRequest(accessToken);
         toConfig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,7 +207,7 @@ public class MyPageFragment extends Fragment {
         tv.setText(testName+" 님");
         point_preview.setText(mypoint+"P");
 
-        myPageRequest(accessToken);
+//        myPageRequest(accessToken);
         myPageRecyclerviewRequest(accessToken);
         return view;
     }
@@ -266,19 +255,48 @@ public class MyPageFragment extends Fragment {
         editor.apply();
     }
 
-    public void myPageRequest(String accessToken) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url2 , null, new Response.Listener<JSONObject>() {
+//    public void myPageRequest(String accessToken) {
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_mypage, null, new Response.Listener<JSONObject>() {
+//
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                try {
+//                    testName = response.getString()
+//                    tv.setText(testName+" 님");
+//                    point_preview.setText(mypoint+"P");
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//            }
+//        }) {
+//
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> params = new HashMap();
+//                params.put("Authorization", "bearer" + accessToken);
+//
+//                return params;
+//            }
+//        };
+//
+//        RequestQueue queue = Volley.newRequestQueue(getContext());
+//        queue.add(jsonObjectRequest);
+//    }
+    public void transferRequest(String accessToken) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_info , null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    testName = response.getString("nickname");
-                    mypoint = Integer.toString(response.optInt("point"));
                     UserEmail = response.getString("email");
                     UserName = response.getString("name");
-                    tv.setText(testName+" 님");
-                    point_preview.setText(mypoint+"P");
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -306,10 +324,12 @@ public class MyPageFragment extends Fragment {
 
     //wishlist recyclerview request
     public void myPageRecyclerviewRequest(String accessToken) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url2 , null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_mypage, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    tv.setText(response.getString("nickname")+" 님");
+                    point_preview.setText(response.getString("point")+"P");
                     JSONObject obj = new JSONObject(response.toString());
                     JSONArray jsonArray = obj.getJSONArray("reviews");
                     for (int i=0;i<jsonArray.length();i++) {
@@ -319,6 +339,7 @@ public class MyPageFragment extends Fragment {
                         item.setHeartlistReviewerNickname(object.getString("userNickname"));
                         item.setHeartlistGrade(object.getString("score"));
                         item.setHeartlistReviewID(object.getInt("reviewId"));
+                        item.setHeartlistHeartcount(String.valueOf(object.getInt("likes")));
 
                         JSONArray imageUrls = object.getJSONArray("photos");
                         item.setHeartlistPicture(imageUrls.getJSONObject(0).getString("storeUrl"));
