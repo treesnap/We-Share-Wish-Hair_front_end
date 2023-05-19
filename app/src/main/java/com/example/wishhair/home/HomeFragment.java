@@ -1,5 +1,6 @@
 package com.example.wishhair.home;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,8 +51,12 @@ public class HomeFragment extends Fragment {
     private boolean hasFaceShape;
     private String userNickName, faceShapeTag;
 
+//    monthly review
     private final ArrayList<HomeItems> monthlyReviewItems = new ArrayList<>();
-
+    private HomeMonthlyReviewAdapter monthlyAdapter;
+    private ViewPager2 monthlyReviewPager;
+    private CircleIndicator3 monthlyIndicator;
+//    recommend
     private final ArrayList<HomeItems> recommendItems = new ArrayList<>();
     private hairItemAdapter homeRecommendAdapter;
     private RecyclerView recommendRecyclerView;
@@ -105,15 +110,13 @@ public class HomeFragment extends Fragment {
         });
 
 //        monthlyReview
+        monthlyReviewPager = v.findViewById(R.id.home_ViewPager_review_monthly);
+        monthlyIndicator = v.findViewById(R.id.home_circleIndicator);
+        monthlyAdapter = new HomeMonthlyReviewAdapter(monthlyReviewItems);
+
         monthlyReviewRequest(accessToken);
 
-        ViewPager2 monthlyReviewPager = v.findViewById(R.id.home_ViewPager_review_monthly);
-        CircleIndicator3 monthlyIndicator = v.findViewById(R.id.home_circleIndicator);
-
         monthlyReviewPager.setOffscreenPageLimit(1);
-        monthlyReviewPager.setAdapter(new HomeMonthlyReviewAdapter(monthlyReviewItems));
-
-        monthlyIndicator.setViewPager(monthlyReviewPager);
 
 //        recommend
         TextView recUserName = v.findViewById(R.id.home_recommend_userName);
@@ -161,7 +164,9 @@ public class HomeFragment extends Fragment {
         editor.putString("userNickName", userNickName);
         editor.apply();
     }
+    @SuppressLint("NotifyDataSetChanged")
     private void monthlyReviewRequest(String accessToken) {
+        monthlyReviewItems.clear();
         final String monthlyURL = UrlConst.URL + "/api/review/month";
         JsonObjectRequest monthlyRequest = new JsonObjectRequest(Request.Method.GET, monthlyURL, null, response -> {
             try {
@@ -173,13 +178,14 @@ public class HomeFragment extends Fragment {
                     String receivedContents = object.getString("contents");
 
                     HomeItems newItem = new HomeItems(reviewId, receivedUserNickname, receivedContents);
-//                    TODO : 요청 보낼 때 마다 아이템 쌓임 버그
                     monthlyReviewItems.add(newItem);
                 }
+                monthlyAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+            monthlyReviewPager.setAdapter(monthlyAdapter);
+            monthlyIndicator.setViewPager(monthlyReviewPager);
         }, error -> {
             String message = GetErrorMessage.getErrorMessage(error);
             Log.e("validate error message", message);
