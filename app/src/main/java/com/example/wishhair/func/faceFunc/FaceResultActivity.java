@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.hairItemAdapter;
+import com.example.wishhair.sign.UrlConst;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
 import com.example.wishhair.home.HomeItems;
@@ -33,6 +35,7 @@ public class FaceResultActivity extends AppCompatActivity {
     private TextView userName, faceShape, faceShape_message;
     //        homeItem 과 형식이 같아 재사용
     private ArrayList<HomeItems> faceRecItems;
+    private String resultShape;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +55,12 @@ public class FaceResultActivity extends AppCompatActivity {
         faceShape_message = findViewById(R.id.faceResult_faceShape_message);
 
 //        TODO : 임시 코드
-        userName.setText("현정");
-        faceShape.setText("달걀형");
-        faceShape_message.setText("달걀형");
+        resultShape = getIntent().getStringExtra("result");
+        SharedPreferences sp = getSharedPreferences("userNickName", MODE_PRIVATE);
+
+        userName.setText(sp.getString("userNickName", "fail"));
+        faceShape.setText(resultShape);
+        faceShape_message.setText(resultShape);
 
 //        dummyData
         String imageSample = "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg";
@@ -78,12 +84,9 @@ public class FaceResultActivity extends AppCompatActivity {
     }
 
     private void faceResultRequest(String accessToken) {
-        String faceResultUrl = "";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, faceResultUrl, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-//                TODO : 결과 파싱해서 userName, faceShape, faceShape_message / recyclerView 설정
-            }
+        String faceResultUrl = UrlConst.URL + "/api/hair_style/home";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, faceResultUrl, null, response -> {
+            Log.d("faceResult", response.toString());
         }, error -> {
             String message = GetErrorMessage.getErrorMessage(error);
             Log.e("validate error message", message);

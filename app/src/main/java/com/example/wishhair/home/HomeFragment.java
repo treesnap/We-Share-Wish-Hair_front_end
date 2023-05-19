@@ -1,6 +1,8 @@
 package com.example.wishhair.home;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -150,11 +152,14 @@ public class HomeFragment extends Fragment {
             settingMessage3.setVisibility(View.GONE);
             btn_faceFunc.setVisibility(View.GONE);
         } else {
-
             receivedText.setText(userNickName);
             btn_tagFunc.setVisibility(View.GONE);
             btn_faceFuncAgain.setVisibility(View.GONE);
         }
+        SharedPreferences sp = requireActivity().getSharedPreferences("userNickName", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("userNickName", userNickName);
+        editor.apply();
     }
     private void monthlyReviewRequest(String accessToken) {
         final String monthlyURL = UrlConst.URL + "/api/review/month";
