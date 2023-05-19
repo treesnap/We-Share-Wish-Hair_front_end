@@ -19,6 +19,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.func.FuncLoading;
 import com.example.wishhair.R;
@@ -36,10 +37,11 @@ public class FaceFuncActivity extends AppCompatActivity implements UploadCallbac
     private FuncLoading loading;
 
     @Override
-    public void onUploadCallback(boolean isSuccess) {
+    public void onUploadCallback(boolean isSuccess, String result) {
         if (isSuccess) {
             loading.dismiss();
             Intent intent = new Intent(FaceFuncActivity.this, FaceResultActivity.class);
+            intent.putExtra("result", result);
             startActivity(intent);
             finish();
         } else {
@@ -98,14 +100,7 @@ public class FaceFuncActivity extends AppCompatActivity implements UploadCallbac
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         Uri uri = result.getData().getData();
                         imagePath = getRealPathFromUri(uri);
-                        try {
-                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                            userImage.setImageBitmap(bitmap);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        Glide.with(getApplicationContext()).load(uri).into(userImage);
                     }
                 }
             }

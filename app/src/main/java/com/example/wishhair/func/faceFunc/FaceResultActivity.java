@@ -1,9 +1,11 @@
 package com.example.wishhair.func.faceFunc;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -12,16 +14,18 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.GetErrorMessage;
+import com.example.wishhair.favorite.FavoriteDetail;
 import com.example.wishhair.hairItemAdapter;
+import com.example.wishhair.sign.UrlConst;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
 import com.example.wishhair.home.HomeItems;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -33,6 +37,10 @@ public class FaceResultActivity extends AppCompatActivity {
     private TextView userName, faceShape, faceShape_message;
     //        homeItem 과 형식이 같아 재사용
     private ArrayList<HomeItems> faceRecItems;
+    private hairItemAdapter faceResultAdapter;
+    RecyclerView recyclerView;
+
+    private String resultShape;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +60,12 @@ public class FaceResultActivity extends AppCompatActivity {
         faceShape_message = findViewById(R.id.faceResult_faceShape_message);
 
 //        TODO : 임시 코드
-        userName.setText("현정");
-        faceShape.setText("달걀형");
-        faceShape_message.setText("달걀형");
+        resultShape = getIntent().getStringExtra("result");
+        SharedPreferences sp = getSharedPreferences("userNickName", MODE_PRIVATE);
+
+        userName.setText(sp.getString("userNickName", "fail"));
+        faceShape.setText(resultShape);
+        faceShape_message.setText(resultShape);
 
 //        dummyData
         String imageSample = "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg";
@@ -63,14 +74,8 @@ public class FaceResultActivity extends AppCompatActivity {
 //            faceRecItems.add(newItems);
 //        }
 
-        hairItemAdapter faceResultAdapter = new hairItemAdapter(faceRecItems, this);
-        faceResultAdapter.setOnItemClickListener((v1, position) -> {
-            HomeItems selectedItem = faceRecItems.get(position);
-        });
+        recyclerView = findViewById(R.id.faceResult_recyclerView);
 
-        RecyclerView recyclerView = findViewById(R.id.faceResult_recyclerView);
-        recyclerView.setAdapter(faceResultAdapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         CustomTokenHandler customTokenHandler = new CustomTokenHandler(this);
         String accessToken = customTokenHandler.getAccessToken();
@@ -78,11 +83,56 @@ public class FaceResultActivity extends AppCompatActivity {
     }
 
     private void faceResultRequest(String accessToken) {
-        String faceResultUrl = "";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, faceResultUrl, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-//                TODO : 결과 파싱해서 userName, faceShape, faceShape_message / recyclerView 설정
+        String faceResultUrl = UrlConst.URL + "/api/hair_style/home";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, faceResultUrl, null, response -> {
+            String recResponse = String.valueOf(response);
+            try {
+                JSONObject result = new JSONObject(recResponse);
+                JSONArray resultArray = result.getJSONArray("result");
+                for (int i = 0; i < resultArray.length(); i++) {
+
+                    JSONObject itemObject = resultArray.getJSONObject(i);
+
+                    int hairStyleId = itemObject.getInt("hairStyleId");
+                    String hairStyleName = itemObject.getString("name");
+
+                    JSONArray photosArray = itemObject.getJSONArray("photos");
+                    ArrayList<String> photoUrls = new ArrayList<>();
+                    for (int j = 0; j < photosArray.length(); j++) {
+                        JSONObject photoObject = photosArray.getJSONObject(j);
+                        photoUrls.add(photoObject.getString("storeUrl"));
+                    }
+
+                    JSONArray hashTagsArray = itemObject.getJSONArray("hashTags");
+                    ArrayList<String> tags = new ArrayList<>();
+                    for (int j = 0; j < hashTagsArray.length(); j++) {
+                        JSONObject hasTagObject = hashTagsArray.getJSONObject(j);
+                        tags.add(hasTagObject.getString("tag"));
+                    }
+
+                    HomeItems item = new HomeItems(hairStyleId, photoUrls, hairStyleName, tags);
+
+                    faceRecItems.add(item);
+                }
+                faceResultAdapter = new hairItemAdapter(faceRecItems, this);
+                faceResultAdapter.setOnItemClickListener(((v1, position) -> {
+                    HomeItems selectedItem = faceRecItems.get(position);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("hairStylename", selectedItem.getHairStyleName());
+                    bundle.putStringArrayList("tags", selectedItem.getTags());
+                    bundle.putInt("hairStyleId", selectedItem.getHairStyleId());
+                    bundle.putStringArrayList("ImageUrls", selectedItem.getHairImages());
+
+                    FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
+                    FavoriteDetail favoriteDetail = new FavoriteDetail();
+                    favoriteDetail.setArguments(bundle);
+                    transaction.replace(R.id.MainLayout, favoriteDetail);
+                    transaction.commit();
+                }));
+                recyclerView.setAdapter(faceResultAdapter);
+                recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }, error -> {
             String message = GetErrorMessage.getErrorMessage(error);

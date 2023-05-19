@@ -47,8 +47,6 @@ public class HomeItems {
 
     private String likes;
 
-    public HomeItems() {}
-
     public HomeItems(int hairStyleId, ArrayList<String> hairImages, String hairStyleName, ArrayList<String> tags) {
         this.hairStyleId = hairStyleId;
         this.hairImages = hairImages;

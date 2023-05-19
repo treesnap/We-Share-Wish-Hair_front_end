@@ -79,9 +79,7 @@ public class TagFuncActivity extends AppCompatActivity implements CompoundButton
         btn_submit.setOnClickListener(view -> {
             loading.show();
             loadingTime();
-
         });
-
     }
 
     @Override

@@ -21,9 +21,11 @@
         android:padding="8dp">
         <TextView
             android:id="@+id/home_item_rec_hairStyle"
-            android:layout_width="55dp"
+            android:layout_width="65dp"
             android:layout_height="match_parent"
-            tools:text="물결펌펌"
+            tools:text="물결펌펌펌펌"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/black"/>

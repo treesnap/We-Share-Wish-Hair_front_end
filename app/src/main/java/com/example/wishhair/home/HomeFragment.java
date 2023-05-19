@@ -1,9 +1,12 @@
 package com.example.wishhair.home;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -21,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.GetErrorMessage;
+import com.example.wishhair.favorite.FavoriteDetail;
 import com.example.wishhair.hairItemAdapter;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.func.faceFunc.FaceFuncActivity;
@@ -41,7 +45,6 @@ import me.relex.circleindicator.CircleIndicator3;
 public class HomeFragment extends Fragment {
 
     private RequestQueue queue;
-    private String accessToken;
 
     private Button btn_tagFunc, btn_faceFunc, btn_faceFuncAgain;
     private boolean hasFaceShape;
@@ -49,7 +52,7 @@ public class HomeFragment extends Fragment {
 
     private final ArrayList<HomeItems> monthlyReviewItems = new ArrayList<>();
 
-    private ArrayList<HomeItems> recommendItems;
+    private final ArrayList<HomeItems> recommendItems = new ArrayList<>();
     private hairItemAdapter homeRecommendAdapter;
     private RecyclerView recommendRecyclerView;
 
@@ -76,7 +79,7 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.home_fragment, container, false);
         //      accessToken
         CustomTokenHandler customTokenHandler = new CustomTokenHandler(requireActivity());
-        accessToken = customTokenHandler.getAccessToken();
+        String accessToken = customTokenHandler.getAccessToken();
 
         queue = Volley.newRequestQueue(requireActivity());
 
@@ -117,8 +120,6 @@ public class HomeFragment extends Fragment {
         recUserName.setText(userNickName);
 
         recommendRecyclerView = v.findViewById(R.id.home_recommend_recyclerView);
-
-        recommendItems = new ArrayList<>();
         recommendRequest(accessToken);
 
         return v;
@@ -151,11 +152,14 @@ public class HomeFragment extends Fragment {
             settingMessage3.setVisibility(View.GONE);
             btn_faceFunc.setVisibility(View.GONE);
         } else {
-
             receivedText.setText(userNickName);
             btn_tagFunc.setVisibility(View.GONE);
             btn_faceFuncAgain.setVisibility(View.GONE);
         }
+        SharedPreferences sp = requireActivity().getSharedPreferences("userNickName", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("userNickName", userNickName);
+        editor.apply();
     }
     private void monthlyReviewRequest(String accessToken) {
         final String monthlyURL = UrlConst.URL + "/api/review/month";
@@ -169,6 +173,7 @@ public class HomeFragment extends Fragment {
                     String receivedContents = object.getString("contents");
 
                     HomeItems newItem = new HomeItems(reviewId, receivedUserNickname, receivedContents);
+//                    TODO : 요청 보낼 때 마다 아이템 쌓임 버그
                     monthlyReviewItems.add(newItem);
                 }
             } catch (JSONException e) {
@@ -200,7 +205,7 @@ public class HomeFragment extends Fragment {
                 JSONObject result = new JSONObject(recResponse);
                 JSONArray resultArray = result.getJSONArray("result");
                 for (int i = 0; i < resultArray.length(); i++) {
-                    HomeItems item = new HomeItems();
+
                     JSONObject itemObject = resultArray.getJSONObject(i);
 
                     int hairStyleId = itemObject.getInt("hairStyleId");
@@ -220,24 +225,30 @@ public class HomeFragment extends Fragment {
                         tags.add(hasTagObject.getString("tag"));
                     }
 
-                    item.setHairStyleId(hairStyleId);
-                    item.setHairStyleName(hairStyleName);
-                    item.setHairImages(photoUrls);
-                    item.setTags(tags);
+                    HomeItems item = new HomeItems(hairStyleId, photoUrls, hairStyleName, tags);
 
                     recommendItems.add(item);
                 }
                 homeRecommendAdapter = new hairItemAdapter(recommendItems, getContext());
                 homeRecommendAdapter.setOnItemClickListener(((v1, position) -> {
                     HomeItems selectedItem = recommendItems.get(position);
-                }));
+                    Bundle bundle = new Bundle();
+                    bundle.putString("hairStylename", selectedItem.getHairStyleName());
+                    bundle.putStringArrayList("tags", selectedItem.getTags());
+                    bundle.putInt("hairStyleId", selectedItem.getHairStyleId());
+                    bundle.putStringArrayList("ImageUrls", selectedItem.getHairImages());
 
+                    FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                    FavoriteDetail favoriteDetail = new FavoriteDetail();
+                    favoriteDetail.setArguments(bundle);
+                    transaction.replace(R.id.MainLayout, favoriteDetail);
+                    transaction.commit();
+                }));
                 recommendRecyclerView.setAdapter(homeRecommendAdapter);
                 recommendRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }, error -> {
             String message = GetErrorMessage.getErrorMessage(error);
             Log.e("validate error message", message);

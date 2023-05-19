@@ -9,7 +9,12 @@ import com.example.wishhair.func.UploadCallback;
 import com.example.wishhair.sign.UrlConst;
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -31,7 +36,11 @@ public class FaceFuncUploader {
         if (BuildConfig.DEBUG) {
             builder.addInterceptor(new OkHttpProfilerInterceptor());
         }
-        OkHttpClient client = builder.build();
+        OkHttpClient client = builder
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
+                .build();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(UrlConst.URL)
@@ -52,12 +61,18 @@ public class FaceFuncUploader {
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                callback.onUploadCallback(response.isSuccessful());
+                try {
+                    JSONObject resultObject = new JSONObject(response.body().string());
+                    String result = resultObject.getString("result");
+                    callback.onUploadCallback(response.isSuccessful(), result);
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                callback.onUploadCallback(false);
+                callback.onUploadCallback(false, null);
             }
         });
     }
