@@ -37,6 +37,7 @@ public class EmailCertActivity extends AppCompatActivity {
     final static private String URL_VALIDATE = UrlConst.URL + "/api/email/validate";
 
     private RequestQueue queue;
+    private CountDownTimer timer;
 
     private EditText ed_email, ed_code;
     private Button btn_intent;
@@ -62,7 +63,7 @@ public class EmailCertActivity extends AppCompatActivity {
 
 //        timer
         remainTime = findViewById(R.id.sign_cert_timer);
-        CountDownTimer timer = new CountDownTimer(180000, 1000) {
+        timer = new CountDownTimer(180000, 1000) {
             @SuppressLint("SetTextI18n")
             @Override
             public void onTick(long millisUntilFinished) {
@@ -78,19 +79,28 @@ public class EmailCertActivity extends AppCompatActivity {
             }
         };
 
+        check_success = ContextCompat.getDrawable(this, R.drawable.sign_check_success);
+        check_fail = ContextCompat.getDrawable(this, R.drawable.sign_check_fail);
+
 //        send request
         ed_email = findViewById(R.id.sign_cert_et_email);
+//        ed_email.setCompoundDrawables(null, null, null, null);
         Button btn_send = findViewById(R.id.sign_cert_btn_requestSend);
-        btn_send.setOnClickListener(view -> {
-            timer.start();
-            String inputEmail = String.valueOf(ed_email.getText());
-            emailSendRequest(inputEmail);
-        });
+        if (prePage.equals("findPassword")) {
+            btn_send.setOnClickListener(view -> {
+                String inputEmail = String.valueOf(ed_email.getText());
+                emailSendRequest(inputEmail);
+            });
+        } else {
+            btn_send.setOnClickListener(view -> {
+                String inputEmail = String.valueOf(ed_email.getText());
+                emailCheckRequest(inputEmail);
+            });
+        }
 
 //        confirmCode request
         ed_code = findViewById(R.id.sign_cert_et_code);
-        check_success = ContextCompat.getDrawable(this, R.drawable.sign_check_success);
-        check_fail = ContextCompat.getDrawable(this, R.drawable.sign_check_fail);
+
         ed_code.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         Button btn_submit = findViewById(R.id.sign_cert_btn_confirmCode);
         btn_submit.setOnClickListener(view -> {
@@ -114,7 +124,44 @@ public class EmailCertActivity extends AppCompatActivity {
         });
     }
 
+    private void emailCheckRequest(String inputEmail) {
+        String URL_CHECK = UrlConst.URL + "/api/email/check";
+        final JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("email", inputEmail);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL_CHECK, jsonObject, response -> {
+            try {
+                String sessionId = response.getString("sessionId");
+                saveSessionId(sessionId);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            emailSendRequest(inputEmail);
+        }, error -> {
+            String message = GetErrorMessage.getErrorMessage(error);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            Log.e("send error message", message);
+            ed_email.setCompoundDrawables(null, null, check_fail, null);
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put("Accept", "application/json");
+                return params;
+            }
+        };
+        CustomRetryPolicy retryPolicy = new CustomRetryPolicy();
+        jsonObjectRequest.setRetryPolicy(retryPolicy);
+
+        queue.add(jsonObjectRequest);
+    }
+
     private void emailSendRequest(String inputEmail) {
+        timer.start();
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("email", inputEmail);
@@ -126,6 +173,7 @@ public class EmailCertActivity extends AppCompatActivity {
             try {
                 String sessionId = response.getString("sessionId");
                 saveSessionId(sessionId);
+                ed_email.setCompoundDrawables(null, null, check_success, null);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -45,14 +45,6 @@ public class TagResultActivity extends AppCompatActivity {
         Button btn_back = findViewById(R.id.tagResult_btn_back);
         btn_back.setOnClickListener(view -> finish());
 
-        ArrayList<HomeItems> items = new ArrayList<>();
-        //        dummyData
-        String imageSample = "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg";
-//        for (int i = 0; i < 5; i++) {
-//            HomeItems newItems = new HomeItems(imageSample, "물결펌", "876", false);
-//            items.add(newItems);
-//        }
-
         recyclerView = findViewById(R.id.tagResult_recyclerView);
 
         CustomTokenHandler customTokenHandler = new CustomTokenHandler(this);
