@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,18 +41,22 @@ public class FaceResultActivity extends AppCompatActivity {
     private ArrayList<HomeItems> faceRecItems;
     private hairItemAdapter faceResultAdapter;
     RecyclerView recyclerView;
-
+    private LinearLayout overlay;
     private String resultShape;
+    private Button btn_finish;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.func_activity_faceresult);
 
+        //        activity inactivation cover
+        overlay = findViewById(R.id.faceResult_overlay);
+
         Button btn_back = findViewById(R.id.faceResult_btn_back);
         btn_back.setOnClickListener(view -> finish());
 
-        Button btn_finish = findViewById(R.id.faceResult_btn_finish);
+        btn_finish = findViewById(R.id.faceResult_btn_finish);
         btn_finish.setOnClickListener(view -> finish());
 
         faceRecItems = new ArrayList<>();
@@ -116,6 +122,10 @@ public class FaceResultActivity extends AppCompatActivity {
                 }
                 faceResultAdapter = new hairItemAdapter(faceRecItems, this);
                 faceResultAdapter.setOnItemClickListener(((v1, position) -> {
+                    // 프래그먼트 생성 시 액티비티 레이아웃 비활성화
+                    overlay.setVisibility(View.VISIBLE);
+                    btn_finish.setVisibility(View.GONE);
+
                     HomeItems selectedItem = faceRecItems.get(position);
                     Bundle bundle = new Bundle();
                     bundle.putString("hairStylename", selectedItem.getHairStyleName());
@@ -126,7 +136,7 @@ public class FaceResultActivity extends AppCompatActivity {
                     FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
                     FavoriteDetail favoriteDetail = new FavoriteDetail();
                     favoriteDetail.setArguments(bundle);
-                    transaction.replace(R.id.MainLayout, favoriteDetail);
+                    transaction.replace(R.id.faceResult_layout, favoriteDetail);
                     transaction.commit();
                 }));
                 recyclerView.setAdapter(faceResultAdapter);

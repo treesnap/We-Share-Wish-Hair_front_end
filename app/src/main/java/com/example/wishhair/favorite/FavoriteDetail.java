@@ -120,7 +120,7 @@ public class FavoriteDetail extends Fragment {
                 }
             };
 
-        } else {
+        } else if (getActivity().getClass().getName().equals(TagResultActivity.class.getName())) {
             callback = new OnBackPressedCallback(true) {
                 @Override
                 public void handleOnBackPressed() {
@@ -129,6 +129,17 @@ public class FavoriteDetail extends Fragment {
                     fm.beginTransaction().remove(fragment).commit();
                     getActivity().findViewById(R.id.tagResult_overlay).setVisibility(View.GONE);
                     getActivity().findViewById(R.id.tagResult_btn_finish).setVisibility(View.VISIBLE);
+                }
+            };
+        } else {
+            callback = new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    Fragment fragment = fm.findFragmentById(R.id.tagResult_layout);
+                    fm.beginTransaction().remove(fragment).commit();
+                    getActivity().findViewById(R.id.faceResult_overlay).setVisibility(View.GONE);
+                    getActivity().findViewById(R.id.faceResult_btn_finish).setVisibility(View.VISIBLE);
                 }
             };
         }

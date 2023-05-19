@@ -240,13 +240,14 @@ public class HomeFragment extends Fragment {
                 }
                 homeRecommendAdapter = new hairItemAdapter(recommendItems, getContext());
                 homeRecommendAdapter.setOnItemClickListener(((v1, position) -> {
+                    mainActivity.setBackPressFlag(true);
                     HomeItems selectedItem = recommendItems.get(position);
                     Bundle bundle = new Bundle();
                     bundle.putString("hairStylename", selectedItem.getHairStyleName());
                     bundle.putStringArrayList("tags", selectedItem.getTags());
                     bundle.putInt("hairStyleId", selectedItem.getHairStyleId());
                     bundle.putStringArrayList("ImageUrls", selectedItem.getHairImages());
-                    mainActivity.setBackPressFlag(true);
+
                     FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                     FavoriteDetail favoriteDetail = new FavoriteDetail();
                     favoriteDetail.setArguments(bundle);
