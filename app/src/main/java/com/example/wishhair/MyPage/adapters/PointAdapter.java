@@ -26,27 +26,17 @@ public class PointAdapter extends RecyclerView.Adapter<PointAdapter.ViewHolder> 
     private Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView PointlistTitle, PointlistNum, PointlistDate;
+        public TextView PointListTitle, PointListNum, POintListDate;
 
         ViewHolder(View view) {
             super(view);
 
-            PointlistTitle = view.findViewById(R.id.point_title);
-            PointlistNum = view.findViewById(R.id.point_num);
-            PointlistDate = view.findViewById(R.id.point_date);
+            PointListTitle = view.findViewById(R.id.point_title);
+            PointListNum = view.findViewById(R.id.point_num);
+            POintListDate = view.findViewById(R.id.point_date);
         }
 
         public void setItem(PointHistory item) {
-
-//            if(item.getPointType().equals("CHARGE")) {
-//                PointlistNum.setText("+" + Integer.toString(item.getDealAmount()));
-//                PointlistNum.setTextColor(Color.RED);
-//            }
-//            else {
-//                PointlistNum.setText("-" + Integer.toString(item.getDealAmount()));
-//                PointlistNum.setTextColor(Color.BLUE);
-//            }
-//            PointlistDate.setText(item.getDealDate().toString());
         }
     }
 
@@ -64,14 +54,15 @@ public class PointAdapter extends RecyclerView.Adapter<PointAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PointHistory item = pointItems.get(position);
         if (item.getPointType() == "충전") {
-            holder.PointlistNum.setText("+" + item.getDealAmount());
-            holder.PointlistNum.setTextColor(Color.BLUE);
+            holder.PointListNum.setText("+" + item.getDealAmount());
+            holder.PointListNum.setTextColor(Color.BLUE);
+            holder.PointListTitle.setText("포인트 적립");
         } else {
-            holder.PointlistNum.setText("-" + item.getDealAmount());
-            holder.PointlistNum.setTextColor(Color.RED);
+            holder.PointListNum.setText("-" + item.getDealAmount());
+            holder.PointListNum.setTextColor(Color.RED);
+            holder.PointListTitle.setText("포인트 환급");
         }
-
-        holder.PointlistDate.setText(parseDate(item.getDealDate()));
+        holder.POintListDate.setText(parseDate(item.getDealDate()));
     }
 
     @Override
