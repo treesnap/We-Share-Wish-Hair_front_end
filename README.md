@@ -7,6 +7,5 @@
 2. 서버 데이터 수정 후 연결 테스트
    TODO list 참고
     1. TagResultActivity 헤어 상세 이동 버그 발생
-    2. HomeFragment 이달의 추천 리뷰 요청 보낼 때 마다 아이템 쌓임 버그
 3. 회원가입 이메일 중복체크
 4. userInfo 따로 빼면 처리
