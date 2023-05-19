@@ -155,7 +155,7 @@ public class FavoriteDetail extends Fragment {
             hashtags.setText(tag);
             styleId = getArguments().getInt("hairStyleId");
             if (getArguments().getStringArrayList("ImageUrls") != null) {
-//                images = getArguments().getStringArrayList("ImageUrls");
+                images = getArguments().getStringArrayList("ImageUrls");
             }
             else
                 Log.d("ImageUrls transfer test", "is null");

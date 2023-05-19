@@ -34,7 +34,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView FavoriteStyleName, FavoriteHeartCount;
+        public TextView FavoriteStyleName;
         public ImageView FavoriteStyleImage;
         public int FavoriteStyleId;
         public ArrayList<String> FavoriteHashtags;
@@ -73,8 +73,6 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
 
             FavoriteStyleImage = view.findViewById(R.id.favorite_style_image);
             FavoriteStyleName = view.findViewById(R.id.favorite_style_name);
-            FavoriteHeartCount = view.findViewById(R.id.favorite_heart_count);
-
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -114,9 +112,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         holder.FavoriteStyleId = item.getFavoriteStyleId();
         holder.FavoriteStyleImageUrls = item.getFavoritePictureUrls();
         holder.FavoriteHashtags = item.getFavoriteHashtags();
-
-        if (item.getFavoritePicture() != null) {
-            holder.bindContentImage(item.getFavoritePicture());
+        if (item.getFavoritePictureUrls() != null) {
+            holder.bindContentImage(item.getFavoritePictureUrls().get(0));
         }
 //        holder.FavoriteHashtags = item.getFavoriteHashtags();
 //        holder.FavoriteHeartCount.setText(item.getFavoriteHeartcount());
