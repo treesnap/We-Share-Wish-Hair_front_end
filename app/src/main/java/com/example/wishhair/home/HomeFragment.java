@@ -246,7 +246,7 @@ public class HomeFragment extends Fragment {
                     bundle.putStringArrayList("tags", selectedItem.getTags());
                     bundle.putInt("hairStyleId", selectedItem.getHairStyleId());
                     bundle.putStringArrayList("ImageUrls", selectedItem.getHairImages());
-                    mainActivity.setFlag(true);
+                    mainActivity.setBackPressFlag(true);
                     FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                     FavoriteDetail favoriteDetail = new FavoriteDetail();
                     favoriteDetail.setArguments(bundle);
