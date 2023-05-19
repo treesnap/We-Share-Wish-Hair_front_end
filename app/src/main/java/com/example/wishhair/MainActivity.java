@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
+            flag = false;
             switch(item.getItemId())
             {
                 case R.id.bot_nav_home:
@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         switch(index)
         {
             case 1:
+                transaction.replace(R.id.MainLayout, homeFragment).commitAllowingStateLoss();
                 break;
             case 2:
                 transaction.replace(R.id.MainLayout, myPageFragment).commitAllowingStateLoss();
@@ -129,10 +130,12 @@ public class MainActivity extends AppCompatActivity {
 
     // 특정 프래그먼트에서 뒤로 두번 누를 시 앱 종료 및 프래그먼트 전환
     private long backpressedTime = 0;
+    private boolean flag = false;
     public void  onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();
         Fragment currentFragment = fm.findFragmentById(R.id.MainLayout);
         Log.d("currentFragment", currentFragment.toString());
+
 
         // 현재 프래그먼트가 navigation bar 4개 프래그먼트일 때 2회 누를 시 종료
         if (currentFragment instanceof HomeFragment || currentFragment instanceof  MyPageFragment ||
@@ -160,7 +163,12 @@ public class MainActivity extends AppCompatActivity {
                     ChangeFragment(7);
                     break;
                 case "FavoriteDetail":
-                    ChangeFragment(5);
+                    if (flag) {
+                        ChangeFragment(1);
+                        flag = false;
+                    } else {
+                        ChangeFragment(5);
+                    }
                     break;
                 default:
                     break;
@@ -168,5 +176,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
+    public void setFlag(boolean f) {
+        flag = f;
+    }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +25,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.GetErrorMessage;
+import com.example.wishhair.MainActivity;
 import com.example.wishhair.favorite.FavoriteDetail;
 import com.example.wishhair.hairItemAdapter;
 import com.example.wishhair.sign.token.CustomTokenHandler;
@@ -55,6 +57,7 @@ public class HomeFragment extends Fragment {
     private final ArrayList<HomeItems> recommendItems = new ArrayList<>();
     private hairItemAdapter homeRecommendAdapter;
     private RecyclerView recommendRecyclerView;
+    private MainActivity mainActivity;
 
     public HomeFragment() {}
 
@@ -66,6 +69,12 @@ public class HomeFragment extends Fragment {
         bundle.putString("faceShapeTag", faceShapeTag);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mainActivity = (MainActivity) getActivity();
     }
 
     @Override
@@ -237,7 +246,7 @@ public class HomeFragment extends Fragment {
                     bundle.putStringArrayList("tags", selectedItem.getTags());
                     bundle.putInt("hairStyleId", selectedItem.getHairStyleId());
                     bundle.putStringArrayList("ImageUrls", selectedItem.getHairImages());
-
+                    mainActivity.setFlag(true);
                     FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                     FavoriteDetail favoriteDetail = new FavoriteDetail();
                     favoriteDetail.setArguments(bundle);

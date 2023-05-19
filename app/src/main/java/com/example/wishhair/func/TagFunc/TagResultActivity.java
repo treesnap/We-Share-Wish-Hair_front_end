@@ -128,6 +128,8 @@ public class TagResultActivity extends AppCompatActivity {
                     FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
                     FavoriteDetail favoriteDetail = new FavoriteDetail();
                     favoriteDetail.setArguments(bundle);
+                    transaction.replace(R.id.tagResult_layout, favoriteDetail);
+//                    transaction.replace(R.id.MainLayout, favoriteDetail);
                     transaction.commit();
                 }));
                 recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
