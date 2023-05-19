@@ -53,11 +53,6 @@ public class TagResultActivity extends AppCompatActivity {
 //            items.add(newItems);
 //        }
 
-        hairItemAdapter tagResultAdapter = new hairItemAdapter(items, this);
-        tagResultAdapter.setOnItemClickListener((v1, position) -> {
-            HomeItems selectedItem = items.get(position);
-        });
-
         recyclerView = findViewById(R.id.tagResult_recyclerView);
 
         CustomTokenHandler customTokenHandler = new CustomTokenHandler(this);
@@ -112,7 +107,6 @@ public class TagResultActivity extends AppCompatActivity {
                     }
 
                     HomeItems item = new HomeItems(hairStyleId, photoUrls, hairStyleName, tags);
-
                     tagResultItems.add(item);
                 }
                 tagResultAdapter = new hairItemAdapter(tagResultItems, this);
@@ -128,6 +122,7 @@ public class TagResultActivity extends AppCompatActivity {
                     FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
                     FavoriteDetail favoriteDetail = new FavoriteDetail();
                     favoriteDetail.setArguments(bundle);
+                    transaction.replace(R.id.MainLayout, favoriteDetail);
                     transaction.commit();
                 }));
                 recyclerView.setLayoutManager(new GridLayoutManager(this, 2));

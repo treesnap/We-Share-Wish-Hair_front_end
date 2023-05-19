@@ -208,6 +208,7 @@ public class TagFuncActivity extends AppCompatActivity implements CompoundButton
     private void loadingTime() {
         Handler handler = new Handler();
         handler.postDelayed(() -> {
+            loading.dismiss();
             Intent intent = new Intent(TagFuncActivity.this, TagResultActivity.class);
             intent.putExtra("selectedHairLength", selectedHairLength);
             intent.putExtra("selectedPerm", selectedPerm);
