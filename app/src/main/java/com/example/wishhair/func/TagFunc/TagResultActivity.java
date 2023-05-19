@@ -3,7 +3,6 @@ package com.example.wishhair.func.TagFunc;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -13,8 +12,6 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.GetErrorMessage;
@@ -131,7 +128,6 @@ public class TagResultActivity extends AppCompatActivity {
                     FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
                     FavoriteDetail favoriteDetail = new FavoriteDetail();
                     favoriteDetail.setArguments(bundle);
-                    transaction.replace(R.id.MainLayout, favoriteDetail);
                     transaction.commit();
                 }));
                 recyclerView.setLayoutManager(new GridLayoutManager(this, 2));

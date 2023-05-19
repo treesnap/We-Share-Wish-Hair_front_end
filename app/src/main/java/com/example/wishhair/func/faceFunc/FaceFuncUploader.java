@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
@@ -61,10 +62,10 @@ public class FaceFuncUploader {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 try {
-                    JSONObject resultObject = new JSONObject(response.body().toString());
+                    JSONObject resultObject = new JSONObject(response.body().string());
                     String result = resultObject.getString("result");
                     callback.onUploadCallback(response.isSuccessful(), result);
-                } catch (JSONException e) {
+                } catch (JSONException | IOException e) {
                     e.printStackTrace();
                 }
             }

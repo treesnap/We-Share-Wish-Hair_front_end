@@ -249,7 +249,6 @@ public class HomeFragment extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }, error -> {
             String message = GetErrorMessage.getErrorMessage(error);
             Log.e("validate error message", message);
