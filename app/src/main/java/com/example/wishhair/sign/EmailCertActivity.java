@@ -17,10 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.GetErrorMessage;
@@ -38,6 +36,8 @@ public class EmailCertActivity extends AppCompatActivity {
     final static private String URL_SEND = UrlConst.URL + "/api/email/send";
     final static private String URL_VALIDATE = UrlConst.URL + "/api/email/validate";
 
+    private RequestQueue queue;
+
     private EditText ed_email, ed_code;
     private Button btn_intent;
     private TextView remainTime;
@@ -54,6 +54,7 @@ public class EmailCertActivity extends AppCompatActivity {
         if (prePage.equals("findPassword")) {
             title.setText("비밀번호 찾기");
         }
+        queue = Volley.newRequestQueue(this);
 
 //        back
         Button btn_back = findViewById(R.id.botBar_btn_back);
@@ -99,7 +100,7 @@ public class EmailCertActivity extends AppCompatActivity {
 
 //        intent Page
         btn_intent = findViewById(R.id.botBar_btn_next);
-//        btn_intent.setVisibility(View.INVISIBLE);
+        btn_intent.setVisibility(View.INVISIBLE);
         btn_intent.setOnClickListener(view -> {
             Intent intent;
             if (prePage.equals("register")) {
@@ -125,7 +126,6 @@ public class EmailCertActivity extends AppCompatActivity {
             try {
                 String sessionId = response.getString("sessionId");
                 saveSessionId(sessionId);
-                Log.d("send request response", sessionId);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -142,9 +142,6 @@ public class EmailCertActivity extends AppCompatActivity {
                 return params;
             }
         };
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-
         CustomRetryPolicy retryPolicy = new CustomRetryPolicy();
         jsonObjectRequest.setRetryPolicy(retryPolicy);
 
@@ -172,7 +169,6 @@ public class EmailCertActivity extends AppCompatActivity {
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL_VALIDATE, jsonObject, response -> {
-            Log.d("validate success", response.toString());
             Toast.makeText(this, "이메일 인증 성공", Toast.LENGTH_SHORT).show();
             ed_code.setCompoundDrawablesWithIntrinsicBounds(null, null, check_success, null);
             btn_intent.setVisibility(View.VISIBLE);
@@ -189,8 +185,6 @@ public class EmailCertActivity extends AppCompatActivity {
                 return headers;
             }
         };
-
-        RequestQueue queue = Volley.newRequestQueue(this);
 
         queue.add(jsonObjectRequest);
     }
