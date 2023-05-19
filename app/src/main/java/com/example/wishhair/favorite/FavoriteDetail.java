@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.NetworkResponse;
@@ -115,8 +116,6 @@ public class FavoriteDetail extends Fragment {
             callback = new OnBackPressedCallback(true) {
                 @Override
                 public void handleOnBackPressed() {
-                    Log.d("backpress", "backpress");
-                    mainActivity.setFlag(true);
                     mainActivity.onBackPressed();
                 }
             };
@@ -128,6 +127,8 @@ public class FavoriteDetail extends Fragment {
                     FragmentManager fm = getActivity().getSupportFragmentManager();
                     Fragment fragment = fm.findFragmentById(R.id.tagResult_layout);
                     fm.beginTransaction().remove(fragment).commit();
+                    getActivity().findViewById(R.id.tagResult_overlay).setVisibility(View.GONE);
+                    getActivity().findViewById(R.id.tagResult_btn_finish).setVisibility(View.VISIBLE);
                 }
             };
         }
