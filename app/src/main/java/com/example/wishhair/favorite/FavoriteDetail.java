@@ -2,6 +2,7 @@ package com.example.wishhair.favorite;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -31,7 +32,10 @@ import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.MainActivity;
 import com.example.wishhair.MyPage.items.HeartlistItem;
 import com.example.wishhair.R;
+import com.example.wishhair.func.TagFunc.TagResultActivity;
 import com.example.wishhair.review.detail.ImageSliderAdapter;
+import com.example.wishhair.sign.LoginActivity;
+import com.example.wishhair.sign.RegisterActivity;
 import com.example.wishhair.sign.UrlConst;
 
 import org.json.JSONArray;
@@ -73,6 +77,7 @@ public class FavoriteDetail extends Fragment {
     private ImageButton favoriteBtn;
     private TextView styleNameTv, hashtags;
     private OnBackPressedCallback callback;
+    private boolean callbackFlag;
 
     private ViewPager2 sliderViewPager;
     private CircleIndicator3 circleIndicator;
@@ -105,7 +110,13 @@ public class FavoriteDetail extends Fragment {
         callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                mainActivity.onBackPressed();
+                if (callbackFlag) {
+                    Intent intent = new Intent(getActivity(), TagResultActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    mainActivity.onBackPressed();
+                }
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
@@ -141,6 +152,7 @@ public class FavoriteDetail extends Fragment {
 
         // data transfer (FavoriteFragment -> FavoriteDetailFragment)
         if (getArguments() != null) {
+            callbackFlag = false;
             styleNameTv.setText(getArguments().getString("hairStylename"));
             ArrayList<String> tags = getArguments().getStringArrayList("tags");
             String tag = "";
