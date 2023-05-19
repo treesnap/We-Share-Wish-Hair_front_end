@@ -27,6 +27,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.favorite.FavoriteDetail;
 import com.example.wishhair.hairItemAdapter;
+import com.example.wishhair.review.ReviewItem;
+import com.example.wishhair.review.detail.RecentReviewDetailActivity;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.func.faceFunc.FaceFuncActivity;
 import com.example.wishhair.R;
@@ -39,6 +41,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import me.relex.circleindicator.CircleIndicator3;
@@ -113,6 +116,10 @@ public class HomeFragment extends Fragment {
         monthlyReviewPager = v.findViewById(R.id.home_ViewPager_review_monthly);
         monthlyIndicator = v.findViewById(R.id.home_circleIndicator);
         monthlyAdapter = new HomeMonthlyReviewAdapter(monthlyReviewItems);
+        monthlyAdapter.setOnItemClickListener(((v1, position) -> {
+            HomeItems selectedItem = monthlyReviewItems.get(position);
+            reviewRequest(accessToken, selectedItem.getReviewId());
+        }));
 
         monthlyReviewRequest(accessToken);
 
@@ -202,10 +209,70 @@ public class HomeFragment extends Fragment {
         queue.add(monthlyRequest);
     }
 
+    private void reviewRequest(String accessToken, int reviewId) {
+        final String URL_reviewList = UrlConst.URL + "/api/review/" + reviewId;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_reviewList, null, response -> {
+//                parse received data
+            try {
+                JSONObject resultObject = response.getJSONObject("reviewResponse");
+                Log.d("result", resultObject.toString());
+                String hairStyleName = resultObject.getString("hairStyleName");
+                String userNickName = resultObject.getString("userNickname");
+                String score = resultObject.getString("score");
+                String content = resultObject.getString("contents");
+                String createDate = resultObject.getString("createdDate");
+                int likes = resultObject.getInt("likes");
+
+                JSONArray hashTagsArray = resultObject.getJSONArray("hashTags");
+                ArrayList<String> tags = new ArrayList<>();
+                for (int j = 0; j < hashTagsArray.length(); j++) {
+                    JSONObject hasTagObject = hashTagsArray.getJSONObject(j);
+                    tags.add(hasTagObject.getString("tag"));
+                }
+
+                JSONArray photosArray = resultObject.getJSONArray("photos");
+                ArrayList<String> receivedUrls = new ArrayList<>();
+                for (int j = 0; j < photosArray.length(); j++) {
+                    JSONObject photoObject = photosArray.getJSONObject(j);
+                    receivedUrls.add(photoObject.getString("storeUrl"));
+                }
+
+                ReviewItem receivedData = new ReviewItem(reviewId, receivedUrls, hairStyleName, userNickName, tags, content, score, likes, createDate, false);
+
+                Intent intent = new Intent(getActivity(), RecentReviewDetailActivity.class);
+                intent.putExtra("reviewId", receivedData.getReviewId());
+                intent.putExtra("userNickname", receivedData.getUserNickName());
+                intent.putExtra("hairStyleName", receivedData.getHairStyleName());
+                intent.putStringArrayListExtra("tags", receivedData.getTags());
+                intent.putExtra("score", receivedData.getScore());
+                intent.putExtra("likes", receivedData.getLikes());
+                intent.putExtra("date", receivedData.getCreatedDate());
+                intent.putExtra("content", receivedData.getContent());
+                intent.putStringArrayListExtra("imageUrls", receivedData.getImageUrls());
+                startActivity(intent);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> {
+            String message = GetErrorMessage.getErrorMessage(error);
+            Log.e("review search error", message);
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        }) { @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+                return params;
+            }
+        };
+
+        queue.add(jsonObjectRequest);
+    }
+
     private void recommendRequest(String accessToken) {
         String recUrl = UrlConst.URL + "/api/hair_style/home";
         JsonObjectRequest recRequest = new JsonObjectRequest(Request.Method.GET, recUrl, null, response -> {
-            Log.d("recResponse", response.toString());
+//            Log.d("recResponse", response.toString());
             String recResponse = String.valueOf(response);
             try {
                 JSONObject result = new JSONObject(recResponse);

@@ -28,10 +28,11 @@ public class ReviewItem implements Serializable {
 
     public ReviewItem() {}
 
-    public ReviewItem(int reviewId, ArrayList<String> imageUrls, String hairStyleName, ArrayList<String> tags, String contents, String score, int likes, String createdDate, boolean isWriter) {
+    public ReviewItem(int reviewId, ArrayList<String> imageUrls, String hairStyleName, String userNickName, ArrayList<String> tags, String contents, String score, int likes, String createdDate, boolean isWriter) {
         this.reviewId = reviewId;
         this.imageUrls = imageUrls;
         this.hairStyleName = hairStyleName;
+        this.userNickName = userNickName;
         this.tags = tags;
         this.score = score;
         this.likes = likes;

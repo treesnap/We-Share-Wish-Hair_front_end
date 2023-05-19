@@ -12,22 +12,40 @@ import com.example.wishhair.R;
 
 import java.util.ArrayList;
 
-public class HomeMonthlyReviewAdapter extends RecyclerView.Adapter<HomeMonthlyReviewAdapter.HotViewHolder> {
+public class HomeMonthlyReviewAdapter extends RecyclerView.Adapter<HomeMonthlyReviewAdapter.MonthlyViewHolder> {
     private final ArrayList<HomeItems> items;
 
     public HomeMonthlyReviewAdapter(ArrayList<HomeItems> items) {
         this.items = items;
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(View v, int position);
+    }
+    private HomeMonthlyReviewAdapter.OnItemClickListener listener = null;
+    public void setOnItemClickListener(HomeMonthlyReviewAdapter.OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     @NonNull
     @Override
-    public HotViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MonthlyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item_review_monthly, parent, false);
-        return new HotViewHolder(view);
+
+        HomeMonthlyReviewAdapter.MonthlyViewHolder viewHolder = new MonthlyViewHolder(view);
+
+        view.setOnClickListener(view1 -> {
+            int position = viewHolder.getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(view1, position);
+            }
+        });
+
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HotViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MonthlyViewHolder holder, int position) {
         HomeItems item = items.get(position);
 
         holder.userName.setText(item.getUsername());
@@ -39,9 +57,9 @@ public class HomeMonthlyReviewAdapter extends RecyclerView.Adapter<HomeMonthlyRe
         return items.size();
     }
 
-    public static class HotViewHolder extends RecyclerView.ViewHolder {
+    public static class MonthlyViewHolder extends RecyclerView.ViewHolder {
         TextView userName, context_review;
-        public HotViewHolder(@NonNull View itemView) {
+        public MonthlyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             this.userName = itemView.findViewById(R.id.home_item_review_userName);
