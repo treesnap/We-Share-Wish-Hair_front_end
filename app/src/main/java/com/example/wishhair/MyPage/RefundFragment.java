@@ -36,11 +36,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RefundFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RefundFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -54,10 +49,9 @@ public class RefundFragment extends Fragment {
 
     final static private String url = UrlConst.URL + "/api/point/use";
     private SharedPreferences loginSP;
-    Button refundApply;
-    EditText inputBank;
-    EditText inputAccount;
-    EditText inputPoint;
+    private Button refundApply;
+    private EditText inputBank, inputAccount, inputPoint;
+    private MainActivity mainActivity;
     private OnBackPressedCallback callback;
 
     public RefundFragment() {
@@ -77,7 +71,7 @@ public class RefundFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity = (MainActivity) getActivity();
         callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -113,6 +107,11 @@ public class RefundFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         String accessToken = loginSP.getString("accessToken", "fail acc");
+//        backButton
+        Button backBtn = view.findViewById(R.id.point_back_btn);
+        backBtn.setOnClickListener(view1 -> {
+            mainActivity.ChangeFragment(7);
+        });
 
         refundApply.setOnClickListener(new View.OnClickListener() {
                 @Override

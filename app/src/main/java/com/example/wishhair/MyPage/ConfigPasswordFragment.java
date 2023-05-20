@@ -116,13 +116,11 @@ public class ConfigPasswordFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Toolbar toolbar = getView().findViewById(R.id.config_toolbar);
-        toolbar.setNavigationIcon(R.drawable.back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mainActivity.ChangeFragment(8);
-            }
+        Toolbar toolbar = getView().findViewById(R.id.config_password_toolbar);
+        //        backButton
+        Button backBtn = view.findViewById(R.id.config_password_back_btn);
+        backBtn.setOnClickListener(view1 -> {
+            mainActivity.ChangeFragment(8);
         });
 
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);

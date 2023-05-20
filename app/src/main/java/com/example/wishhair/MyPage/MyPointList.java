@@ -126,15 +126,11 @@ public class MyPointList extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Toolbar toolbar = getView().findViewById(R.id.point_toolbar);
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        String accessToken = loginSP.getString("accessToken", "fail acc");
-
-
-        toolbar.setNavigationIcon(R.drawable.back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mainActivity.ChangeFragment(2);
-            }
+        accessToken = loginSP.getString("accessToken", "fail acc");
+//        backButton
+        Button backBtn = view.findViewById(R.id.point_back_btn);
+        backBtn.setOnClickListener(view1 -> {
+            mainActivity.ChangeFragment(2);
         });
 
         toPointRefund.setOnClickListener(new View.OnClickListener() {
@@ -222,10 +218,6 @@ public class MyPointList extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
-//                Log.i("Gson", "request");
-//                processResponse(response);
             }
         }, new Response.ErrorListener() {
 

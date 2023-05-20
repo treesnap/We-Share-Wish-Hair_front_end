@@ -57,12 +57,11 @@ public class ConfigFragment extends Fragment {
     private SharedPreferences loginSP;
     final static private String url = UrlConst.URL + "/api/user";
     static private String accessToken;
-    private Button config_apply;
     private EditText configNickname;
     private RadioButton btnMan, btnWoman;
     private RadioGroup btnGroup;
     private String sexAfter, UserEmail, UserName;
-    private Button config_to_passwordConfig;
+    private Button config_to_passwordConfig, config_apply;
     private TextView configUserName, configUserEmail;
 
 
@@ -122,13 +121,12 @@ public class ConfigFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Toolbar toolbar = getView().findViewById(R.id.config_toolbar);
-        toolbar.setNavigationIcon(R.drawable.back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mainActivity.ChangeFragment(2);
-            }
+        //        backButton
+        Button backBtn = view.findViewById(R.id.config_back_btn);
+        backBtn.setOnClickListener(view1 -> {
+            mainActivity.ChangeFragment(2);
         });
+
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         accessToken = loginSP.getString("accessToken", "fail acc");
 
