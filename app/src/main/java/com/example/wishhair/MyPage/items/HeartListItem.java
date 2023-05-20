@@ -1,24 +1,19 @@
 package com.example.wishhair.MyPage.items;
 
 public class HeartListItem {
-    private String HeartListPicture, HeartListGrade;
-    private String HeartListStyleName, HeartListReviewerNickname;
-    private String[] HashTags;
-    private int HeartListHeartCount, HeartListReviewID;
 
-//    public HeartlistItem(ImageView imageView, TextView grade, TextView count, TextView StyleName) {
-//        HeartlistPicture = imageView;
-//        HeartlistGrade = grade;
-//        HeartlistHeartcount = count;
-//        HeartlistStyleName = StyleName;
-//    }
+    private String HeartListPicture, HeartListGrade, HeartListHeartCount, HeartListStyleName, HeartListReviewerNickname;
+    private String[] HashTags;
+    private int HeartListReviewID;
+
     public HeartListItem() {}
 
-    public int getHeartListHeartCount() {
+    public String getHeartListHeartCount() {
         return HeartListHeartCount;
     }
 
-    public void setHeartListHeartCount(int heartListHeartCount) {
+    public void setHeartListHeartCount(String heartListHeartCount) {
+
         HeartListHeartCount = heartListHeartCount;
     }
 

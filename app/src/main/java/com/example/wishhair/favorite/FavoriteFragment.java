@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -129,7 +128,6 @@ public class FavoriteFragment extends Fragment {
         adapter.setOnItemClickListener(new FavoriteAdapter.OnItemClickListener() {
             @Override
             public void onItemClicked(int position, int id, String stylename, ArrayList<String> tags, ArrayList<String> arrayList) {
-                Toast.makeText(getContext(),"position:" +position + " hairstyleid:"+id, Toast.LENGTH_SHORT).show();
                 targetStyleId = id;
                 Bundle bundle = new Bundle();
                 bundle.putString("hairStylename", stylename);

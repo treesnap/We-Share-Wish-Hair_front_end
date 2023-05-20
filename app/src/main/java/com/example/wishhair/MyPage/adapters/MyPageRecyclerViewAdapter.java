@@ -34,20 +34,21 @@ public class MyPageRecyclerViewAdapter extends RecyclerView.Adapter<MyPageRecycl
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView heartListPicture;
-        TextView heartListGrade, heartListHeartCount;
-        TextView heartListStyleName;
+
+        private ImageView HeartListPicture;
+        private TextView HeartListGrade, HeartListHeartCount, HeartListUserName;
 
         ViewHolder(View view) {
             super(view);
 
-            this.heartListPicture = view.findViewById(R.id.heartlist_my_imageView_picture);
-            this.heartListGrade = view.findViewById(R.id.heartlist_my_tv_grade);
-            this.heartListHeartCount = view.findViewById(R.id.heartlist_my_tv_heartCount);
-            this.heartListStyleName = view.findViewById(R.id.heartlist_stylename);
+            this.HeartListPicture = view.findViewById(R.id.heartlist_my_imageView_picture);
+            this.HeartListGrade = view.findViewById(R.id.heartlist_my_tv_grade);
+            this.HeartListHeartCount = view.findViewById(R.id.heartlist_my_tv_heartCount);
+            this.HeartListUserName = view.findViewById(R.id.heartlist_username);
         }
         public void bindContentImage(String imageUrl) {
-            Glide.with(context).load(imageUrl).into(heartListPicture);
+            Glide.with(context).load(imageUrl).into(HeartListPicture);
+
         };
     }
 
@@ -70,10 +71,11 @@ public class MyPageRecyclerViewAdapter extends RecyclerView.Adapter<MyPageRecycl
     }
 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        HeartListItem item = heartListItems.get(position);
-        holder.heartListStyleName.setText(item.getHeartListStyleName());
-        holder.heartListHeartCount.setText(String.valueOf(item.getHeartListHeartCount()));
-        holder.heartListGrade.setText(item.getHeartListGrade());
+
+        HeartListItem item = heartlistItems.get(position);
+        holder.HeartListUserName.setText(item.getHeartListReviewerNickname()+"님");
+        holder.HeartListGrade.setText(item.getHeartListGrade());
+        holder.HeartListHeartCount.setText(item.getHeartListHeartCount());
 
         if (item.getHeartListPicture() != null) {
             holder.bindContentImage(item.getHeartListPicture());

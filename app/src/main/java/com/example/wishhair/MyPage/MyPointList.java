@@ -126,15 +126,11 @@ public class MyPointList extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Toolbar toolbar = getView().findViewById(R.id.point_toolbar);
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        String accessToken = loginSP.getString("accessToken", "fail acc");
-
-
-        toolbar.setNavigationIcon(R.drawable.back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mainActivity.ChangeFragment(2);
-            }
+        accessToken = loginSP.getString("accessToken", "fail acc");
+//        backButton
+        Button backBtn = view.findViewById(R.id.point_back_btn);
+        backBtn.setOnClickListener(view1 -> {
+            mainActivity.ChangeFragment(2);
         });
 
         toPointRefund.setOnClickListener(new View.OnClickListener() {
@@ -222,10 +218,6 @@ public class MyPointList extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
-//                Log.i("Gson", "request");
-//                processResponse(response);
             }
         }, new Response.ErrorListener() {
 
@@ -246,19 +238,4 @@ public class MyPointList extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(jsonObjectRequest);
     }
-
-//    public void processResponse(JSONObject response) {
-//        Gson gson = new Gson();
-//        Type type = new TypeToken<List<PointHistory>>(){}.getType();
-//        List<PointHistory> phList = new ArrayList<PointHistory>();
-//        PointHistory test1 = new PointHistory();
-//        phList.add(test1);
-//        if (phList != null && !phList.isEmpty()) {
-//            adapter.setItems((ArrayList<PointHistory>) phList);
-//            adapter.notifyDataSetChanged();
-//            Log.d("Gson","adapter passed");
-//        }
-//        else
-//            Log.d("Gson","else passed");
-//    }
 }

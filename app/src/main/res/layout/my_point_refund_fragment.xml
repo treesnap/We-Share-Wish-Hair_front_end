@@ -14,6 +14,13 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
         >
+        <Button
+            android:id="@+id/point_back_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/back"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="16dp"/>
 
         <TextView
             android:id="@+id/toolbar_title"
@@ -21,7 +28,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="포인트 환급"
-            android:textSize="20sp">
+            android:textSize="25sp"
+            android:textColor="@color/default_blue"
+            android:textStyle="bold"
+            >
 
         </TextView>
 

@@ -68,15 +68,11 @@ public class MyPageFragment extends Fragment {
     final static private String url_wishlist = UrlConst.URL + "/api/hair_style/wish";
     final static private String url_withdraw = UrlConst.URL + "/api/user";
 
-    private static String testName = null;
-    private static String myPoint;
-
-    private RecyclerView HeartListRecyclerView;
-    private MyPageRecyclerViewAdapter adapter;
-    private ArrayList<HeartListItem> heartListItems;
-
-    private TextView tv, point_preview;
-    private ImageView userPicture;
+    static String testName = null;
+    static String mypoint, UserEmail, UserName;
+    ArrayList<HeartListItem> list;
+    private TextView tv, point_preview;;
+    private ImageView userpicture;
 
     private OnBackPressedCallback callback;
 
@@ -233,18 +229,16 @@ public class MyPageFragment extends Fragment {
         editor.apply();
     }
 
-    public void myPageRequest(String accessToken) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_myPage, null, response -> {
-            try {
-                testName = response.getString("nickname");
-                myPoint = Integer.toString(response.optInt("point"));
+    public void transferRequest(String accessToken) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_info , null, new Response.Listener<JSONObject>() {
 
-                tv.setText(testName+" 님");
-                point_preview.setText(myPoint +"P");
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    UserEmail = response.getString("email");
+                    UserName = response.getString("name");
+                } catch (JSONException e) {
+                    e.printStackTrace();
         }, volleyError -> {
             String message = GetErrorMessage.getErrorMessage(volleyError);
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
@@ -263,8 +257,11 @@ public class MyPageFragment extends Fragment {
     //wishlist recyclerview request
     @SuppressLint("NotifyDataSetChanged")
     public void myPageRecyclerviewRequest(String accessToken) {
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_myPage, null, response -> {
             try {
+                tv.setText(response.getString("nickname")+" 님");
+                point_preview.setText(response.getString("point")+"P");
                 JSONObject obj = new JSONObject(response.toString());
                 JSONArray jsonArray = obj.getJSONArray("reviews");
                 for (int i = 0; i < jsonArray.length(); i++) {

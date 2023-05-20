@@ -19,23 +19,14 @@
             app:srcCompat="@drawable/my_page" />
 
         <TextView
-            android:id="@+id/heartlist_stylename"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/heartlist_my_imageView_picture"
-            android:text="히피펌"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-
-        <TextView
             android:id="@+id/heartlist_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/heartlist_stylename"
-            android:textSize="8sp"
+            android:layout_below="@id/heartlist_my_imageView_picture"
+            android:textSize="12sp"
             android:textColor="@color/black"
             android:textStyle="bold"
+            android:layout_marginTop="5dp"
             />
 
         <ImageView
@@ -43,38 +34,45 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_below="@id/heartlist_username"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/heartlist_my_tv_heartCount"
             android:layout_marginEnd="5dp"
-            android:background="@drawable/star_fill" />
+            android:background="@drawable/star_fill"
+            />
 
         <TextView
             android:id="@+id/heartlist_my_tv_grade"
-            android:layout_width="wrap_content"
+            android:layout_width="30dp"
             android:layout_height="15dp"
             android:layout_below="@id/heartlist_username"
+            android:layout_marginTop="5dp"
             android:layout_toEndOf="@id/heartlist_my_imageView_gradeMark"
             android:includeFontPadding="false"
             android:textSize="13sp"
-            android:text="3.04" />
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            />
 
         <ImageView
             android:id="@+id/heartlist_my_imageView_Heart"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_below="@id/heartlist_username"
-            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
-            android:layout_toEndOf="@id/heartlist_my_tv_grade"
             android:src="@drawable/heart_fill" />
 
         <TextView
             android:id="@+id/heartlist_my_tv_heartCount"
-            android:layout_width="wrap_content"
+            android:layout_width="53dp"
             android:layout_height="15dp"
             android:layout_below="@id/heartlist_username"
+            android:layout_marginTop="5dp"
             android:layout_toEndOf="@id/heartlist_my_imageView_Heart"
             android:includeFontPadding="false"
-            android:text="500"
             android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             />
     </RelativeLayout>
 </LinearLayout>
