@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -78,9 +79,9 @@ public class FavoriteDetail extends Fragment {
     private boolean isWishing;
 
     private ImageButton favoriteBtn;
+    private Button backBtn;
     private TextView styleNameTv, hashtags;
     private OnBackPressedCallback callback;
-    private String backCheck;
 
     private ViewPager2 sliderViewPager;
     private CircleIndicator3 circleIndicator;
@@ -106,7 +107,6 @@ public class FavoriteDetail extends Fragment {
         return fragment;
     }
 
-    private Activity activity;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -136,7 +136,7 @@ public class FavoriteDetail extends Fragment {
                 @Override
                 public void handleOnBackPressed() {
                     FragmentManager fm = getActivity().getSupportFragmentManager();
-                    Fragment fragment = fm.findFragmentById(R.id.tagResult_layout);
+                    Fragment fragment = fm.findFragmentById(R.id.faceResult_layout);
                     fm.beginTransaction().remove(fragment).commit();
                     getActivity().findViewById(R.id.faceResult_overlay).setVisibility(View.GONE);
                     getActivity().findViewById(R.id.faceResult_btn_finish).setVisibility(View.VISIBLE);
@@ -168,6 +168,7 @@ public class FavoriteDetail extends Fragment {
         styleNameTv = view.findViewById(R.id.favorite_detail_stylename);
         hashtags = view.findViewById(R.id.favorite_detail_hashtag);
         reviewRecyclerView = view.findViewById(R.id.favorite_detail_review_recyclerview);
+        backBtn = view.findViewById(R.id.favorite_detail_back);
         return view;
     }
 
@@ -177,13 +178,18 @@ public class FavoriteDetail extends Fragment {
 
         // data transfer (FavoriteFragment -> FavoriteDetailFragment)
         if (getArguments() != null) {
-            backCheck = getArguments().getString("backCheck");
             styleNameTv.setText(getArguments().getString("hairStylename"));
             ArrayList<String> tags = getArguments().getStringArrayList("tags");
             String tag = "";
+            boolean lineFlag = true;
             try {
                 for (int i = 0; i < tags.size(); i++) {
                     tag = tag + "#" + tags.get(i) + " ";
+//                    tag 30자 초과 시 줄바꿈
+                    if (tag.length() > 29 && lineFlag) {
+                        lineFlag = false;
+                        tag += "\n";
+                    }
                 }
             } catch (Exception e) {
 //                e.printStackTrace();
@@ -194,8 +200,6 @@ public class FavoriteDetail extends Fragment {
             if (getArguments().getStringArrayList("ImageUrls") != null) {
                 images = getArguments().getStringArrayList("ImageUrls");
             }
-            else
-                Log.d("ImageUrls transfer test", "is null");
         }
 
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
@@ -211,19 +215,37 @@ public class FavoriteDetail extends Fragment {
         favoriteDetailRecyclerViewAdapter = new FavoriteDetailRecyclerViewAdapter();
         reviewRecyclerView.setAdapter(favoriteDetailRecyclerViewAdapter);
 
-
+//        Favorite Add or Delete
         favoriteBtn.setOnClickListener(view1 -> {
             if (!isWishing) {
                 FavoritePOSTRequest(accessToken);
                 favoriteBtn.setImageResource(R.drawable.heart_fill_5);
                 isWishing =! isWishing;
-                Log.d("favchk", "post");
             } else {
                 FavoriteDELETERequest(accessToken);
                 favoriteBtn.setImageResource(R.drawable.heart_empty);
                 favoriteBtn.setBackgroundColor(Color.WHITE);
                 isWishing =! isWishing;
-                Log.d("favchk", "delete");
+            }
+        });
+
+//       BackButton
+        backBtn.setOnClickListener(view12 -> {
+            if (getActivity().getClass().getName().equals(MainActivity.class.getName())) {
+                mainActivity = (MainActivity) getActivity();
+                mainActivity.onBackPressed();
+            } else if (getActivity().getClass().getName().equals(TagResultActivity.class.getName())) {
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        Fragment fragment = fm.findFragmentById(R.id.tagResult_layout);
+                        fm.beginTransaction().remove(fragment).commit();
+                        getActivity().findViewById(R.id.tagResult_overlay).setVisibility(View.GONE);
+                        getActivity().findViewById(R.id.tagResult_btn_finish).setVisibility(View.VISIBLE);
+            } else {
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        Fragment fragment = fm.findFragmentById(R.id.tagResult_layout);
+                        fm.beginTransaction().remove(fragment).commit();
+                        getActivity().findViewById(R.id.faceResult_overlay).setVisibility(View.GONE);
+                        getActivity().findViewById(R.id.faceResult_btn_finish).setVisibility(View.VISIBLE);
             }
         });
     }
@@ -302,10 +324,6 @@ public class FavoriteDetail extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(jsonObjectRequest);
-    }
-
-    public String getBackCheck() {
-        return backCheck;
     }
 
     //favorite detail recyclerview request

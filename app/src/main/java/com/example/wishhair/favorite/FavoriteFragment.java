@@ -135,7 +135,6 @@ public class FavoriteFragment extends Fragment {
         adapter.setOnItemClickListener(new FavoriteAdapter.OnItemClickListener() {
             @Override
             public void onItemClicked(int position, int id, String stylename, ArrayList<String> tags, ArrayList<String> arrayList) {
-                Toast.makeText(getContext(),"position:" +position + " hairstyleid:"+id, Toast.LENGTH_SHORT).show();
                 targetStyleId = id;
                 Bundle bundle = new Bundle();
                 bundle.putString("hairStylename", stylename);

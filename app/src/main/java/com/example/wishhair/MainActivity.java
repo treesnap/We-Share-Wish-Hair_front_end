@@ -134,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
     public void  onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();
         Fragment currentFragment = fm.findFragmentById(R.id.MainLayout);
-        Log.d("currentFragment", currentFragment.toString());
 
 
         // 현재 프래그먼트가 navigation bar 4개 프래그먼트일 때 2회 누를 시 종료

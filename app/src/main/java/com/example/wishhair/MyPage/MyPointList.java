@@ -246,19 +246,4 @@ public class MyPointList extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(jsonObjectRequest);
     }
-
-//    public void processResponse(JSONObject response) {
-//        Gson gson = new Gson();
-//        Type type = new TypeToken<List<PointHistory>>(){}.getType();
-//        List<PointHistory> phList = new ArrayList<PointHistory>();
-//        PointHistory test1 = new PointHistory();
-//        phList.add(test1);
-//        if (phList != null && !phList.isEmpty()) {
-//            adapter.setItems((ArrayList<PointHistory>) phList);
-//            adapter.notifyDataSetChanged();
-//            Log.d("Gson","adapter passed");
-//        }
-//        else
-//            Log.d("Gson","else passed");
-//    }
 }
