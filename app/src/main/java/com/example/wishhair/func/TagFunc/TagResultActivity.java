@@ -18,7 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.favorite.FavoriteDetail;
-import com.example.wishhair.hairItemAdapter;
+import com.example.wishhair.HairItemAdapter;
 import com.example.wishhair.sign.UrlConst;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
@@ -34,7 +34,7 @@ import java.util.Map;
 
 public class TagResultActivity extends AppCompatActivity {
     private final ArrayList<HomeItems> tagResultItems = new ArrayList<>();
-    private hairItemAdapter tagResultAdapter;
+    private HairItemAdapter tagResultAdapter;
     private RecyclerView recyclerView;
     private LinearLayout overlay;
     private Button btn_finish;
@@ -50,19 +50,6 @@ public class TagResultActivity extends AppCompatActivity {
 //        back
         Button btn_back = findViewById(R.id.tagResult_btn_back);
         btn_back.setOnClickListener(view -> finish());
-
-        ArrayList<HomeItems> items = new ArrayList<>();
-        //        dummyData
-        String imageSample = "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg";
-//        for (int i = 0; i < 5; i++) {
-//            HomeItems newItems = new HomeItems(imageSample, "물결펌", "876", false);
-//            items.add(newItems);
-//        }
-
-        hairItemAdapter tagResultAdapter = new hairItemAdapter(items, this);
-        tagResultAdapter.setOnItemClickListener((v1, position) -> {
-            HomeItems selectedItem = items.get(position);
-        });
 
         recyclerView = findViewById(R.id.tagResult_recyclerView);
 
@@ -118,15 +105,13 @@ public class TagResultActivity extends AppCompatActivity {
                     }
 
                     HomeItems item = new HomeItems(hairStyleId, photoUrls, hairStyleName, tags);
-
                     tagResultItems.add(item);
                 }
-                tagResultAdapter = new hairItemAdapter(tagResultItems, this);
+                tagResultAdapter = new HairItemAdapter(tagResultItems, this);
                 tagResultAdapter.setOnItemClickListener(((v1, position) -> {
                     // 프래그먼트 생성 시 액티비티 레이아웃 비활성화
                     overlay.setVisibility(View.VISIBLE);
                     btn_finish.setVisibility(View.GONE);
-
                     HomeItems selectedItem = tagResultItems.get(position);
                     Bundle bundle = new Bundle();
                     bundle.putString("hairStylename", selectedItem.getHairStyleName());

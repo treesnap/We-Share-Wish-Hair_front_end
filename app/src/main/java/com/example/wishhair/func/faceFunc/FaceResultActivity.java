@@ -20,7 +20,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.favorite.FavoriteDetail;
-import com.example.wishhair.hairItemAdapter;
+import com.example.wishhair.HairItemAdapter;
 import com.example.wishhair.sign.UrlConst;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
@@ -39,7 +39,7 @@ public class FaceResultActivity extends AppCompatActivity {
     private TextView userName, faceShape, faceShape_message;
     //        homeItem 과 형식이 같아 재사용
     private ArrayList<HomeItems> faceRecItems;
-    private hairItemAdapter faceResultAdapter;
+    private HairItemAdapter faceResultAdapter;
     RecyclerView recyclerView;
     private LinearLayout overlay;
     private String resultShape;
@@ -65,7 +65,6 @@ public class FaceResultActivity extends AppCompatActivity {
         faceShape = findViewById(R.id.faceResult_faceShape);
         faceShape_message = findViewById(R.id.faceResult_faceShape_message);
 
-//        TODO : 임시 코드
         resultShape = getIntent().getStringExtra("result");
         SharedPreferences sp = getSharedPreferences("userNickName", MODE_PRIVATE);
 
@@ -120,7 +119,7 @@ public class FaceResultActivity extends AppCompatActivity {
 
                     faceRecItems.add(item);
                 }
-                faceResultAdapter = new hairItemAdapter(faceRecItems, this);
+                faceResultAdapter = new HairItemAdapter(faceRecItems, this);
                 faceResultAdapter.setOnItemClickListener(((v1, position) -> {
                     // 프래그먼트 생성 시 액티비티 레이아웃 비활성화
                     overlay.setVisibility(View.VISIBLE);
