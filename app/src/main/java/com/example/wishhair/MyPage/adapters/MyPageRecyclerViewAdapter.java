@@ -11,63 +11,77 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.wishhair.MyPage.PointHistory;
-import com.example.wishhair.MyPage.items.HeartlistItem;
+import com.example.wishhair.MyPage.items.HeartListItem;
 import com.example.wishhair.R;
 
 import java.util.ArrayList;
 
 public class MyPageRecyclerViewAdapter extends RecyclerView.Adapter<MyPageRecyclerViewAdapter.ViewHolder>{
-    private ArrayList<HeartlistItem> heartlistItems = new ArrayList<HeartlistItem>();
-    Context context;
-    public MyPageRecyclerViewAdapter(Context context) {
+    private final ArrayList<HeartListItem> heartListItems;
+    private final Context context;
+
+    public MyPageRecyclerViewAdapter(Context context, ArrayList<HeartListItem> items) {
         this.context = context;
+        this.heartListItems = items;
     }
+
+    public interface OnItemClickListener {
+        void onItemClick(View v, int position);
+    }
+    private MyPageRecyclerViewAdapter.OnItemClickListener listener = null;
+    public void setOnItemClickListener(MyPageRecyclerViewAdapter.OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView HeartlistPicture;
-        public TextView HeartlistGrade, HeartlistHeartcount;
-        public TextView HeartlistStyleName;
+        ImageView heartListPicture;
+        TextView heartListGrade, heartListHeartCount;
+        TextView heartListStyleName;
 
         ViewHolder(View view) {
             super(view);
 
-            HeartlistPicture = view.findViewById(R.id.heartlist_my_imageView_picture);
-            HeartlistGrade = view.findViewById(R.id.heartlist_my_tv_grade);
-            HeartlistHeartcount = view.findViewById(R.id.heartlist_my_tv_heartCount);
-            HeartlistStyleName = view.findViewById(R.id.heartlist_stylename);
+            this.heartListPicture = view.findViewById(R.id.heartlist_my_imageView_picture);
+            this.heartListGrade = view.findViewById(R.id.heartlist_my_tv_grade);
+            this.heartListHeartCount = view.findViewById(R.id.heartlist_my_tv_heartCount);
+            this.heartListStyleName = view.findViewById(R.id.heartlist_stylename);
         }
         public void bindContentImage(String imageUrl) {
-            Glide.with(context).load(imageUrl).into(HeartlistPicture);
+            Glide.with(context).load(imageUrl).into(heartListPicture);
         };
     }
 
     @NonNull
     @Override
-    public MyPageRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.heartlist_item, parent, false);
-        return new ViewHolder(view);
+
+        MyPageRecyclerViewAdapter.ViewHolder viewHolder = new ViewHolder(view);
+
+        view.setOnClickListener(view1 -> {
+            int position = viewHolder.getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(view1, position);
+            }
+        });
+
+        return viewHolder;
     }
 
-
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        HeartlistItem item = heartlistItems.get(position);
-        holder.HeartlistStyleName.setText(item.getHeartlistStyleName());
+        HeartListItem item = heartListItems.get(position);
+        holder.heartListStyleName.setText(item.getHeartListStyleName());
+        holder.heartListHeartCount.setText(String.valueOf(item.getHeartListHeartCount()));
+        holder.heartListGrade.setText(item.getHeartListGrade());
 
-        if (item.getHeartlistPicture() != null) {
-            holder.bindContentImage(item.getHeartlistPicture());
+        if (item.getHeartListPicture() != null) {
+            holder.bindContentImage(item.getHeartListPicture());
         }
     }
 
     @Override
     public int getItemCount() {
-        return heartlistItems.size();
-    }
-    public void addItem(HeartlistItem e) {
-        heartlistItems.add(e);
-    }
-    public void setItems(ArrayList<HeartlistItem> items) {
-        this.heartlistItems = items;
+        return heartListItems.size();
     }
 }
-

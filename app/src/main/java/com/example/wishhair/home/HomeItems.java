@@ -38,7 +38,6 @@ public class HomeItems {
         this.context_review = context_review;
     }
 
-    //    TODO: set recommend item
 //    recommend
     private int hairStyleId;
     private ArrayList<String> hairImages;
