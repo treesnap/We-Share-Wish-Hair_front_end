@@ -100,8 +100,6 @@ public class EmailCertActivity extends AppCompatActivity {
 
 //        confirmCode request
         ed_code = findViewById(R.id.sign_cert_et_code);
-
-        ed_code.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         Button btn_submit = findViewById(R.id.sign_cert_btn_confirmCode);
         btn_submit.setOnClickListener(view -> {
             String inputCode = String.valueOf(ed_code.getText());
@@ -145,7 +143,7 @@ public class EmailCertActivity extends AppCompatActivity {
             String message = GetErrorMessage.getErrorMessage(error);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             Log.e("send error message", message);
-            ed_email.setCompoundDrawables(null, null, check_fail, null);
+            ed_email.setCompoundDrawablesWithIntrinsicBounds(null, null, check_fail, null);
         }) {
             @Override
             public Map<String, String> getHeaders() {
@@ -173,7 +171,7 @@ public class EmailCertActivity extends AppCompatActivity {
             try {
                 String sessionId = response.getString("sessionId");
                 saveSessionId(sessionId);
-                ed_email.setCompoundDrawables(null, null, check_success, null);
+                ed_email.setCompoundDrawablesWithIntrinsicBounds(null, null, check_success, null);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -81,8 +81,7 @@
                 android:ems="30"
                 android:hint="@string/cert_hint_email"
                 android:inputType="textEmailAddress"
-                android:importantForAutofill="no"
-                android:drawableEnd="@drawable/sign_check_fail"/>
+                android:importantForAutofill="no" />
             <Button
                 android:id="@+id/sign_cert_btn_requestSend"
                 android:layout_weight="2"
