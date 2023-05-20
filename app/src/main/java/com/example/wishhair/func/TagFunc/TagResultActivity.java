@@ -16,7 +16,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.favorite.FavoriteDetail;
-import com.example.wishhair.hairItemAdapter;
+import com.example.wishhair.HairItemAdapter;
 import com.example.wishhair.sign.UrlConst;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class TagResultActivity extends AppCompatActivity {
     private final ArrayList<HomeItems> tagResultItems = new ArrayList<>();
-    private hairItemAdapter tagResultAdapter;
+    private HairItemAdapter tagResultAdapter;
     private RecyclerView recyclerView;
 
 
@@ -101,7 +101,7 @@ public class TagResultActivity extends AppCompatActivity {
                     HomeItems item = new HomeItems(hairStyleId, photoUrls, hairStyleName, tags);
                     tagResultItems.add(item);
                 }
-                tagResultAdapter = new hairItemAdapter(tagResultItems, this);
+                tagResultAdapter = new HairItemAdapter(tagResultItems, this);
                 tagResultAdapter.setOnItemClickListener(((v1, position) -> {
 //                    TODO : 헤어 상세 이동 버그 발생
                     HomeItems selectedItem = tagResultItems.get(position);

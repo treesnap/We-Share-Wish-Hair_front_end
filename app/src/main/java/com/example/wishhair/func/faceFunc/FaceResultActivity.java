@@ -18,7 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.favorite.FavoriteDetail;
-import com.example.wishhair.hairItemAdapter;
+import com.example.wishhair.HairItemAdapter;
 import com.example.wishhair.sign.UrlConst;
 import com.example.wishhair.sign.token.CustomTokenHandler;
 import com.example.wishhair.R;
@@ -37,7 +37,7 @@ public class FaceResultActivity extends AppCompatActivity {
     private TextView userName, faceShape, faceShape_message;
     //        homeItem 과 형식이 같아 재사용
     private ArrayList<HomeItems> faceRecItems;
-    private hairItemAdapter faceResultAdapter;
+    private HairItemAdapter faceResultAdapter;
     RecyclerView recyclerView;
 
     private String resultShape;
@@ -114,7 +114,7 @@ public class FaceResultActivity extends AppCompatActivity {
 
                     faceRecItems.add(item);
                 }
-                faceResultAdapter = new hairItemAdapter(faceRecItems, this);
+                faceResultAdapter = new HairItemAdapter(faceRecItems, this);
                 faceResultAdapter.setOnItemClickListener(((v1, position) -> {
                     HomeItems selectedItem = faceRecItems.get(position);
                     Bundle bundle = new Bundle();
