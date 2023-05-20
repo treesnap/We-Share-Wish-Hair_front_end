@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,8 +72,7 @@ public class MyPageFragment extends Fragment {
     final static private String url_info = UrlConst.URL + "/api/user/info";
 
     static String testName = null;
-    static String mypoint, UserEmail, UserName;
-    ArrayList<HeartListItem> list;
+    static String UserEmail, UserName;
     private TextView tv, point_preview;;
     private ImageView userPicture;
 
@@ -113,7 +113,17 @@ public class MyPageFragment extends Fragment {
         ImageButton withdrawBtn = view.findViewById(R.id.mypage_withdraw);
 
 
-        toConfig.setOnClickListener(view1 -> mainActivity.ChangeFragment(8));
+        toConfig.setOnClickListener(view1 -> {
+            Bundle UserInfoTransfer = new Bundle();
+            UserInfoTransfer.putString("userEmail", UserEmail);
+            UserInfoTransfer.putString("userName", UserName);
+
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            ConfigFragment configFragment = new ConfigFragment();
+            configFragment.setArguments(UserInfoTransfer);
+            transaction.replace(R.id.MainLayout, configFragment);
+            transaction.commit();
+        });
         toMyPoint.setOnClickListener(view12 -> mainActivity.ChangeFragment(7));
         withdrawBtn.setOnClickListener(view13 -> {
             AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(view13.getContext(), R.style.WithdrawAlertDialogTheme);
@@ -150,24 +160,11 @@ public class MyPageFragment extends Fragment {
 //            }
 //        });
 
-/*      HomeFragment로 이동하는 버튼 <불필요 시 삭제>
-        toolbar.setNavigationIcon(R.drawable.back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                HomeFragment homeFragment = new HomeFragment();
-                fragmentTransaction.replace(R.id.MainLayout, homeFragment);
-                fragmentTransaction.commit();
-            }
-        });
-        toolbar.inflateMenu(R.menu.메뉴.xml);   버튼 추가 시 사용할 것 */
-
 //        LOGOUT
         ImageButton btn_logout  = view.findViewById(R.id.mypage_button_logout);
-
         btn_logout.setOnClickListener(view14 -> logout(accessToken));
 
+        transferRequest(accessToken);
     }
 
     @Override
@@ -307,7 +304,6 @@ public class MyPageFragment extends Fragment {
         }, volleyError -> {
             String message = GetErrorMessage.getErrorMessage(volleyError);
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-            Log.e("withDraw error", message);
         }) {
             @Override
             public Map<String, String> getHeaders() {
