@@ -26,7 +26,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.favorite.FavoriteDetail;
-import com.example.wishhair.hairItemAdapter;
+import com.example.wishhair.HairItemAdapter;
 import com.example.wishhair.review.ReviewItem;
 import com.example.wishhair.review.detail.RecentReviewDetailActivity;
 import com.example.wishhair.sign.token.CustomTokenHandler;
@@ -41,7 +41,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import me.relex.circleindicator.CircleIndicator3;
@@ -61,7 +60,7 @@ public class HomeFragment extends Fragment {
     private CircleIndicator3 monthlyIndicator;
 //    recommend
     private final ArrayList<HomeItems> recommendItems = new ArrayList<>();
-    private hairItemAdapter homeRecommendAdapter;
+    private HairItemAdapter homeRecommendAdapter;
     private RecyclerView recommendRecyclerView;
 
     public HomeFragment() {}
@@ -302,7 +301,7 @@ public class HomeFragment extends Fragment {
 
                     recommendItems.add(item);
                 }
-                homeRecommendAdapter = new hairItemAdapter(recommendItems, getContext());
+                homeRecommendAdapter = new HairItemAdapter(recommendItems, getContext());
                 homeRecommendAdapter.setOnItemClickListener(((v1, position) -> {
                     HomeItems selectedItem = recommendItems.get(position);
                     Bundle bundle = new Bundle();
