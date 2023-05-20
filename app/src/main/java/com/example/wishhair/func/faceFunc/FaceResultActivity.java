@@ -59,7 +59,6 @@ public class FaceResultActivity extends AppCompatActivity {
         faceShape = findViewById(R.id.faceResult_faceShape);
         faceShape_message = findViewById(R.id.faceResult_faceShape_message);
 
-//        TODO : 임시 코드
         resultShape = getIntent().getStringExtra("result");
         SharedPreferences sp = getSharedPreferences("userNickName", MODE_PRIVATE);
 

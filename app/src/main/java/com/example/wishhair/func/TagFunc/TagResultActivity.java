@@ -103,7 +103,6 @@ public class TagResultActivity extends AppCompatActivity {
                 }
                 tagResultAdapter = new HairItemAdapter(tagResultItems, this);
                 tagResultAdapter.setOnItemClickListener(((v1, position) -> {
-//                    TODO : 헤어 상세 이동 버그 발생
                     HomeItems selectedItem = tagResultItems.get(position);
                     Bundle bundle = new Bundle();
                     bundle.putString("hairStylename", selectedItem.getHairStyleName());
