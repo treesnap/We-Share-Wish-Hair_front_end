@@ -72,7 +72,7 @@ public class MyPageRecyclerViewAdapter extends RecyclerView.Adapter<MyPageRecycl
 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        HeartListItem item = heartlistItems.get(position);
+        HeartListItem item = heartListItems.get(position);
         holder.HeartListUserName.setText(item.getHeartListReviewerNickname()+"님");
         holder.HeartListGrade.setText(item.getHeartListGrade());
         holder.HeartListHeartCount.setText(item.getHeartListHeartCount());

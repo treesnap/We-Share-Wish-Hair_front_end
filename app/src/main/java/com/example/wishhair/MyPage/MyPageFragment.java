@@ -50,6 +50,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,14 +68,18 @@ public class MyPageFragment extends Fragment {
     final static private String url_myPage = UrlConst.URL + "/api/user/my_page";
     final static private String url_wishlist = UrlConst.URL + "/api/hair_style/wish";
     final static private String url_withdraw = UrlConst.URL + "/api/user";
+    final static private String url_info = UrlConst.URL + "/api/user/info";
 
     static String testName = null;
     static String mypoint, UserEmail, UserName;
     ArrayList<HeartListItem> list;
     private TextView tv, point_preview;;
-    private ImageView userpicture;
+    private ImageView userPicture;
 
     private OnBackPressedCallback callback;
+    private RecyclerView HeartListRecyclerView;
+    private MyPageRecyclerViewAdapter adapter;
+    private ArrayList<HeartListItem> heartListItems;
 
     public MyPageFragment() {}
 
@@ -174,15 +179,11 @@ public class MyPageFragment extends Fragment {
 
         tv = view.findViewById(R.id.mypage_nickname);
         point_preview = view.findViewById(R.id.mypage_point_preview);
-        userPicture = view.findViewById(R.id.mypage_user_picture);
 
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         accessToken = loginSP.getString("accessToken", "fail acc");
 
         tv.setText(testName+" 님");
-        point_preview.setText(myPoint +"P");
-
-        myPageRequest(accessToken);
 
 //        heartList
         heartListItems = new ArrayList<>();
@@ -229,30 +230,6 @@ public class MyPageFragment extends Fragment {
         editor.apply();
     }
 
-    public void transferRequest(String accessToken) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_info , null, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    UserEmail = response.getString("email");
-                    UserName = response.getString("name");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-        }, volleyError -> {
-            String message = GetErrorMessage.getErrorMessage(volleyError);
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-            Log.e("myPage error", message);
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap();
-                params.put("Authorization", "bearer" + accessToken);
-                return params;
-            }
-        };
-        queue.add(jsonObjectRequest);
-    }
 
     //wishlist recyclerview request
     @SuppressLint("NotifyDataSetChanged")
@@ -271,7 +248,7 @@ public class MyPageFragment extends Fragment {
                     item.setHeartListReviewerNickname(object.getString("userNickname"));
                     item.setHeartListGrade(object.getString("score"));
                     item.setHeartListReviewID(object.getInt("reviewId"));
-                    item.setHeartListHeartCount(object.getInt("likes"));
+                    item.setHeartListHeartCount(object.getString("likes"));
 
                     JSONArray imageUrls = object.getJSONArray("photos");
                     item.setHeartListPicture(imageUrls.getJSONObject(0).getString("storeUrl"));
@@ -295,9 +272,54 @@ public class MyPageFragment extends Fragment {
                 return params;
             }
         };
-
         queue.add(jsonObjectRequest);
     }
+
+    // 회원 탈퇴 Request
+    public void WithdrawRequest(String accessToken) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url_withdraw , null, response -> {
+            Log.i("WithDraw Request", "success");
+            Intent intent = new Intent(mainActivity, LoginActivity.class);
+            startActivity(intent);
+            mainActivity.finish();
+            }, volleyError -> {
+            String message = GetErrorMessage.getErrorMessage(volleyError);
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+            Log.e("withDraw error", message);
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+                return params;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
+    public void transferRequest(String accessToken) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_info , null, response -> {
+            try {
+                UserEmail = response.getString("email");
+                UserName = response.getString("name");
+            } catch (JSONException e) {
+//                e.printStackTrace();
+            }
+        }, volleyError -> {
+            String message = GetErrorMessage.getErrorMessage(volleyError);
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+            Log.e("withDraw error", message);
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+                return params;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
+
+
 //    class로 분리 시도
     private void reviewRequest(String accessToken, int reviewId) {
         final String URL_reviewList = UrlConst.URL + "/api/review/" + reviewId;
@@ -371,27 +393,4 @@ public class MyPageFragment extends Fragment {
                 }
             }
     );
-
-    // 회원 탈퇴 Request
-    public void WithdrawRequest(String accessToken) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url_withdraw , null, response -> {
-            Log.i("WithDraw Request", "success");
-            Intent intent = new Intent(mainActivity, LoginActivity.class);
-            startActivity(intent);
-            mainActivity.finish();
-        }, volleyError -> {
-            String message = GetErrorMessage.getErrorMessage(volleyError);
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-            Log.e("withDraw error", message);
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap();
-                params.put("Authorization", "bearer" + accessToken);
-                return params;
-            }
-        };
-
-        queue.add(jsonObjectRequest);
-    }
 }
