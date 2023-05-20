@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -34,12 +36,16 @@ public class TagResultActivity extends AppCompatActivity {
     private final ArrayList<HomeItems> tagResultItems = new ArrayList<>();
     private HairItemAdapter tagResultAdapter;
     private RecyclerView recyclerView;
-
+    private LinearLayout overlay;
+    private Button btn_finish;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_result);
+
+//        activity inactivation cover
+        overlay = findViewById(R.id.tagResult_overlay);
 
 //        back
         Button btn_back = findViewById(R.id.tagResult_btn_back);
@@ -52,7 +58,7 @@ public class TagResultActivity extends AppCompatActivity {
         tagResultRequest(accessToken);
 
 //        finish
-        Button btn_finish = findViewById(R.id.tagResult_btn_finish);
+        btn_finish = findViewById(R.id.tagResult_btn_finish);
         btn_finish.setOnClickListener(view -> finish());
     }
 
@@ -103,6 +109,9 @@ public class TagResultActivity extends AppCompatActivity {
                 }
                 tagResultAdapter = new HairItemAdapter(tagResultItems, this);
                 tagResultAdapter.setOnItemClickListener(((v1, position) -> {
+                    // 프래그먼트 생성 시 액티비티 레이아웃 비활성화
+                    overlay.setVisibility(View.VISIBLE);
+                    btn_finish.setVisibility(View.GONE);
                     HomeItems selectedItem = tagResultItems.get(position);
                     Bundle bundle = new Bundle();
                     bundle.putString("hairStylename", selectedItem.getHairStyleName());
@@ -113,7 +122,7 @@ public class TagResultActivity extends AppCompatActivity {
                     FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
                     FavoriteDetail favoriteDetail = new FavoriteDetail();
                     favoriteDetail.setArguments(bundle);
-                    transaction.replace(R.id.MainLayout, favoriteDetail);
+                    transaction.replace(R.id.tagResult_layout, favoriteDetail);
                     transaction.commit();
                 }));
                 recyclerView.setLayoutManager(new GridLayoutManager(this, 2));

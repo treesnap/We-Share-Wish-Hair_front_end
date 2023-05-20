@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
+            backPressFlag = false;
             switch(item.getItemId())
             {
                 case R.id.bot_nav_home:
@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         switch(index)
         {
             case 1:
+                transaction.replace(R.id.MainLayout, homeFragment).commitAllowingStateLoss();
                 break;
             case 2:
                 transaction.replace(R.id.MainLayout, myPageFragment).commitAllowingStateLoss();
@@ -128,19 +129,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 특정 프래그먼트에서 뒤로 두번 누를 시 앱 종료 및 프래그먼트 전환
-    private long backpressedTime = 0;
+    private long backPressedTime = 0;
+    private boolean backPressFlag = false;
     public void  onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();
         Fragment currentFragment = fm.findFragmentById(R.id.MainLayout);
         Log.d("currentFragment", currentFragment.toString());
 
+
         // 현재 프래그먼트가 navigation bar 4개 프래그먼트일 때 2회 누를 시 종료
         if (currentFragment instanceof HomeFragment || currentFragment instanceof  MyPageFragment ||
             currentFragment instanceof FavoriteFragment || currentFragment instanceof ReviewFragment) {
-            if (System.currentTimeMillis() > backpressedTime + 1000) {
-                backpressedTime = System.currentTimeMillis();
+            if (System.currentTimeMillis() > backPressedTime + 1000) {
+                backPressedTime = System.currentTimeMillis();
                 Toast.makeText(this, "한번 더 누르시면 종료합니다.", Toast.LENGTH_SHORT).show();
-            } else if (System.currentTimeMillis() <= backpressedTime + 2000) {
+            } else if (System.currentTimeMillis() <= backPressedTime + 2000) {
                 finish();
             }
         }
@@ -160,7 +163,13 @@ public class MainActivity extends AppCompatActivity {
                     ChangeFragment(7);
                     break;
                 case "FavoriteDetail":
-                    ChangeFragment(5);
+                    // HomeItem -> Detail -> Home
+                    if (backPressFlag) {
+                        ChangeFragment(1);
+                        backPressFlag = false;
+                    } else {
+                        ChangeFragment(5);
+                    }
                     break;
                 default:
                     break;
@@ -168,5 +177,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
+    public void setBackPressFlag(boolean f) {
+        backPressFlag = f;
+    }
 }

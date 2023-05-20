@@ -2,67 +2,73 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/faceResult_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".func.faceFunc.FaceResultActivity">
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
-    <!--    top bar -->
+            <!--    top bar -->
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/faceResult_topBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toTopOf="parent">
+
                 <Button
                     android:id="@+id/faceResult_btn_back"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/back"/>
+                    android:background="@drawable/back" />
             </androidx.appcompat.widget.Toolbar>
 
-    <!--    title -->
+            <!--    title -->
             <TextView
                 android:id="@+id/faceResult_userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
                 android:layout_marginStart="25dp"
-                tools:text="현정"
+                android:layout_marginTop="25dp"
+                android:textColor="@color/default_blue"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                android:textColor="@color/default_blue"
-                app:layout_constraintTop_toBottomOf="@id/faceResult_topBar"
+                app:layout_constraintEnd_toStartOf="@id/faceResult_message_1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/faceResult_message_1"/>
+                app:layout_constraintTop_toBottomOf="@id/faceResult_topBar"
+                tools:text="현정" />
+
             <TextView
                 android:id="@+id/faceResult_message_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/faceResult_message_1"
+                android:textColor="@color/black"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
                 app:layout_constraintBaseline_toBaselineOf="@id/faceResult_userName"
-                app:layout_constraintTop_toBottomOf="@id/faceResult_topBar"
-                app:layout_constraintStart_toEndOf="@id/faceResult_userName" />
+                app:layout_constraintStart_toEndOf="@id/faceResult_userName"
+                app:layout_constraintTop_toBottomOf="@id/faceResult_topBar" />
+
             <TextView
                 android:id="@+id/faceResult_faceShape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="달걀형 "
+                android:textColor="@color/default_blue"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                android:textColor="@color/default_blue"
                 app:layout_constraintBaseline_toBaselineOf="@id/faceResult_message_2"
-                app:layout_constraintEnd_toStartOf="@id/faceResult_message_2"/>
+                app:layout_constraintEnd_toStartOf="@id/faceResult_message_2"
+                tools:text="달걀형 " />
+
             <TextView
                 android:id="@+id/faceResult_message_2"
                 android:layout_width="wrap_content"
@@ -70,63 +76,73 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="25dp"
                 android:text="@string/faceResult_message_2"
+                android:textColor="@color/black"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/faceResult_message_1"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/faceResult_message_1" />
 
             <TextView
                 android:id="@+id/faceResult_faceShape_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
                 android:layout_marginStart="50dp"
-                tools:text="달걀형"
+                android:layout_marginTop="60dp"
+                android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/faceResult_message_2"
+                app:layout_constraintEnd_toStartOf="@id/faceResult_message_3"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/faceResult_message_3"/>
+                app:layout_constraintTop_toBottomOf="@id/faceResult_message_2"
+                tools:text="달걀형" />
+
             <TextView
                 android:id="@+id/faceResult_message_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/faceResult_message_3"
+                android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toEndOf="@id/faceResult_faceShape_message"
-                app:layout_constraintBaseline_toBaselineOf="@id/faceResult_faceShape_message" />
+                app:layout_constraintBaseline_toBaselineOf="@id/faceResult_faceShape_message"
+                app:layout_constraintStart_toEndOf="@id/faceResult_faceShape_message" />
 
-    <!--        recommend hairStyles-->
+            <!--        recommend hairStyles-->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/faceResult_recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginStart="30dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginBottom="70dp"
-                tools:listitem="@layout/home_item_reco_style"
-                app:layout_constraintTop_toBottomOf="@id/faceResult_faceShape_message"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/faceResult_faceShape_message"
+                tools:listitem="@layout/home_item_reco_style" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/faceResult_btn_finish"
         android:layout_width="match_parent"
         android:layout_height="35dp"
+        android:layout_gravity="bottom"
         android:layout_marginStart="45dp"
         android:layout_marginEnd="45dp"
         android:layout_marginBottom="20dp"
-        android:layout_gravity="bottom"
+        android:background="@drawable/border_sign_button"
         android:text="@string/faceResult_btn_finish"
-        android:textSize="16sp"
-        android:textStyle="bold"
         android:textColor="@color/text_ivory"
-        android:background="@drawable/border_sign_button"/>
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/faceResult_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        ></LinearLayout>
 </FrameLayout>

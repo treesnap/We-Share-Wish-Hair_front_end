@@ -1,6 +1,7 @@
 package com.example.wishhair.favorite;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -19,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.NetworkResponse;
@@ -74,7 +77,7 @@ public class FavoriteDetail extends Fragment {
     private ImageButton favoriteBtn;
     private TextView styleNameTv, hashtags;
     private OnBackPressedCallback callback;
-    private boolean callbackFlag;
+    private String backCheck;
 
     private ViewPager2 sliderViewPager;
     private CircleIndicator3 circleIndicator;
@@ -100,22 +103,44 @@ public class FavoriteDetail extends Fragment {
         return fragment;
     }
 
+    private Activity activity;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mainActivity = (MainActivity) getActivity();
-        callback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                if (callbackFlag) {
-                    Intent intent = new Intent(getActivity(), TagResultActivity.class);
-                    startActivity(intent);
-                }
-                else {
+
+        if (getActivity().getClass().getName().equals(MainActivity.class.getName())) {
+            mainActivity = (MainActivity) getActivity();
+            callback = new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
                     mainActivity.onBackPressed();
                 }
-            }
-        };
+            };
+
+        } else if (getActivity().getClass().getName().equals(TagResultActivity.class.getName())) {
+            callback = new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    Fragment fragment = fm.findFragmentById(R.id.tagResult_layout);
+                    fm.beginTransaction().remove(fragment).commit();
+                    getActivity().findViewById(R.id.tagResult_overlay).setVisibility(View.GONE);
+                    getActivity().findViewById(R.id.tagResult_btn_finish).setVisibility(View.VISIBLE);
+                }
+            };
+        } else {
+            callback = new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    Fragment fragment = fm.findFragmentById(R.id.tagResult_layout);
+                    fm.beginTransaction().remove(fragment).commit();
+                    getActivity().findViewById(R.id.faceResult_overlay).setVisibility(View.GONE);
+                    getActivity().findViewById(R.id.faceResult_btn_finish).setVisibility(View.VISIBLE);
+                }
+            };
+        }
+
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
@@ -149,7 +174,7 @@ public class FavoriteDetail extends Fragment {
 
         // data transfer (FavoriteFragment -> FavoriteDetailFragment)
         if (getArguments() != null) {
-            callbackFlag = false;
+            backCheck = getArguments().getString("backCheck");
             styleNameTv.setText(getArguments().getString("hairStylename"));
             ArrayList<String> tags = getArguments().getStringArrayList("tags");
             String tag = "";
@@ -276,6 +301,9 @@ public class FavoriteDetail extends Fragment {
         queue.add(jsonObjectRequest);
     }
 
+    public String getBackCheck() {
+        return backCheck;
+    }
 
     //favorite detail recyclerview request
 //    public void FavoriteDetailRecyclerViewRequest(String accessToken) {

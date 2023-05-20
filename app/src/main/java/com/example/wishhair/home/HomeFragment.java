@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.GetErrorMessage;
+import com.example.wishhair.MainActivity;
 import com.example.wishhair.favorite.FavoriteDetail;
 import com.example.wishhair.HairItemAdapter;
 import com.example.wishhair.review.ReviewItem;
@@ -62,6 +64,7 @@ public class HomeFragment extends Fragment {
     private final ArrayList<HomeItems> recommendItems = new ArrayList<>();
     private HairItemAdapter homeRecommendAdapter;
     private RecyclerView recommendRecyclerView;
+    private MainActivity mainActivity;
 
     public HomeFragment() {}
 
@@ -73,6 +76,12 @@ public class HomeFragment extends Fragment {
         bundle.putString("faceShapeTag", faceShapeTag);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mainActivity = (MainActivity) getActivity();
     }
 
     @Override
@@ -303,6 +312,7 @@ public class HomeFragment extends Fragment {
                 }
                 homeRecommendAdapter = new HairItemAdapter(recommendItems, getContext());
                 homeRecommendAdapter.setOnItemClickListener(((v1, position) -> {
+                    mainActivity.setBackPressFlag(true);
                     HomeItems selectedItem = recommendItems.get(position);
                     Bundle bundle = new Bundle();
                     bundle.putString("hairStylename", selectedItem.getHairStyleName());
