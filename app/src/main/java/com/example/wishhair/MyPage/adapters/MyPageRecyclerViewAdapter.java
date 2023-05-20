@@ -11,33 +11,31 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.wishhair.MyPage.PointHistory;
-import com.example.wishhair.MyPage.items.HeartlistItem;
+import com.example.wishhair.MyPage.items.HeartListItem;
 import com.example.wishhair.R;
 
 import java.util.ArrayList;
 
 public class MyPageRecyclerViewAdapter extends RecyclerView.Adapter<MyPageRecyclerViewAdapter.ViewHolder>{
-    private ArrayList<HeartlistItem> heartlistItems = new ArrayList<HeartlistItem>();
+    private ArrayList<HeartListItem> heartlistItems = new ArrayList<HeartListItem>();
     Context context;
     public MyPageRecyclerViewAdapter(Context context) {
         this.context = context;
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView HeartlistPicture;
-        public TextView HeartlistGrade, HeartlistHeartcount;
-        public TextView HeartlistStyleName;
+        private ImageView HeartListPicture;
+        private TextView HeartListGrade, HeartListHeartCount, HeartListUserName;
 
         ViewHolder(View view) {
             super(view);
 
-            HeartlistPicture = view.findViewById(R.id.heartlist_my_imageView_picture);
-            HeartlistGrade = view.findViewById(R.id.heartlist_my_tv_grade);
-            HeartlistHeartcount = view.findViewById(R.id.heartlist_my_tv_heartCount);
-            HeartlistStyleName = view.findViewById(R.id.heartlist_stylename);
+            HeartListPicture = view.findViewById(R.id.heartlist_my_imageView_picture);
+            HeartListGrade = view.findViewById(R.id.heartlist_my_tv_grade);
+            HeartListHeartCount = view.findViewById(R.id.heartlist_my_tv_heartCount);
+            HeartListUserName = view.findViewById(R.id.heartlist_username);
         }
         public void bindContentImage(String imageUrl) {
-            Glide.with(context).load(imageUrl).into(HeartlistPicture);
+            Glide.with(context).load(imageUrl).into(HeartListPicture);
         };
     }
 
@@ -51,11 +49,12 @@ public class MyPageRecyclerViewAdapter extends RecyclerView.Adapter<MyPageRecycl
 
 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        HeartlistItem item = heartlistItems.get(position);
-        holder.HeartlistStyleName.setText(item.getHeartlistStyleName());
-
-        if (item.getHeartlistPicture() != null) {
-            holder.bindContentImage(item.getHeartlistPicture());
+        HeartListItem item = heartlistItems.get(position);
+        holder.HeartListUserName.setText(item.getHeartListReviewerNickname()+"님");
+        holder.HeartListGrade.setText(item.getHeartListGrade());
+        holder.HeartListHeartCount.setText(item.getHeartListHeartCount());
+        if (item.getHeartListPicture() != null) {
+            holder.bindContentImage(item.getHeartListPicture());
         }
     }
 
@@ -63,10 +62,10 @@ public class MyPageRecyclerViewAdapter extends RecyclerView.Adapter<MyPageRecycl
     public int getItemCount() {
         return heartlistItems.size();
     }
-    public void addItem(HeartlistItem e) {
+    public void addItem(HeartListItem e) {
         heartlistItems.add(e);
     }
-    public void setItems(ArrayList<HeartlistItem> items) {
+    public void setItems(ArrayList<HeartListItem> items) {
         this.heartlistItems = items;
     }
 }

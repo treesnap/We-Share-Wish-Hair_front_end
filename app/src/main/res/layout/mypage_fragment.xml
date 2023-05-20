@@ -375,7 +375,8 @@
                 android:layout_marginRight="25dp"
                 android:text="좋아요한 리뷰"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/HeartlistRecyclerView"

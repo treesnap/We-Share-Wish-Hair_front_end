@@ -34,7 +34,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.MainActivity;
 import com.example.wishhair.MyPage.adapters.MyPageRecyclerViewAdapter;
-import com.example.wishhair.MyPage.items.HeartlistItem;
+import com.example.wishhair.MyPage.items.HeartListItem;
 import com.example.wishhair.R;
 import com.example.wishhair.sign.LoginActivity;
 import com.example.wishhair.sign.UrlConst;
@@ -63,7 +63,7 @@ public class MyPageFragment extends Fragment {
 
     static String testName = null;
     static String mypoint, UserEmail, UserName;
-    ArrayList<HeartlistItem> list;
+    ArrayList<HeartListItem> list;
     private TextView tv, point_preview;;
     private ImageView userpicture;
 
@@ -255,40 +255,6 @@ public class MyPageFragment extends Fragment {
         editor.apply();
     }
 
-//    public void myPageRequest(String accessToken) {
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_mypage, null, new Response.Listener<JSONObject>() {
-//
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    testName = response.getString()
-//                    tv.setText(testName+" 님");
-//                    point_preview.setText(mypoint+"P");
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//            }
-//        }) {
-//
-//            @Override
-//            public Map<String, String> getHeaders() {
-//                Map<String, String> params = new HashMap();
-//                params.put("Authorization", "bearer" + accessToken);
-//
-//                return params;
-//            }
-//        };
-//
-//        RequestQueue queue = Volley.newRequestQueue(getContext());
-//        queue.add(jsonObjectRequest);
-//    }
     public void transferRequest(String accessToken) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_info , null, new Response.Listener<JSONObject>() {
 
@@ -333,16 +299,16 @@ public class MyPageFragment extends Fragment {
                     JSONObject obj = new JSONObject(response.toString());
                     JSONArray jsonArray = obj.getJSONArray("reviews");
                     for (int i=0;i<jsonArray.length();i++) {
-                        HeartlistItem item = new HeartlistItem();
+                        HeartListItem item = new HeartListItem();
                         JSONObject object = jsonArray.getJSONObject(i);
-                        item.setHeartlistStyleName(object.getString("hairStyleName"));
-                        item.setHeartlistReviewerNickname(object.getString("userNickname"));
-                        item.setHeartlistGrade(object.getString("score"));
-                        item.setHeartlistReviewID(object.getInt("reviewId"));
-                        item.setHeartlistHeartcount(String.valueOf(object.getInt("likes")));
+                        item.setHeartListStyleName(object.getString("hairStyleName"));
+                        item.setHeartListReviewerNickname(object.getString("userNickname"));
+                        item.setHeartListGrade(object.getString("score"));
+                        item.setHeartListReviewID(object.getInt("reviewId"));
+                        item.setHeartListHeartCount(String.valueOf(object.getInt("likes")));
 
                         JSONArray imageUrls = object.getJSONArray("photos");
-                        item.setHeartlistPicture(imageUrls.getJSONObject(0).getString("storeUrl"));
+                        item.setHeartListPicture(imageUrls.getJSONObject(0).getString("storeUrl"));
 
                         adapter.addItem(item);
                         adapter.notifyDataSetChanged();

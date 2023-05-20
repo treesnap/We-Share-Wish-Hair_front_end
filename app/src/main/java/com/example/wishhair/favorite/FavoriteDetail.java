@@ -1,9 +1,7 @@
 package com.example.wishhair.favorite;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,29 +20,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.wishhair.GetErrorMessage;
 import com.example.wishhair.MainActivity;
-import com.example.wishhair.MyPage.items.HeartlistItem;
 import com.example.wishhair.R;
 import com.example.wishhair.func.TagFunc.TagResultActivity;
 import com.example.wishhair.review.detail.ImageSliderAdapter;
-import com.example.wishhair.sign.LoginActivity;
-import com.example.wishhair.sign.RegisterActivity;
 import com.example.wishhair.sign.UrlConst;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
