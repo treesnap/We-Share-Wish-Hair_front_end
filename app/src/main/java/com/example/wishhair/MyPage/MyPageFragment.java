@@ -255,7 +255,7 @@ public class MyPageFragment extends Fragment {
         editor.apply();
     }
 
-    //    public void myPageRequest(String accessToken) {
+//    public void myPageRequest(String accessToken) {
 //        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_mypage, null, new Response.Listener<JSONObject>() {
 //
 //            @Override
