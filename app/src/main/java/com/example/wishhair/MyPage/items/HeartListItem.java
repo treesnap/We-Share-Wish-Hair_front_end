@@ -1,6 +1,7 @@
 package com.example.wishhair.MyPage.items;
 
 public class HeartListItem {
+
     private String HeartListPicture, HeartListGrade, HeartListHeartCount, HeartListStyleName, HeartListReviewerNickname;
     private String[] HashTags;
     private int HeartListReviewID;
@@ -12,6 +13,7 @@ public class HeartListItem {
     }
 
     public void setHeartListHeartCount(String heartListHeartCount) {
+
         HeartListHeartCount = heartListHeartCount;
     }
 

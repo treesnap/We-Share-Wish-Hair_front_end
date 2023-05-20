@@ -234,7 +234,6 @@ public class ReviewListFragment extends Fragment {
                 } else if (sort_selected.equals(sortItems[1])) { //오래된 순 정렬
                     sort_old();
                 } else if (sort_selected.equals(sortItems[2])) { // 좋아요 순 정렬
-//                    TODO : 좋아요 데이터가 없어서 테스트 못함
                     Comparator<ReviewItem> likeDesc = (item1, item2) -> (item2.getLikes() - item1.getLikes());
                     Collections.sort(recentReviewItems, likeDesc);
                 }

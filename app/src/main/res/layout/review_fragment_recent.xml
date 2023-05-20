@@ -8,49 +8,49 @@
     android:orientation="vertical">
 
     <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 <!--                filter -->
-                <RadioGroup
-                    android:id="@+id/review_fragment_filter_radioGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="horizontal">
-                    <RadioButton
-                        android:id="@+id/review_fragment_filter_whole"
-                        android:layout_width="56dp"
-                        android:layout_height="25dp"
-                        android:layout_marginEnd="5dp"
-                        android:button="@null"
-                        android:background="@drawable/radio_button_custom"
-                        android:text="@string/review_filter_whole"
-                        android:textColor="@color/text_ivory"
-                        android:gravity="center"
-                        android:checked="true"/>
-                    <RadioButton
-                        android:id="@+id/review_fragment_filter_man"
-                        android:layout_width="56dp"
-                        android:layout_height="25dp"
-                        android:layout_marginEnd="5dp"
-                        android:button="@null"
-                        android:background="@drawable/radio_button_custom"
-                        android:text="@string/review_filter_man"
-                        android:textColor="@color/text_ivory"
-                        android:gravity="center"/>
-                    <RadioButton
-                        android:id="@+id/review_fragment_filter_woman"
-                        android:layout_width="56dp"
-                        android:layout_height="25dp"
-                        android:button="@null"
-                        android:background="@drawable/radio_button_custom"
-                        android:text="@string/review_filter_woman"
-                        android:textColor="@color/text_ivory"
-                        android:gravity="center"/>
-                </RadioGroup>
+        <RadioGroup
+            android:id="@+id/review_fragment_filter_radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/review_fragment_filter_whole"
+                android:layout_width="56dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="5dp"
+                android:button="@null"
+                android:background="@drawable/radio_button_custom"
+                android:text="@string/review_filter_whole"
+                android:textColor="@color/text_ivory"
+                android:gravity="center"
+                android:checked="true"/>
+            <RadioButton
+                android:id="@+id/review_fragment_filter_man"
+                android:layout_width="56dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="5dp"
+                android:button="@null"
+                android:background="@drawable/radio_button_custom"
+                android:text="@string/review_filter_man"
+                android:textColor="@color/text_ivory"
+                android:gravity="center"/>
+            <RadioButton
+                android:id="@+id/review_fragment_filter_woman"
+                android:layout_width="56dp"
+                android:layout_height="25dp"
+                android:button="@null"
+                android:background="@drawable/radio_button_custom"
+                android:text="@string/review_filter_woman"
+                android:textColor="@color/text_ivory"
+                android:gravity="center"/>
+        </RadioGroup>
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/review_fragment_spinner_sort"
@@ -61,38 +61,44 @@
             android:dropDownWidth="90dp"
             android:popupBackground="@drawable/border_spinner_popup_review_sort"
             android:background="@drawable/border_spinner_review_sort" />
-            </LinearLayout>
+    </LinearLayout>
 
     <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/review_recent_swipeRefLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
-                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/review_recent_swipeRefLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/review_recent_recyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:listitem="@layout/review_recycler_item_recent">
-                    </androidx.recyclerview.widget.RecyclerView>
-                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/review_recent_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:paddingBottom="60dp"
+                    tools:listitem="@layout/review_recycler_item_recent">
+                </androidx.recyclerview.widget.RecyclerView>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </LinearLayout>
 
 <!--                review write -->
-                <Button
-                    android:id="@+id/review_fragment_btn_write"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginEnd="40dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:background="@drawable/border_sign_button"
-                    android:minHeight="0dp"
-                    android:text="@string/review_recent_btn_write"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_ivory"/>
-            </FrameLayout>
-
+        <Button
+            android:id="@+id/review_fragment_btn_write"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@drawable/border_sign_button"
+            android:minHeight="0dp"
+            android:text="@string/review_recent_btn_write"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_ivory"/>
+    </FrameLayout>
 </LinearLayout>

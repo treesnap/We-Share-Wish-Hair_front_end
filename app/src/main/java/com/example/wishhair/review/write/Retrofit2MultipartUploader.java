@@ -83,7 +83,6 @@ public class Retrofit2MultipartUploader {
                 } else {
                     Log.d("write error", response.toString());
                 }
-
             }
 
             @Override
@@ -128,7 +127,6 @@ public class Retrofit2MultipartUploader {
                 } else {
                     Log.d("write error", response.toString());
                 }
-
             }
 
             @Override

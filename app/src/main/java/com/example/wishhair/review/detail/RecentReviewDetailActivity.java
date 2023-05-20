@@ -64,7 +64,6 @@ public class RecentReviewDetailActivity extends AppCompatActivity {
         btn_like = findViewById(R.id.review_detail_like);
         isLikeRequest(accessToken);
         btn_like.setOnClickListener(view -> {
-            Log.d("islike", String.valueOf(isLike));
             if (isLike) {
                 likeCancelRequest(accessToken);
             } else {
@@ -149,7 +148,6 @@ public class RecentReviewDetailActivity extends AppCompatActivity {
         String likeUrl = UrlConst.URL + "/api/review/like/" + reviewId;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, likeUrl, null, response -> {
             btn_like.setImageResource(R.drawable.heart_fill);
-//            TODO : 좋아요 갯수 늘리기
             likeCount++;
             likes.setText(String.valueOf(likeCount));
         }, this::printErrorMessage) {
@@ -167,7 +165,6 @@ public class RecentReviewDetailActivity extends AppCompatActivity {
         String cancelUrl = UrlConst.URL + "/api/review/like/cancel/" + reviewId;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, cancelUrl, null, response -> {
             btn_like.setImageResource(R.drawable.heart_empty);
-//            TODO : 좋아요 갯수 줄이기
             likeCount--;
             likes.setText(String.valueOf(likeCount));
         }, this::printErrorMessage) {

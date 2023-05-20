@@ -126,7 +126,7 @@ public class MyReviewDetailActivity extends AppCompatActivity {
         date = parseDate(getIntent().getStringExtra("date"));
         isWriter = getIntent().getBooleanExtra("isWriter", false);
 
-        myReviewDetailItem = new ReviewItem(reviewId, imageUrls, hairStyleName, hashTags, content, score, likes, date, isWriter);
+        myReviewDetailItem = new ReviewItem(reviewId, imageUrls, hairStyleName, null, hashTags, content, score, likes, date, isWriter);
     }
 
     public void showMenu(View view) {

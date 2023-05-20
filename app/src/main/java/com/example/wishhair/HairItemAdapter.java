@@ -16,19 +16,19 @@ import com.example.wishhair.home.HomeItems;
 
 import java.util.ArrayList;
 
-public class hairItemAdapter extends RecyclerView.Adapter<hairItemAdapter.RecViewHolder>{
+public class HairItemAdapter extends RecyclerView.Adapter<HairItemAdapter.RecViewHolder>{
     private final ArrayList<HomeItems> items;
     private final Context context;
 
-    public hairItemAdapter(ArrayList<HomeItems> items, Context context) {
+    public HairItemAdapter(ArrayList<HomeItems> items, Context context) {
         this.items = items;
         this.context = context;
     }
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
-    private hairItemAdapter.OnItemClickListener listener = null;
-    public void setOnItemClickListener(hairItemAdapter.OnItemClickListener listener) {
+    private HairItemAdapter.OnItemClickListener listener = null;
+    public void setOnItemClickListener(HairItemAdapter.OnItemClickListener listener) {
         this.listener = listener;
     }
 
