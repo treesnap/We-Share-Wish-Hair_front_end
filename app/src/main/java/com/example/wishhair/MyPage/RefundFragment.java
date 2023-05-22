@@ -31,6 +31,7 @@ import com.example.wishhair.MainActivity;
 import com.example.wishhair.R;
 import com.example.wishhair.sign.UrlConst;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -53,6 +54,7 @@ public class RefundFragment extends Fragment {
     private EditText inputBank, inputAccount, inputPoint;
     private MainActivity mainActivity;
     private OnBackPressedCallback callback;
+    private int pointAmount;
 
     public RefundFragment() {
         // Required empty public constructor
@@ -113,6 +115,11 @@ public class RefundFragment extends Fragment {
             mainActivity.ChangeFragment(7);
         });
 
+        // data transfer (pointlist -> refund)
+        if (getArguments() != null) {
+            pointAmount = getArguments().getInt("point");
+        }
+
         refundApply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -124,14 +131,24 @@ public class RefundFragment extends Fragment {
                     AlertDialog alertDialog = myAlertBuilder.create();
 
                     // 버튼 리스너 설정
-                    v.findViewById(R.id.dialog_refund_OKbtn).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            RefundRequest(accessToken);
-                            Toast.makeText(view.getContext().getApplicationContext(),"환급 완료 !",Toast.LENGTH_SHORT).show();
-                            alertDialog.dismiss();
-                        }
-                    });
+                    if (pointAmount < Integer.parseInt(inputPoint.getText().toString())) {
+                        v.findViewById(R.id.dialog_refund_OKbtn).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Toast.makeText(view.getContext().getApplicationContext(), "보유중인 포인트를 초과하여 환급할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                                alertDialog.dismiss();
+                            }
+                        });
+                    } else {
+                        v.findViewById(R.id.dialog_refund_OKbtn).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                RefundRequest(accessToken);
+                                Toast.makeText(view.getContext().getApplicationContext(),"환급 완료 !",Toast.LENGTH_SHORT).show();
+                                alertDialog.dismiss();
+                            }
+                        });
+                    }
                     v.findViewById(R.id.dialog_refund_Canclebtn).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -155,7 +172,7 @@ public class RefundFragment extends Fragment {
         try {
             refundObj.put("bankName",inputBank.toString());
             refundObj.put("accountNumber", inputAccount.toString());
-            refundObj.put("dealAmount", Integer.parseInt(inputPoint.toString()));
+            refundObj.put("dealAmount", Integer.parseInt(inputPoint.getText().toString()));
         } catch (Exception e) {
             e.printStackTrace();
         }

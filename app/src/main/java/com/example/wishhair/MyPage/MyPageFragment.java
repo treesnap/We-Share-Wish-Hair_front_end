@@ -65,7 +65,7 @@ public class MyPageFragment extends Fragment {
     private String accessToken;
 
     private RequestQueue queue;
-    final static private String url_logout = UrlConst.URL + "/api/logout";
+    final static private String url_logout = UrlConst.URL + "/api/auth/logout";
     final static private String url_myPage = UrlConst.URL + "/api/user/my_page";
     final static private String url_wishlist = UrlConst.URL + "/api/hair_style/wish";
     final static private String url_withdraw = UrlConst.URL + "/api/user";

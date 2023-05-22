@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,20 +31,14 @@ import com.example.wishhair.MainActivity;
 import com.example.wishhair.MyPage.adapters.PointAdapter;
 import com.example.wishhair.R;
 import com.example.wishhair.sign.UrlConst;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 /**
@@ -64,18 +59,19 @@ public class MyPointList extends Fragment {
     MainActivity mainActivity;
     private OnBackPressedCallback callback;
 
-    PointAdapter adapter;
-    RecyclerView recyclerView;
-    LinearLayoutManager layoutManager;
-    DividerItemDecoration dividerItemDecoration;
+    private PointAdapter adapter;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
+    private DividerItemDecoration dividerItemDecoration;
     private SharedPreferences loginSP;
     final static private String url = UrlConst.URL + "/api/user/my_page";
     final static private String point_url = UrlConst.URL + "/api/point";
     final static private String pointhistory_url = UrlConst.URL + "/api/point?size=10&page=0";
 
     static private String accessToken;
-    TextView mypointview;
-    Button toPointRefund;
+    private TextView myPointView;
+    private Button toPointRefund;
+    private int myPoint;
     public MyPointList() {
         // Required empty public constructor
     }
@@ -133,10 +129,18 @@ public class MyPointList extends Fragment {
             mainActivity.ChangeFragment(2);
         });
 
+//        data transfer(pointlist -> refund)
         toPointRefund.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mainActivity.ChangeFragment(9);
+                Bundle pointTransfer = new Bundle();
+                pointTransfer.putInt("point", myPoint);
+
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                RefundFragment refundFragment = new RefundFragment();
+                refundFragment.setArguments(pointTransfer);
+                transaction.replace(R.id.MainLayout, refundFragment);
+                transaction.commit();
             }
         });
 
@@ -160,7 +164,7 @@ public class MyPointList extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.my_point_list_fragment, container, false);
-        mypointview = view.findViewById(R.id.point_pointview);
+        myPointView = view.findViewById(R.id.point_pointview);
         toPointRefund = view.findViewById(R.id.point_refund);
         AndroidThreeTen.init(getContext());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
@@ -172,9 +176,8 @@ public class MyPointList extends Fragment {
 
             @Override
             public void onResponse(JSONObject response) {
-                String mypoint = Integer.toString(response.optInt("point"));
-                Log.i("pointlist response ", mypoint);
-                mypointview.setText("현재 포인트\n"+mypoint+"P");
+                myPoint = response.optInt("point");
+                myPointView.setText("현재 포인트\n"+myPoint+"P");
 
             }
         }, new Response.ErrorListener() {
