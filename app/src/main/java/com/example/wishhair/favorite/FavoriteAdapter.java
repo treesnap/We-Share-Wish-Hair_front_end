@@ -115,8 +115,6 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         if (item.getFavoritePictureUrls() != null) {
             holder.bindContentImage(item.getFavoritePictureUrls().get(0));
         }
-//        holder.FavoriteHashtags = item.getFavoriteHashtags();
-//        holder.FavoriteHeartCount.setText(item.getFavoriteHeartcount());
     }
 
     @Override

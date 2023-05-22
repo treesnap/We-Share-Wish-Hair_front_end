@@ -2,19 +2,21 @@ package com.example.wishhair.favorite;
 
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+
 public class FavoriteDetailRecyclerViewItem {
-    ImageView styleReviewPicture;
-    String styleReviewGrade, styleReviewHeartCount;
-    String styleReviewNickname;
-    int ReviewStyleID;
+    private String styleReviewPicture;
+    private String styleReviewGrade, styleReviewHeartCount;
+    private String styleReviewNickname;
+    private int ReviewStyleID, itemReviewID;
 
     public FavoriteDetailRecyclerViewItem() {}
 
-    public ImageView getStyleReviewPicture() {
+    public String getStyleReviewPicture() {
         return styleReviewPicture;
     }
 
-    public void setStyleReviewPicture(ImageView styleReviewPicture) {
+    public void setStyleReviewPicture(String styleReviewPicture) {
         this.styleReviewPicture = styleReviewPicture;
     }
 
@@ -48,5 +50,13 @@ public class FavoriteDetailRecyclerViewItem {
 
     public void setReviewStyleID(int reviewStyleID) {
         ReviewStyleID = reviewStyleID;
+    }
+
+    public int getItemReviewID() {
+        return itemReviewID;
+    }
+
+    public void setItemReviewID(int itemReviewID) {
+        this.itemReviewID = itemReviewID;
     }
 }

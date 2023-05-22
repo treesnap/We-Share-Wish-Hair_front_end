@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -35,7 +37,9 @@ import com.example.wishhair.func.TagFunc.TagResultActivity;
 import com.example.wishhair.review.detail.ImageSliderAdapter;
 import com.example.wishhair.sign.UrlConst;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +62,7 @@ public class FavoriteDetail extends Fragment {
     public FavoriteDetail() {}
 
     final static private String url_favorite = UrlConst.URL + "/api/hair_style/wish/";
-    final static private String url_favorite_chk = UrlConst.URL + "/api";
+    final static private String url_search_review = UrlConst.URL + "/api/review/hair_style/";
 
 //    accessToken
     private SharedPreferences loginSP;
@@ -78,6 +82,7 @@ public class FavoriteDetail extends Fragment {
     private CircleIndicator3 circleIndicator;
 
     private FavoriteDetailRecyclerViewAdapter favoriteDetailRecyclerViewAdapter;
+    private ArrayList<FavoriteDetailRecyclerViewItem> favoriteDetailRecyclerViewItems;
     private RecyclerView reviewRecyclerView;
 
     public ArrayList<String> images = new ArrayList<>(
@@ -203,7 +208,12 @@ public class FavoriteDetail extends Fragment {
         sliderViewPager.setAdapter(new ImageSliderAdapter(getContext(), images));
         circleIndicator.setViewPager(sliderViewPager);
 
-        favoriteDetailRecyclerViewAdapter = new FavoriteDetailRecyclerViewAdapter();
+//        review recyclerview
+        favoriteDetailRecyclerViewItems = new ArrayList<>();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+        reviewRecyclerView.setLayoutManager(layoutManager);
+        favoriteDetailRecyclerViewAdapter = new FavoriteDetailRecyclerViewAdapter(getContext(),favoriteDetailRecyclerViewItems);
+        FavoriteDetailRecyclerViewRequest(accessToken);
         reviewRecyclerView.setAdapter(favoriteDetailRecyclerViewAdapter);
 
 //        Favorite Add or Delete
@@ -239,6 +249,7 @@ public class FavoriteDetail extends Fragment {
                         getActivity().findViewById(R.id.faceResult_btn_finish).setVisibility(View.VISIBLE);
             }
         });
+
     }
 
     public void FavoriteCheckRequest(String accessToken) {
@@ -317,49 +328,56 @@ public class FavoriteDetail extends Fragment {
         queue.add(jsonObjectRequest);
     }
 
-    //favorite detail recyclerview request
-//    public void FavoriteDetailRecyclerViewRequest(String accessToken) {
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url2 , null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    JSONObject obj = new JSONObject(response.toString());
-//                    JSONArray jsonArray = obj.getJSONArray("reviews");
-//                    for (int i=0;i<jsonArray.length();i++) {
-//                        FavoriteDetailRecyclerViewItem item = new FavoriteDetailRecyclerViewItem();
-//                        JSONObject object = jsonArray.getJSONObject(i);
-//                        item.setStyleReviewNickname(object.getString(""));
-//                        item.setStyleReviewHeartCount(object.getString(""));
-//                        item.setStyleReviewGrade(object.getString(""));
-//                        item.setReviewStyleID(object.getInt(""));
-////                        item.setStyleReviewPicture(object.getString());
-//
-//                        favoriteDetailRecyclerViewAdapter.addItem(item);
-//                        favoriteDetailRecyclerViewAdapter.notifyDataSetChanged();
-//                    }
-//
-//                } catch (JSONException e) {
-////                    e.printStackTrace();
-//                }
-//
-//            }
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//            }
-//        }) {
-//
-//            @Override
-//            public Map<String, String> getHeaders() {
-//                Map<String, String> params = new HashMap();
-//                params.put("Authorization", "bearer" + accessToken);
-//
-//                return params;
-//            }
-//        };
-//
-//        RequestQueue queue = Volley.newRequestQueue(getContext());
-//        queue.add(jsonObjectRequest);
-//    }
+//    favorite detail recyclerview request
+    public void FavoriteDetailRecyclerViewRequest(String accessToken) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_search_review+19 , null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject obj = new JSONObject(response.toString());
+                    JSONArray jsonArray = obj.getJSONArray("result");
+                    for (int i=0;i<jsonArray.length();i++) {
+                        FavoriteDetailRecyclerViewItem item = new FavoriteDetailRecyclerViewItem();
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        item.setStyleReviewNickname(object.getString("userNickname"));
+                        item.setStyleReviewHeartCount(object.getString("likes"));
+                        item.setStyleReviewGrade(object.getString("score"));
+
+                        JSONArray arrayList = object.getJSONArray("photos");
+                        item.setStyleReviewPicture(arrayList.getJSONObject(0).getString("storeUrl"));
+
+                        favoriteDetailRecyclerViewAdapter.addItem(item);
+                        Log.d("request test"+styleId, item.getStyleReviewNickname());
+                        Log.d("request test"+styleId, item.getStyleReviewHeartCount());
+                        Log.d("request test"+styleId, item.getStyleReviewGrade());
+                        Log.d("request test"+styleId, object.getString("hairStyleName"));
+                        favoriteDetailRecyclerViewAdapter.notifyDataSetChanged();
+                    }
+
+
+                } catch (JSONException e) {
+//                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                GetErrorMessage.getErrorMessage(volleyError);
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+
+                return params;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(jsonObjectRequest);
+    }
 }
