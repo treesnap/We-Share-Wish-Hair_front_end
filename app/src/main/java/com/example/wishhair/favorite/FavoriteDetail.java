@@ -330,7 +330,7 @@ public class FavoriteDetail extends Fragment {
 
 //    favorite detail recyclerview request
     public void FavoriteDetailRecyclerViewRequest(String accessToken) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_search_review+19 , null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_search_review+styleId , null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -347,14 +347,8 @@ public class FavoriteDetail extends Fragment {
                         item.setStyleReviewPicture(arrayList.getJSONObject(0).getString("storeUrl"));
 
                         favoriteDetailRecyclerViewAdapter.addItem(item);
-                        Log.d("request test"+styleId, item.getStyleReviewNickname());
-                        Log.d("request test"+styleId, item.getStyleReviewHeartCount());
-                        Log.d("request test"+styleId, item.getStyleReviewGrade());
-                        Log.d("request test"+styleId, object.getString("hairStyleName"));
-                        favoriteDetailRecyclerViewAdapter.notifyDataSetChanged();
                     }
-
-
+                    favoriteDetailRecyclerViewAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
 //                    e.printStackTrace();
                 }
