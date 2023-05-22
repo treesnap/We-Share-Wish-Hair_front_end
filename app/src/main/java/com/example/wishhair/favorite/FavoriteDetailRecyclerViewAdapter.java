@@ -1,6 +1,7 @@
 package com.example.wishhair.favorite;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.wishhair.MyPage.adapters.MyPageRecyclerViewAdapter;
 import com.example.wishhair.R;
 
 import java.util.ArrayList;
@@ -18,6 +20,14 @@ import java.util.ArrayList;
 public class FavoriteDetailRecyclerViewAdapter extends RecyclerView.Adapter<FavoriteDetailRecyclerViewAdapter.ViewHolder> {
     private ArrayList<FavoriteDetailRecyclerViewItem> items = new ArrayList<FavoriteDetailRecyclerViewItem>();
     private Context context;
+
+    public interface OnItemClickListener {
+        void onItemClick(View v, int position);
+    }
+    private FavoriteDetailRecyclerViewAdapter.OnItemClickListener detail_review_listener;
+    public void setOnItemClickListener(FavoriteDetailRecyclerViewAdapter.OnItemClickListener listener) {
+        this.detail_review_listener = listener;
+    }
     public FavoriteDetailRecyclerViewAdapter(Context context, ArrayList<FavoriteDetailRecyclerViewItem> favoriteDetailRecyclerViewItems) {
         this.context = context;
         this.items = favoriteDetailRecyclerViewItems;
@@ -34,6 +44,16 @@ public class FavoriteDetailRecyclerViewAdapter extends RecyclerView.Adapter<Favo
             reviewNickname = view.findViewById(R.id.detail_recyclerview_nickname);
             reviewHeartCount = view.findViewById(R.id.detail_recyclerview_heartcount);
             reviewGrade = view.findViewById(R.id.detail_recyclerview_grade);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        detail_review_listener.onItemClick(view, pos);
+                    }
+                }
+            });
         }
 
         public ImageView getReviewImage() {
