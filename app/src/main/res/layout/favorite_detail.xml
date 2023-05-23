@@ -2,6 +2,7 @@
 <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
         <LinearLayout
@@ -109,12 +110,12 @@
 
                 <ImageButton
                     android:id="@+id/favorite_detail_heart_button"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:src="@drawable/heart_empty2"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.05"
+                    app:layout_constraintHorizontal_bias="0.04"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.5"/>
