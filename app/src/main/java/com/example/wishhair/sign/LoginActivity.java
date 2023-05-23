@@ -1,6 +1,5 @@
 package com.example.wishhair.sign;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -38,10 +37,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.sign_activity_login);
         login_id = findViewById(R.id.ed_login_id);
         login_pw = findViewById(R.id.ed_login_pw);
-
-//       TODO 평소 테스트 편하게 넘어가기 위해 login 정보 미리 삽입해놓음
-        login_id.setText("namhm23@naver.com");
-        login_pw.setText("hello1234@");
 
 //        login
         Button login_loginBtn = findViewById(R.id.btn_login);

@@ -2,6 +2,7 @@ package com.example.wishhair.func.TagFunc;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -10,7 +11,6 @@ import android.os.Handler;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -24,9 +24,8 @@ public class TagFuncActivity extends AppCompatActivity implements CompoundButton
     private FuncLoading loading;
     private String selectedHairLength, selectedPerm;
 //      #TODO  태그 하드코딩 >> enum 활용해서 수정 가능
-
-    private CheckBox imageTag_1, imageTag_2, imageTag_3, imageTag_4, imageTag_5, imageTag_6, imageTag_7, imageTag_8, imageTag_9, imageTag_10, imageTag_11, imageTag_12;
     private final ArrayList<String> selectedImages = new ArrayList<>();
+    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,25 +35,23 @@ public class TagFuncActivity extends AppCompatActivity implements CompoundButton
         btn_back.setOnClickListener(view -> finish());
 
 //        hair Length RadioGroup
-        RadioButton hairLength_1, hairLength_2, hairLength_3;
-        hairLength_1 = findViewById(R.id.tagFunc_hairLength_1);
-        hairLength_2 = findViewById(R.id.tagFunc_hairLength_2);
-        hairLength_3 = findViewById(R.id.tagFunc_hairLength_3);
+        findViewById(R.id.tagFunc_hairLength_1);
+        findViewById(R.id.tagFunc_hairLength_2);
+        findViewById(R.id.tagFunc_hairLength_3);
 
-        selectedHairLength = "LONG";
+        selectedHairLength = "H_LONG";
         RadioGroup hairLengthGroup = findViewById(R.id.tagFunc_hairLength);
         hairLengthGroup.setOnCheckedChangeListener((radioGroup, checkId) -> {
             switch (checkId) {
-                case R.id.tagFunc_hairLength_1 -> selectedHairLength = "LONG";
+                case R.id.tagFunc_hairLength_1 -> selectedHairLength = "H_LONG";
                 case R.id.tagFunc_hairLength_2 -> selectedHairLength = "MEDIUM";
                 case R.id.tagFunc_hairLength_3 -> selectedHairLength = "SHORT";
             }
         });
 
 //        perm RadioGroup
-        RadioButton perm_1, perm_2;
-        perm_1 = findViewById(R.id.tagFunc_perm_1);
-        perm_2 = findViewById(R.id.tagFunc_perm_2);
+        findViewById(R.id.tagFunc_perm_1);
+        findViewById(R.id.tagFunc_perm_2);
 
         selectedPerm = "PERM";
         RadioGroup permGroup = findViewById(R.id.tagFunc_perm);
@@ -82,6 +79,7 @@ public class TagFuncActivity extends AppCompatActivity implements CompoundButton
         });
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
@@ -178,6 +176,7 @@ public class TagFuncActivity extends AppCompatActivity implements CompoundButton
     }
 
     private void initImageTags() {
+        CheckBox imageTag_1, imageTag_2, imageTag_3, imageTag_4, imageTag_5, imageTag_6, imageTag_7, imageTag_8, imageTag_9, imageTag_10, imageTag_11, imageTag_12;
         imageTag_1 = findViewById(R.id.tagFunc_imageTag_1);
         imageTag_2 = findViewById(R.id.tagFunc_imageTag_2);
         imageTag_3 = findViewById(R.id.tagFunc_imageTag_3);
