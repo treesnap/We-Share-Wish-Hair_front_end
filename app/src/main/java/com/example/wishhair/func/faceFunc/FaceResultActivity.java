@@ -72,15 +72,7 @@ public class FaceResultActivity extends AppCompatActivity {
         faceShape.setText(resultShape);
         faceShape_message.setText(resultShape);
 
-//        dummyData
-        String imageSample = "https://cdn.pixabay.com/photo/2019/12/26/10/44/horse-4720178_1280.jpg";
-//        for (int i = 0; i < 4; i++) {
-//            HomeItems newItems = new HomeItems(imageSample, "물결펌", "876", false);
-//            faceRecItems.add(newItems);
-//        }
-
         recyclerView = findViewById(R.id.faceResult_recyclerView);
-
 
         CustomTokenHandler customTokenHandler = new CustomTokenHandler(this);
         String accessToken = customTokenHandler.getAccessToken();

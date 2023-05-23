@@ -154,8 +154,7 @@
                     android:maxLength="6"
                     android:inputType="number"
                     android:hint="@string/cert_hint_submit"
-                    android:autofillHints="password"
-                    android:drawableEnd="@drawable/sign_check_success" />
+                    android:autofillHints="password" />
                 <Button
                     android:id="@+id/sign_cert_btn_confirmCode"
                     android:layout_weight="2"

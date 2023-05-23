@@ -199,6 +199,21 @@ public class ReviewListFragment extends Fragment {
 
                 recentReviewItems.clear();
                 recentReviewItems.addAll(requestItems);
+
+                Collections.sort(recentReviewItems, new Comparator<>() {
+                    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                    @Override
+                    public int compare(ReviewItem item1, ReviewItem item2) {
+                        try {
+                            Date date1 = dateFormat.parse(item1.getCreatedDate());
+                            Date date2 = dateFormat.parse(item2.getCreatedDate());
+                            return Objects.requireNonNull(date2).compareTo(date1);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        return 0;
+                    }
+                });
                 recentAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();

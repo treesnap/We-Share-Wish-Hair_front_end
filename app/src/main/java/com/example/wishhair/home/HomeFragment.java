@@ -51,9 +51,10 @@ public class HomeFragment extends Fragment {
 
     private RequestQueue queue;
 
+    TextView hello, receivedText, settingMessage1, settingMessage2, settingMessage3;
     private Button btn_tagFunc, btn_faceFunc, btn_faceFuncAgain;
     private boolean hasFaceShape;
-    private String userNickName, faceShapeTag;
+    private String userNickName, faceShapeTag, accessToken;
 
 //    monthly review
     private final ArrayList<HomeItems> monthlyReviewItems = new ArrayList<>();
@@ -79,6 +80,12 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        infoRequest(accessToken);
+    }
+
+    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mainActivity = (MainActivity) getActivity();
@@ -95,12 +102,13 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.home_fragment, container, false);
         //      accessToken
         CustomTokenHandler customTokenHandler = new CustomTokenHandler(requireActivity());
-        String accessToken = customTokenHandler.getAccessToken();
+        accessToken = customTokenHandler.getAccessToken();
 
         queue = Volley.newRequestQueue(requireActivity());
 
 //        title
         initTitle(v);
+        infoRequest(accessToken);
 
 //        faceFunc
         btn_faceFunc.setOnClickListener(view -> {
@@ -148,21 +156,19 @@ public class HomeFragment extends Fragment {
         btn_faceFunc = v.findViewById(R.id.home_btn_faceFunc);
         btn_faceFuncAgain = v.findViewById(R.id.home_btn_faceFuncAgain);
 
-        TextView hello, receivedText, settingMessage1, settingMessage2, settingMessage3;
-
         hello = v.findViewById(R.id.home_tv_hello);
         receivedText = v.findViewById(R.id.home_title_receivedText);
         settingMessage1 = v.findViewById(R.id.home_tv_settingMessage1);
         settingMessage2 = v.findViewById(R.id.home_tv_settingMessage2);
         settingMessage3 = v.findViewById(R.id.home_tv_settingMessage3);
 
-        Bundle homeBundle = getArguments();
+        /*Bundle homeBundle = getArguments();
         if (homeBundle != null) {
             userNickName = homeBundle.getString("nickname");
             hasFaceShape = homeBundle.getBoolean("hasFaceShape");
             faceShapeTag = homeBundle.getString("faceShapeTag");
-        }
-        if (hasFaceShape) {
+        }*/
+        /*if (hasFaceShape) {
             hello.setVisibility(View.GONE);
             receivedText.setText(faceShapeTag);
             settingMessage1.setText("에 어울리는");
@@ -173,11 +179,11 @@ public class HomeFragment extends Fragment {
             receivedText.setText(userNickName);
             btn_tagFunc.setVisibility(View.GONE);
             btn_faceFuncAgain.setVisibility(View.GONE);
-        }
-        SharedPreferences sp = requireActivity().getSharedPreferences("userNickName", Context.MODE_PRIVATE);
+        }*/
+        /*SharedPreferences sp = requireActivity().getSharedPreferences("userNickName", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("userNickName", userNickName);
-        editor.apply();
+        editor.apply();*/
     }
     @SuppressLint("NotifyDataSetChanged")
     private void monthlyReviewRequest(String accessToken) {
@@ -215,6 +221,40 @@ public class HomeFragment extends Fragment {
         };
 
         queue.add(monthlyRequest);
+    }
+
+    private void infoRequest(String accessToken) {
+        String infoUrl = UrlConst.URL + "/api/user/home_info";
+        JsonObjectRequest infoRequest = new JsonObjectRequest(Request.Method.GET, infoUrl, null, response -> {
+            try {
+                userNickName = response.getString("nickname");
+                hasFaceShape = response.getBoolean("hasFaceShape");
+                faceShapeTag = response.getString("faceShapeTag");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (hasFaceShape) {
+                hello.setVisibility(View.GONE);
+                receivedText.setText(faceShapeTag);
+                settingMessage1.setText("에 어울리는");
+                settingMessage2.setText("헤어스타일은?");
+                settingMessage3.setVisibility(View.GONE);
+                btn_faceFunc.setVisibility(View.GONE);
+            } else {
+                receivedText.setText(userNickName);
+                btn_tagFunc.setVisibility(View.GONE);
+                btn_faceFuncAgain.setVisibility(View.GONE);
+            }
+        }, error -> {}) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String>  params = new HashMap();
+                params.put("Authorization", "bearer" + accessToken);
+                return params;
+            }
+        };
+        queue.add(infoRequest);
     }
 
     private void reviewRequest(String accessToken, int reviewId) {
