@@ -180,7 +180,7 @@ public class MyPageFragment extends Fragment {
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         accessToken = loginSP.getString("accessToken", "fail acc");
 
-        tv.setText(testName+" 님");
+        userPicture = view.findViewById(R.id.mypage_user_picture);
 
 //        heartList
         heartListItems = new ArrayList<>();
@@ -237,6 +237,11 @@ public class MyPageFragment extends Fragment {
                 tv.setText(response.getString("nickname")+" 님");
                 point_preview.setText(response.getString("point")+"P");
                 JSONObject obj = new JSONObject(response.toString());
+                if (response.getString("sex").equals("MAN")) {
+                    userPicture.setImageResource(R.drawable.user_sample);
+                } else {
+                    userPicture.setImageResource(R.drawable.user_sample);
+                }
                 JSONArray jsonArray = obj.getJSONArray("reviews");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     HeartListItem item = new HeartListItem();

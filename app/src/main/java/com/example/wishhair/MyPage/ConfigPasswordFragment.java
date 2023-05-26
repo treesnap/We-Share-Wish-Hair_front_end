@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,6 +23,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
@@ -38,6 +40,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,6 +66,8 @@ public class ConfigPasswordFragment extends Fragment {
     private Button config_password_apply;
     private EditText config_password, config_new_password, config_verfication;
     private TextView verification_Error;
+    private Drawable check_success, check_fail;
+    private String newPW, verifyPW;
 
     public ConfigPasswordFragment() {
         // Required empty public constructor
@@ -123,6 +128,9 @@ public class ConfigPasswordFragment extends Fragment {
             mainActivity.ChangeFragment(8);
         });
 
+        check_success = ContextCompat.getDrawable(getContext(), R.drawable.sign_check_success);
+        check_fail = ContextCompat.getDrawable(getContext(), R.drawable.sign_check_fail);
+
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         accessToken = loginSP.getString("accessToken", "fail acc");
 
@@ -133,6 +141,20 @@ public class ConfigPasswordFragment extends Fragment {
             }
         });
 
+        config_new_password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                inputValidate();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
         // 비밀번호 확인과 다를 때
         config_verfication.addTextChangedListener(new TextWatcher() {
             @Override
@@ -142,7 +164,7 @@ public class ConfigPasswordFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                configValidate();
             }
 
             @Override
@@ -258,5 +280,30 @@ public class ConfigPasswordFragment extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(jsonObjectRequest);
+    }
+    private boolean inputValidate() {
+        newPW = config_new_password.getText().toString();
+        String passwordPattern = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,20}$";
+
+
+        boolean validateInput = Pattern.matches(passwordPattern, newPW);
+        if (validateInput) {
+            config_new_password.setCompoundDrawablesWithIntrinsicBounds(null, null, check_success, null);
+            return true;
+        } else {
+            config_new_password.setCompoundDrawablesWithIntrinsicBounds(null, null, check_fail, null);
+            return false;
+        }
+    }
+
+    private boolean configValidate() {
+        verifyPW = config_verfication.getText().toString();
+        if (verifyPW.equals(newPW)) {
+            config_verfication.setCompoundDrawablesWithIntrinsicBounds(null, null, check_success, null);
+            return true;
+        } else {
+            config_verfication.setCompoundDrawablesWithIntrinsicBounds(null, null, check_fail, null);
+            return false;
+        }
     }
 }

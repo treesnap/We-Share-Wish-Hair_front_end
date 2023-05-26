@@ -124,9 +124,5 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
 
     public void addItem(FavoriteItem e) {
         FavoriteItems.add(e);
-
     }
-
-
-
 }
