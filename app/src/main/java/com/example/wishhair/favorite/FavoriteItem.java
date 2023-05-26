@@ -12,11 +12,6 @@ public class FavoriteItem {
     int FavoriteStyleId;
     ArrayList<String> FavoriteHashtags;
 
-//    public FavoriteItem(ImageView imageView, TextView grade, TextView count) {
-//        FavoritePicture = imageView;
-//        FavoriteGrade = grade;
-//        FavoriteHeartcount = count;
-//    }
     public FavoriteItem() {}
 
     public String getFavoritePicture() {

@@ -56,7 +56,6 @@ public class FavoriteFragment extends Fragment {
 
     private SharedPreferences loginSP;
     final static private String url = UrlConst.URL + "/api/hair_style/wish";
-    final static private String url2 = UrlConst.URL + "/api/hair_style/wish/5";
 
     static private String accessToken;
 
@@ -101,7 +100,6 @@ public class FavoriteFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.favorite_fragment, container, false);
         recyclerView = v.findViewById(R.id.favorite_recyclerview);
-        btn = v.findViewById(R.id.favorite_modify);
         return v;
     }
 
@@ -110,13 +108,6 @@ public class FavoriteFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         loginSP = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         accessToken = loginSP.getString("accessToken", "fail acc");
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                testRequest(accessToken);
-            }
-        });
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);
@@ -172,9 +163,6 @@ public class FavoriteFragment extends Fragment {
                         for (int j=0;j<ImageUrls.length();j++) {
                             JSONObject ImageUrl = ImageUrls.getJSONObject(j);
                             arrayList.add(ImageUrl.getString("storeUrl"));
-//                            if (j==0) {
-//                                item.setFavoritePicture(ImageUrl.getString("storeUrl"));
-//                            }
                         }
                         item.setFavoritePictureUrls(arrayList);
 
@@ -199,31 +187,6 @@ public class FavoriteFragment extends Fragment {
                 Map<String, String> params = new HashMap();
                 params.put("Authorization", "bearer" + accessToken);
 
-                return params;
-            }
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(jsonObjectRequest);
-    }
-
-    public void testRequest(String accessToken) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url2, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    Log.i("error message", response.getString("message"));
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }, volleyError -> {
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap();
-                params.put("Authorization", "bearer" + accessToken);
                 return params;
             }
         };

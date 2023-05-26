@@ -36,14 +36,6 @@
         android:layout_marginRight="20dp"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/favorite_modify"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="20dp"
-            android:text="편집" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/favorite_recyclerview"
             android:layout_width="353dp"
