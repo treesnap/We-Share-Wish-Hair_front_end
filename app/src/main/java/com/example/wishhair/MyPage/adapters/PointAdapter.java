@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class PointAdapter extends RecyclerView.Adapter<PointAdapter.ViewHolder> {
     private ArrayList<PointHistory> pointItems = new ArrayList<PointHistory>();
@@ -26,14 +27,14 @@ public class PointAdapter extends RecyclerView.Adapter<PointAdapter.ViewHolder> 
     private Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView PointListTitle, PointListNum, POintListDate;
+        public TextView PointListTitle, PointListNum, PointListDate;
 
         ViewHolder(View view) {
             super(view);
 
             PointListTitle = view.findViewById(R.id.point_title);
             PointListNum = view.findViewById(R.id.point_num);
-            POintListDate = view.findViewById(R.id.point_date);
+            PointListDate = view.findViewById(R.id.point_date);
         }
 
         public void setItem(PointHistory item) {
@@ -53,7 +54,7 @@ public class PointAdapter extends RecyclerView.Adapter<PointAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PointHistory item = pointItems.get(position);
-        if (item.getPointType() == "충전") {
+        if (Objects.equals(item.getPointType(), "충전")) {
             holder.PointListNum.setText("+" + item.getDealAmount());
             holder.PointListNum.setTextColor(Color.BLUE);
             holder.PointListTitle.setText("포인트 적립");
@@ -62,7 +63,7 @@ public class PointAdapter extends RecyclerView.Adapter<PointAdapter.ViewHolder> 
             holder.PointListNum.setTextColor(Color.RED);
             holder.PointListTitle.setText("포인트 환급");
         }
-        holder.POintListDate.setText(parseDate(item.getDealDate()));
+        holder.PointListDate.setText(parseDate(item.getDealDate()));
     }
 
     @Override
