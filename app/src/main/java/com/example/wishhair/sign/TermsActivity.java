@@ -32,7 +32,7 @@ public class TermsActivity extends AppCompatActivity {
                 Intent intent = new Intent(TermsActivity.this, EmailCertActivity.class);
                 intent.putExtra("pageRequest", "register");
                 startActivity(intent);
-//                    finish();
+                finish();
             } else {
                 Toast.makeText(TermsActivity.this, "약관에 모두 동의해주세요", Toast.LENGTH_SHORT).show();
             }
