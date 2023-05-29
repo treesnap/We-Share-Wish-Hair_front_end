@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,8 @@ public class EmailCertActivity extends AppCompatActivity {
         TextView title = findViewById(R.id.sign_cert_title);
         if (prePage.equals("findPassword")) {
             title.setText("비밀번호 찾기");
+            ImageView process = findViewById(R.id.sign_cert_processBar);
+            process.setVisibility(View.GONE);
         }
         queue = Volley.newRequestQueue(this);
 

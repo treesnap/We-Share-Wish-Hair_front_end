@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:src="@drawable/sign_process_bar_1"
+        android:src="@drawable/sign_process_bar_2"
         app:layout_constraintTop_toBottomOf="@id/sign_cert_title"
         app:layout_constraintStart_toStartOf="@id/sign_cert_title"
         app:layout_constraintEnd_toEndOf="@id/sign_cert_title"/>
