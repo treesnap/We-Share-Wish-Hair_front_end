@@ -238,9 +238,9 @@ public class MyPageFragment extends Fragment {
                 point_preview.setText(response.getString("point")+"P");
                 JSONObject obj = new JSONObject(response.toString());
                 if (response.getString("sex").equals("MAN")) {
-                    userPicture.setImageResource(R.drawable.user_sample);
+                    userPicture.setImageResource(R.drawable.mypage_man);
                 } else {
-                    userPicture.setImageResource(R.drawable.user_sample);
+                    userPicture.setImageResource(R.drawable.mypage_woman);
                 }
                 JSONArray jsonArray = obj.getJSONArray("reviews");
                 for (int i = 0; i < jsonArray.length(); i++) {
