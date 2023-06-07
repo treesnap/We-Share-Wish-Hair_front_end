@@ -87,7 +87,9 @@ public class FaceResultActivity extends AppCompatActivity {
                 JSONObject result = new JSONObject(recResponse);
                 JSONArray resultArray = result.getJSONArray("result");
                 for (int i = 0; i < resultArray.length(); i++) {
-
+                    if (i > 3) {
+                        break;
+                    }
                     JSONObject itemObject = resultArray.getJSONObject(i);
 
                     int hairStyleId = itemObject.getInt("hairStyleId");

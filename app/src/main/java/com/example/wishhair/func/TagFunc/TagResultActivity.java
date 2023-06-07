@@ -84,7 +84,9 @@ public class TagResultActivity extends AppCompatActivity {
                 JSONArray resultArray = result.getJSONArray("result");
                 Log.d("size", String.valueOf(resultArray.length()));
                 for (int i = 0; i < resultArray.length(); i++) {
-
+                    if (i > 3) {
+                        break;
+                    }
                     JSONObject itemObject = resultArray.getJSONObject(i);
 
                     int hairStyleId = itemObject.getInt("hairStyleId");
