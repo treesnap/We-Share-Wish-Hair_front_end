@@ -54,8 +54,9 @@
                 android:id="@+id/home_tv_settingMessage2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="@string/home_message_3"
-                android:textSize="27sp"
+                android:textSize="18sp"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
@@ -73,27 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="7dp">
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/home_btn_tagFunc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#00FF0000"
-                    android:text="@string/home_btn_tagFunc"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:drawableEnd="@drawable/next"
-                    android:drawablePadding="10dp" />
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/home_btn_faceFuncAgain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#00FF0000"
-                    android:layout_gravity="end"
-                    android:text="@string/home_btn_faceFuncAgain"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:drawableEnd="@drawable/next"
-                    android:drawablePadding="10dp" />
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/home_btn_faceFunc"
                     android:layout_width="78dp"

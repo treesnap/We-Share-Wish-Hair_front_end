@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
     private RequestQueue queue;
 
     TextView hello, receivedText, settingMessage1, settingMessage2, settingMessage3;
-    private Button btn_tagFunc, btn_faceFunc, btn_faceFuncAgain;
+    private Button btn_faceFunc;
     private boolean hasFaceShape;
     private String userNickName, faceShapeTag, accessToken;
 
@@ -112,19 +112,7 @@ public class HomeFragment extends Fragment {
 
 //        faceFunc
         btn_faceFunc.setOnClickListener(view -> {
-            Intent intent = new Intent(requireContext(), FaceFuncActivity.class);
-            startActivity(intent);
-        });
-
-//        TagFunc
-        btn_tagFunc.setOnClickListener(view -> {
             Intent intent = new Intent(requireContext(), TagFuncActivity.class);
-            startActivity(intent);
-        });
-
-//        faceFuncAgain
-        btn_faceFuncAgain.setOnClickListener(view -> {
-            Intent intent = new Intent(requireContext(), FaceFuncActivity.class);
             startActivity(intent);
         });
 
@@ -152,9 +140,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void initTitle(View v) {
-        btn_tagFunc = v.findViewById(R.id.home_btn_tagFunc);
         btn_faceFunc = v.findViewById(R.id.home_btn_faceFunc);
-        btn_faceFuncAgain = v.findViewById(R.id.home_btn_faceFuncAgain);
 
         hello = v.findViewById(R.id.home_tv_hello);
         receivedText = v.findViewById(R.id.home_title_receivedText);
@@ -243,8 +229,6 @@ public class HomeFragment extends Fragment {
                 btn_faceFunc.setVisibility(View.GONE);
             } else {
                 receivedText.setText(userNickName);
-                btn_tagFunc.setVisibility(View.GONE);
-                btn_faceFuncAgain.setVisibility(View.GONE);
             }
         }, error -> {}) {
             @Override
