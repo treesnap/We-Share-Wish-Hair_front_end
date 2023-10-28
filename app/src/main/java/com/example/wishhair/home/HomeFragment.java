@@ -68,16 +68,6 @@ public class HomeFragment extends Fragment {
     private MainActivity mainActivity;
 
     public HomeFragment() {}
-        //TODO : bundle, LoginActivity에서 intent로 넘기는거 필요없는지 다시 체크(homeInfo에서 받으면 필요없으니까)해서 수정
-    public static HomeFragment newInstance(String userNickName, boolean hasFaceShape, String faceShapeTag) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("nickname", userNickName);
-        bundle.putBoolean("hasFaceShape", hasFaceShape);
-        bundle.putString("faceShapeTag", faceShapeTag);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     @Override
     public void onResume() {
@@ -147,26 +137,8 @@ public class HomeFragment extends Fragment {
         settingMessage1 = v.findViewById(R.id.home_tv_settingMessage1);
         settingMessage2 = v.findViewById(R.id.home_tv_settingMessage2);
         settingMessage3 = v.findViewById(R.id.home_tv_settingMessage3);
-
-        /*Bundle homeBundle = getArguments();
-        if (homeBundle != null) {
-            userNickName = homeBundle.getString("nickname");
-            hasFaceShape = homeBundle.getBoolean("hasFaceShape");
-            faceShapeTag = homeBundle.getString("faceShapeTag");
-        }
-        if (hasFaceShape) {
-            hello.setVisibility(View.GONE);
-            receivedText.setText(faceShapeTag);
-            settingMessage1.setText("에 어울리는");
-            settingMessage2.setText("헤어스타일은?");
-            settingMessage3.setVisibility(View.GONE);
-            btn_faceFunc.setVisibility(View.GONE);
-        } else {
-            receivedText.setText(userNickName);
-            btn_tagFunc.setVisibility(View.GONE);
-            btn_faceFuncAgain.setVisibility(View.GONE);
-        }*/
     }
+
     @SuppressLint("NotifyDataSetChanged")
     private void monthlyReviewRequest(String accessToken) {
         monthlyReviewItems.clear();
