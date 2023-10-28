@@ -27,6 +27,7 @@ import com.example.wishhair.func.UploadCallback;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class FaceFuncActivity extends AppCompatActivity implements UploadCallback {
 
@@ -65,6 +66,12 @@ public class FaceFuncActivity extends AppCompatActivity implements UploadCallbac
 //        selectUserImage
         userImage = findViewById(R.id.func_faceImage);
         userImage.setOnClickListener(view -> setImageView(userImage));
+
+//        Tags
+        //TODO : 태그 같이 서버에 넘기는지 확인해야함
+        String selectedHairLength = getIntent().getStringExtra("selectedHairLength");
+        String selectedPerm = getIntent().getStringExtra("selectedPerm");
+        ArrayList<String> selectedImages = getIntent().getStringArrayListExtra("selectedImages");
 
 //        loading
         loading = new FuncLoading(this);
