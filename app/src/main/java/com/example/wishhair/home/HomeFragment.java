@@ -153,8 +153,8 @@ public class HomeFragment extends Fragment {
             userNickName = homeBundle.getString("nickname");
             hasFaceShape = homeBundle.getBoolean("hasFaceShape");
             faceShapeTag = homeBundle.getString("faceShapeTag");
-        }*/
-        /*if (hasFaceShape) {
+        }
+        if (hasFaceShape) {
             hello.setVisibility(View.GONE);
             receivedText.setText(faceShapeTag);
             settingMessage1.setText("에 어울리는");
@@ -166,10 +166,6 @@ public class HomeFragment extends Fragment {
             btn_tagFunc.setVisibility(View.GONE);
             btn_faceFuncAgain.setVisibility(View.GONE);
         }*/
-        SharedPreferences sp = requireActivity().getSharedPreferences("userNickName", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("userNickName", userNickName);
-        editor.apply();
     }
     @SuppressLint("NotifyDataSetChanged")
     private void monthlyReviewRequest(String accessToken) {
@@ -216,6 +212,11 @@ public class HomeFragment extends Fragment {
                 userNickName = response.getString("nickname");
                 hasFaceShape = response.getBoolean("hasFaceShape");
                 faceShapeTag = response.getString("faceShapeTag");
+
+                SharedPreferences sp = requireActivity().getSharedPreferences("userNickName", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("userNickName", userNickName);
+                editor.apply();
 
             } catch (JSONException e) {
                 e.printStackTrace();
