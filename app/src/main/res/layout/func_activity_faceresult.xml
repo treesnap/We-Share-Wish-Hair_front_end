@@ -65,9 +65,9 @@
                 android:textColor="@color/default_blue"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                app:layout_constraintBaseline_toBaselineOf="@id/faceResult_message_2"
-                app:layout_constraintEnd_toStartOf="@id/faceResult_message_2"
-                tools:text="달걀형 " />
+                app:layout_constraintBaseline_toBaselineOf="@id/faceResult_message_1"
+                app:layout_constraintStart_toEndOf="@id/faceResult_message_1"
+                tools:text="달걀형" />
 
             <TextView
                 android:id="@+id/faceResult_message_2"
@@ -79,8 +79,21 @@
                 android:textColor="@color/black"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/faceResult_message_1" />
+                app:layout_constraintBaseline_toBaselineOf="@id/faceResult_faceShape"
+                app:layout_constraintStart_toEndOf="@id/faceResult_faceShape" />
+
+            <TextView
+                android:id="@+id/faceResult_message_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:text="@string/faceResult_message_3"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/faceResult_userName"
+                />
 
             <TextView
                 android:id="@+id/faceResult_faceShape_message"
@@ -97,15 +110,18 @@
                 tools:text="달걀형" />
 
             <TextView
-                android:id="@+id/faceResult_message_3"
+                android:id="@+id/faceResult_message_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/faceResult_message_3"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="30dp"
+                android:text="@string/faceResult_message_4"
                 android:textColor="@color/black"
-                android:textSize="15sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintBaseline_toBaselineOf="@id/faceResult_faceShape_message"
-                app:layout_constraintStart_toEndOf="@id/faceResult_faceShape_message" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/faceResult_message_3"
+                 />
 
             <!--        recommend hairStyles-->
             <androidx.recyclerview.widget.RecyclerView
@@ -143,6 +159,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone"
-        ></LinearLayout>
+        android:visibility="gone" />
 </FrameLayout>

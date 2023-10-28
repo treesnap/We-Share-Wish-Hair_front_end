@@ -36,7 +36,7 @@ import java.util.Map;
 
 public class FaceResultActivity extends AppCompatActivity {
 
-    private TextView userName, faceShape, faceShape_message;
+    private TextView userName, faceShape;
     //        homeItem 과 형식이 같아 재사용
     private ArrayList<HomeItems> faceRecItems;
     private HairItemAdapter faceResultAdapter;
@@ -63,14 +63,13 @@ public class FaceResultActivity extends AppCompatActivity {
 
         userName = findViewById(R.id.faceResult_userName);
         faceShape = findViewById(R.id.faceResult_faceShape);
-        faceShape_message = findViewById(R.id.faceResult_faceShape_message);
 
         resultShape = getIntent().getStringExtra("result");
         SharedPreferences sp = getSharedPreferences("userNickName", MODE_PRIVATE);
 
         userName.setText(sp.getString("userNickName", "fail"));
-        faceShape.setText(resultShape);
-        faceShape_message.setText(resultShape);
+        String resultShapeText = resultShape + "얼굴";
+        faceShape.setText(resultShapeText);
 
         recyclerView = findViewById(R.id.faceResult_recyclerView);
 
