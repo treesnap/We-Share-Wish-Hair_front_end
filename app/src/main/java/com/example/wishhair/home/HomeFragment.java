@@ -68,7 +68,7 @@ public class HomeFragment extends Fragment {
     private MainActivity mainActivity;
 
     public HomeFragment() {}
-
+        //TODO : bundle, LoginActivity에서 intent로 넘기는거 필요없는지 다시 체크(homeInfo에서 받으면 필요없으니까)해서 수정
     public static HomeFragment newInstance(String userNickName, boolean hasFaceShape, String faceShapeTag) {
         HomeFragment fragment = new HomeFragment();
         Bundle bundle = new Bundle();
@@ -166,10 +166,10 @@ public class HomeFragment extends Fragment {
             btn_tagFunc.setVisibility(View.GONE);
             btn_faceFuncAgain.setVisibility(View.GONE);
         }*/
-        /*SharedPreferences sp = requireActivity().getSharedPreferences("userNickName", Context.MODE_PRIVATE);
+        SharedPreferences sp = requireActivity().getSharedPreferences("userNickName", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("userNickName", userNickName);
-        editor.apply();*/
+        editor.apply();
     }
     @SuppressLint("NotifyDataSetChanged")
     private void monthlyReviewRequest(String accessToken) {

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -66,9 +67,13 @@ public class TagFuncActivity extends AppCompatActivity implements CompoundButton
         initImageTags();
 
 //        loading
+        SharedPreferences sp = getSharedPreferences("userNickName", MODE_PRIVATE);
+        String userName = sp.getString("userNickName", "fail");
+        String message_loading = userName + "님에게 잘 어울리는\n헤어스타일을 찾고있어요";
+
         loading = new FuncLoading(this);
         TextView loadingMessage = loading.findViewById(R.id.loading_message);
-        loadingMessage.setText("태그에 적합한\n헤어스타일을 찾고있어요");
+        loadingMessage.setText(message_loading);
         loading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 //        submit
