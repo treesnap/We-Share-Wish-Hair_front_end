@@ -20,6 +20,7 @@ import com.example.wishhair.MyPage.MyPageFragment;
 import com.example.wishhair.MyPage.MyPointList;
 
 import com.example.wishhair.MyPage.RefundFragment;
+import com.example.wishhair.MyPage.VIPSubFragment;
 import com.example.wishhair.favorite.FavoriteDetail;
 import com.example.wishhair.favorite.FavoriteFragment;
 import com.example.wishhair.home.HomeFragment;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private final RefundFragment refundFragment = new RefundFragment();
     private final FavoriteDetail favoriteDetail = new FavoriteDetail();
     private final ConfigPasswordFragment configPasswordFragment = new ConfigPasswordFragment();
+    private final VIPSubFragment vipSubFragment = new VIPSubFragment();
     public static Context context;
 
     private boolean hasFaceShape;
@@ -105,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 transaction.replace(R.id.MainLayout, myPageFragment).commitAllowingStateLoss();
                 break;
             case 3:
+                transaction.replace(R.id.MainLayout, vipSubFragment).commitAllowingStateLoss();
                 break;
             case 4:
                 transaction.replace(R.id.MainLayout, favoriteDetail).commitAllowingStateLoss();
@@ -150,13 +153,12 @@ public class MainActivity extends AppCompatActivity {
         else {
             switch (currentFragment.getClass().getSimpleName()) {
                 case "ConfigFragment":
+                case "VIPSubFragment":
+                case "MyPointList":
                     ChangeFragment(2);
                     break;
                 case "ConfigPasswordFragment":
                     ChangeFragment(8);
-                    break;
-                case "MyPointList":
-                    ChangeFragment(2);
                     break;
                 case "RefundFragment":
                     ChangeFragment(7);
@@ -170,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
                         ChangeFragment(5);
                     }
                     break;
+
                 default:
                     break;
             }
