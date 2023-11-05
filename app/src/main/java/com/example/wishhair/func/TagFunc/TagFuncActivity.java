@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.example.wishhair.func.FuncLoading;
 import com.example.wishhair.R;
-import com.example.wishhair.func.faceFunc.FaceResultActivity;
+import com.example.wishhair.func.faceFunc.FaceFuncActivity;
 
 import java.util.ArrayList;
 
@@ -214,7 +214,7 @@ public class TagFuncActivity extends AppCompatActivity implements CompoundButton
         Handler handler = new Handler();
         handler.postDelayed(() -> {
             loading.dismiss();
-            Intent intent = new Intent(TagFuncActivity.this, FaceResultActivity.class);
+            Intent intent = new Intent(TagFuncActivity.this, FaceFuncActivity.class);
             intent.putExtra("selectedHairLength", selectedHairLength);
             intent.putExtra("selectedPerm", selectedPerm);
             intent.putStringArrayListExtra("selectedImages", selectedImages);

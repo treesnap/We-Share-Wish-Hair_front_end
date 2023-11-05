@@ -9,7 +9,6 @@ import androidx.loader.content.CursorLoader;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -25,8 +24,6 @@ import com.example.wishhair.func.FuncLoading;
 import com.example.wishhair.R;
 import com.example.wishhair.func.UploadCallback;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class FaceFuncActivity extends AppCompatActivity implements UploadCallback {
