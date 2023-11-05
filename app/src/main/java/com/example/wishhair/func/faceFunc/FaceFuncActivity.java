@@ -25,7 +25,6 @@ import com.example.wishhair.R;
 import com.example.wishhair.func.UploadCallback;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FaceFuncActivity extends AppCompatActivity implements UploadCallback {
 
@@ -71,12 +70,6 @@ public class FaceFuncActivity extends AppCompatActivity implements UploadCallbac
         String selectedPerm = getIntent().getStringExtra("selectedPerm");
         ArrayList<String> selectedImages = getIntent().getStringArrayListExtra("selectedImages");
 
-        List<String> queryTags = new ArrayList<>();
-        queryTags.add(selectedHairLength);
-        queryTags.add(selectedPerm);
-        queryTags.addAll(selectedImages);
-
-
 //        loading
         loading = new FuncLoading(this);
         loading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -84,11 +77,10 @@ public class FaceFuncActivity extends AppCompatActivity implements UploadCallbac
         uploader = new FaceFuncUploader(this);
         Button btn_submit = findViewById(R.id.func_btn_submit);
         btn_submit.setOnClickListener(view -> {
-            uploader.uploadUserImages(imagePath, accessToken, queryTags, this);
+            uploader.uploadUserImages(imagePath, accessToken, this);
             loading.show();
         });
     }
-
 
     private void setImageView(ImageView imageView) {
 //        기존에 이미지 지움
