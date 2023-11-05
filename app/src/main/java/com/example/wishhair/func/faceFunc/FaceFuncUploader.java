@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
@@ -50,14 +51,14 @@ public class FaceFuncUploader {
         this.context = context;
     }
 
-    public void uploadUserImages(String imagePath, String accessToken, UploadCallback callback) {
+    public void uploadUserImages(String imagePath, String accessToken, List<String> tags, UploadCallback callback) {
         File file = new File(imagePath);
         RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
         String fileName = "userImage.jpg";
         MultipartBody.Part imagePart = MultipartBody.Part.createFormData("file", fileName, imageBody);
 
-        Call<ResponseBody> call = api.uploadImages("bearer" + accessToken, imagePart);
+        Call<ResponseBody> call = api.uploadImages("bearer" + accessToken, imagePart, tags);
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
