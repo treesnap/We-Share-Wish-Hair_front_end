@@ -89,9 +89,10 @@
     <string name="faceResult_message_1">님은 </string>
     <string name="faceResult_message_2">을</string>
     <string name="faceResult_message_3">소유하고 있네요!</string>
-    <string name="faceResult_message_4">조건에 가장 적합한 헤어스타일은...</string>
+    <string name="faceResult_message_4">조건에 가장 적합한 헤어스타일은…</string>
     <string name="faceResult_btn_finish">얼굴형 분석 끝내기</string>
     <string name="loading_message">AI가 얼굴형을 분석하고 있어요</string>
+    <string name="faceResult_recommendStyle_pic">faceResult_recommendStyle_pic</string>
 
     <!--    tag func -->
     <string name="tagFunc_title">헤어스타일 추천</string>
@@ -120,6 +121,5 @@
     <string name="tag_image_formal">포멀한</string>
     <string name="tag_image_manly">남성적인</string>
     <string name="tag_image_soft">부드러운</string>
-
 
 </resources>
