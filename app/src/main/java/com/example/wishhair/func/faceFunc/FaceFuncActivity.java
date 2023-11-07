@@ -35,11 +35,13 @@ public class FaceFuncActivity extends AppCompatActivity implements UploadCallbac
     private FuncLoading loading;
 
     @Override
-    public void onUploadCallback(boolean isSuccess, String result) {
+    public void onUploadCallback(boolean isSuccess, String faceShape, String hairstyleName, String googleDriverLink) {
         if (isSuccess) {
             loading.dismiss();
             Intent intent = new Intent(FaceFuncActivity.this, FaceResultActivity.class);
-            intent.putExtra("result", result);
+            intent.putExtra("faceShape", faceShape);
+            intent.putExtra("hairstyleName", hairstyleName);
+            intent.putExtra("googleDriverLink", googleDriverLink);
             startActivity(intent);
             finish();
         } else {

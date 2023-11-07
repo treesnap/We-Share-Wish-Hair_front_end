@@ -63,8 +63,12 @@ public class FaceFuncUploader {
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 try {
                     JSONObject resultObject = new JSONObject(response.body().string());
-                    String result = resultObject.getString("result");
-                    callback.onUploadCallback(response.isSuccessful(), result);
+//                    result parsing
+                    String faceShape = resultObject.getString("faceShape");
+                    String hairStyleName = resultObject.getString("hairstyleName");
+                    String googleDriverLink = resultObject.getString("googleDriverLink");
+
+                    callback.onUploadCallback(response.isSuccessful(), faceShape, hairStyleName, googleDriverLink);
                 } catch (JSONException | IOException e) {
                     e.printStackTrace();
                 }
@@ -72,7 +76,7 @@ public class FaceFuncUploader {
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                callback.onUploadCallback(false, null);
+                callback.onUploadCallback(false, null, null, null);
             }
         });
     }
