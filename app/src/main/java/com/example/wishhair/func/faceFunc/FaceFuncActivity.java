@@ -35,13 +35,13 @@ public class FaceFuncActivity extends AppCompatActivity implements UploadCallbac
     private FuncLoading loading;
 
     @Override
-    public void onUploadCallback(boolean isSuccess, String faceShape, String hairstyleName, String googleDriverLink) {
+    public void onUploadCallback(boolean isSuccess, String faceShape, String hairstyleName, String googleDriveLink) {
         if (isSuccess) {
             loading.dismiss();
             Intent intent = new Intent(FaceFuncActivity.this, FaceResultActivity.class);
-            intent.putExtra("faceShape", faceShape);
-            intent.putExtra("hairstyleName", hairstyleName);
-            intent.putExtra("googleDriverLink", googleDriverLink);
+            intent.putExtra("face_shape", faceShape);
+            intent.putExtra("hairstyle_name", hairstyleName);
+            intent.putExtra("google_drive_link", googleDriveLink);
             startActivity(intent);
             finish();
         } else {
@@ -67,7 +67,7 @@ public class FaceFuncActivity extends AppCompatActivity implements UploadCallbac
         userImage.setOnClickListener(view -> setImageView(userImage));
 
 //        Tags
-        //TODO : 태그 같이 서버에 넘기는지 확인해야함
+        //태그 같이 안넘김
         String selectedHairLength = getIntent().getStringExtra("selectedHairLength");
         String selectedPerm = getIntent().getStringExtra("selectedPerm");
         ArrayList<String> selectedImages = getIntent().getStringArrayListExtra("selectedImages");

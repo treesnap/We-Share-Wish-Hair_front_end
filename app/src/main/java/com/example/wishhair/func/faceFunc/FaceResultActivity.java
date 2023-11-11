@@ -33,11 +33,11 @@ public class FaceResultActivity extends AppCompatActivity {
         userName = findViewById(R.id.faceResult_userName);
         faceShape = findViewById(R.id.faceResult_faceShape);
 
-        resultShape = getIntent().getStringExtra("faceShape");
-        hairStyleName = getIntent().getStringExtra("hairstyleName");
-        googleDriverLink = getIntent().getStringExtra("googleDriverLink");
+        resultShape = getIntent().getStringExtra("face_shape");
+        hairStyleName = getIntent().getStringExtra("hairstyle_name");
+        googleDriverLink = getIntent().getStringExtra("google_drive_link");
 
-//        result TODO: 결과 테스트 필요
+//        result TODO: 사진 불러오기 안돼
         resultStyleImage = findViewById(R.id.faceResult_recommendStyle_pic);
         Glide.with((Context) this).load(googleDriverLink).into(resultStyleImage);
 
@@ -49,7 +49,6 @@ public class FaceResultActivity extends AppCompatActivity {
         userName.setText(sp.getString("userNickName", "fail"));
         String resultShapeText = resultShape + "얼굴";
         faceShape.setText(resultShapeText);
-
     }
 
 }

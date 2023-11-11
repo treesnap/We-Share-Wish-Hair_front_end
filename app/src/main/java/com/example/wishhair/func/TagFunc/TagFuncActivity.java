@@ -4,18 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
-import com.example.wishhair.func.FuncLoading;
 import com.example.wishhair.R;
 import com.example.wishhair.func.faceFunc.FaceFuncActivity;
 
@@ -23,7 +17,6 @@ import java.util.ArrayList;
 
 public class TagFuncActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener{
 
-    private FuncLoading loading;
     private String selectedHairLength, selectedPerm;
 //      #TODO  태그 하드코딩 >> enum 활용해서 수정 가능
     private final ArrayList<String> selectedImages = new ArrayList<>();
@@ -66,22 +59,15 @@ public class TagFuncActivity extends AppCompatActivity implements CompoundButton
 
 //        image Tags
         initImageTags();
-
-//        loading
-        SharedPreferences sp = getSharedPreferences("userNickName", MODE_PRIVATE);
-        String userName = sp.getString("userNickName", "fail");
-        String message_loading = userName + "님에게 잘 어울리는\n헤어스타일을 찾고있어요";
-
-        loading = new FuncLoading(this);
-        TextView loadingMessage = loading.findViewById(R.id.loading_message);
-        loadingMessage.setText(message_loading);
-        loading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
 //        submit
         Button btn_submit = findViewById(R.id.tagFunc_btn_submit);
         btn_submit.setOnClickListener(view -> {
-            loading.show();
-            loadingTime();
+            Intent intent = new Intent(TagFuncActivity.this, FaceFuncActivity.class);
+            intent.putExtra("selectedHairLength", selectedHairLength);
+            intent.putExtra("selectedPerm", selectedPerm);
+            intent.putStringArrayListExtra("selectedImages", selectedImages);
+            startActivity(intent);
+            finish();
         });
     }
 
@@ -208,19 +194,6 @@ public class TagFuncActivity extends AppCompatActivity implements CompoundButton
         imageTag_10.setOnCheckedChangeListener(this);
         imageTag_11.setOnCheckedChangeListener(this);
         imageTag_12.setOnCheckedChangeListener(this);
-    }
-
-    private void loadingTime() {
-        Handler handler = new Handler();
-        handler.postDelayed(() -> {
-            loading.dismiss();
-            Intent intent = new Intent(TagFuncActivity.this, FaceFuncActivity.class);
-            intent.putExtra("selectedHairLength", selectedHairLength);
-            intent.putExtra("selectedPerm", selectedPerm);
-            intent.putStringArrayListExtra("selectedImages", selectedImages);
-            startActivity(intent);
-            finish();
-        }, 2000);
     }
 
 }
