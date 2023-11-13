@@ -126,27 +126,29 @@ public class MyPageFragment extends Fragment {
         });
         toMyPoint.setOnClickListener(view12 -> mainActivity.ChangeFragment(7));
         withdrawBtn.setOnClickListener(view13 -> {
-            AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(view13.getContext(), R.style.WithdrawAlertDialogTheme);
-            View v = LayoutInflater.from(getContext()).inflate(R.layout.mypage_withdraw_dialog, view13.findViewById(R.id.dialog_withdraw_layout));
-            // alert의 title과 Messege 세팅
+            mainActivity.ChangeFragment(3);
 
-            myAlertBuilder.setView(v);
-            AlertDialog alertDialog = myAlertBuilder.create();
-
-            // 버튼 리스너 설정
-            v.findViewById(R.id.dialog_withdraw_OKbtn).setOnClickListener(view131 -> {
-                WithdrawRequest(accessToken);
-                Toast.makeText(view131.getContext().getApplicationContext(),"회원 탈퇴 완료",Toast.LENGTH_SHORT).show();
-                alertDialog.dismiss();
-            });
-            v.findViewById(R.id.dialog_withdraw_Canclebtn).setOnClickListener(view1312 -> alertDialog.dismiss());
-
-            // 다이얼로그 형태 지우기
-            if (alertDialog.getWindow() != null) {
-                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-            }
-            // Alert를 생성해주고 보여주는 메소드(show를 선언해야 Alert가 생성됨)
-            alertDialog.show();
+//            AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(view13.getContext(), R.style.WithdrawAlertDialogTheme);
+//            View v = LayoutInflater.from(getContext()).inflate(R.layout.mypage_withdraw_dialog, view13.findViewById(R.id.dialog_withdraw_layout));
+//            // alert의 title과 Messege 세팅
+//
+//            myAlertBuilder.setView(v);
+//            AlertDialog alertDialog = myAlertBuilder.create();
+//
+//            // 버튼 리스너 설정
+//            v.findViewById(R.id.dialog_withdraw_OKbtn).setOnClickListener(view131 -> {
+//                WithdrawRequest(accessToken);
+//                Toast.makeText(view131.getContext().getApplicationContext(),"회원 탈퇴 완료",Toast.LENGTH_SHORT).show();
+//                alertDialog.dismiss();
+//            });
+//            v.findViewById(R.id.dialog_withdraw_Canclebtn).setOnClickListener(view1312 -> alertDialog.dismiss());
+//
+//            // 다이얼로그 형태 지우기
+//            if (alertDialog.getWindow() != null) {
+//                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+//            }
+//            // Alert를 생성해주고 보여주는 메소드(show를 선언해야 Alert가 생성됨)
+//            alertDialog.show();
         });
 
 //      Profile Picture Click Event

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MyPage.RefundFragment"
+    android:layout_marginBottom="60dp">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/vip_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        >
+        <Button
+            android:id="@+id/vip_back_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/back"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="16dp"/>
+
+        <TextView
+            android:id="@+id/vip_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="VIP 구독"
+            android:textSize="25sp"
+            android:textColor="@color/default_blue"
+            android:textStyle="bold"
+            />
+
+
+    </androidx.appcompat.widget.Toolbar>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="프리미엄 기능 및 광고 제거"
+            android:textStyle="bold"
+
+            />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:id="@+id/vip_radiobutton_month"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:text="연간
+                                                  ₩35000 / 년   "
+            android:paddingLeft="12dp"
+            android:layout_marginTop="70dp"
+            android:background="@drawable/vipsub_radiobutton"
+            android:button="@null"
+            android:layout_gravity="center"
+            android:textSize="6pt"
+            android:textStyle="bold"
+            android:textColor="@drawable/vip_radiobutton_textcolor"
+            />
+
+        <RadioButton
+            android:id="@+id/vip_radiobutton_year"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:text="월간
+                                                    ₩5000 / 월   "
+            android:paddingLeft="12dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/vipsub_radiobutton"
+            android:button="@null"
+            android:layout_gravity="center"
+            android:textSize="6pt"
+            android:textStyle="bold"
+            android:textColor="@drawable/vip_radiobutton_textcolor"
+            />
+
+    </RadioGroup>
+    <Button
+        android:id="@+id/vip_sub_button"
+        android:layout_width="260dp"
+        android:layout_height="40dp"
+        android:background="@drawable/point_btn"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="7일 무료체험 후 구독"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="6pt"
+        />
+
+
+</LinearLayout>
