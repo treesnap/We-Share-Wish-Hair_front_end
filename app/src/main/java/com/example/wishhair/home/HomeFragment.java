@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
     private RequestQueue queue;
 
     TextView hello, receivedText, settingMessage1, settingMessage2, settingMessage3;
-    private Button btn_tagFunc, btn_faceFunc, btn_faceFuncAgain;
+    private Button btn_faceFunc;
     private boolean hasFaceShape;
     private String userNickName, faceShapeTag, accessToken;
 
@@ -68,16 +68,6 @@ public class HomeFragment extends Fragment {
     private MainActivity mainActivity;
 
     public HomeFragment() {}
-
-    public static HomeFragment newInstance(String userNickName, boolean hasFaceShape, String faceShapeTag) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("nickname", userNickName);
-        bundle.putBoolean("hasFaceShape", hasFaceShape);
-        bundle.putString("faceShapeTag", faceShapeTag);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     @Override
     public void onResume() {
@@ -112,19 +102,7 @@ public class HomeFragment extends Fragment {
 
 //        faceFunc
         btn_faceFunc.setOnClickListener(view -> {
-            Intent intent = new Intent(requireContext(), FaceFuncActivity.class);
-            startActivity(intent);
-        });
-
-//        TagFunc
-        btn_tagFunc.setOnClickListener(view -> {
             Intent intent = new Intent(requireContext(), TagFuncActivity.class);
-            startActivity(intent);
-        });
-
-//        faceFuncAgain
-        btn_faceFuncAgain.setOnClickListener(view -> {
-            Intent intent = new Intent(requireContext(), FaceFuncActivity.class);
             startActivity(intent);
         });
 
@@ -152,39 +130,15 @@ public class HomeFragment extends Fragment {
     }
 
     private void initTitle(View v) {
-        btn_tagFunc = v.findViewById(R.id.home_btn_tagFunc);
         btn_faceFunc = v.findViewById(R.id.home_btn_faceFunc);
-        btn_faceFuncAgain = v.findViewById(R.id.home_btn_faceFuncAgain);
 
         hello = v.findViewById(R.id.home_tv_hello);
         receivedText = v.findViewById(R.id.home_title_receivedText);
         settingMessage1 = v.findViewById(R.id.home_tv_settingMessage1);
         settingMessage2 = v.findViewById(R.id.home_tv_settingMessage2);
         settingMessage3 = v.findViewById(R.id.home_tv_settingMessage3);
-
-        /*Bundle homeBundle = getArguments();
-        if (homeBundle != null) {
-            userNickName = homeBundle.getString("nickname");
-            hasFaceShape = homeBundle.getBoolean("hasFaceShape");
-            faceShapeTag = homeBundle.getString("faceShapeTag");
-        }*/
-        /*if (hasFaceShape) {
-            hello.setVisibility(View.GONE);
-            receivedText.setText(faceShapeTag);
-            settingMessage1.setText("에 어울리는");
-            settingMessage2.setText("헤어스타일은?");
-            settingMessage3.setVisibility(View.GONE);
-            btn_faceFunc.setVisibility(View.GONE);
-        } else {
-            receivedText.setText(userNickName);
-            btn_tagFunc.setVisibility(View.GONE);
-            btn_faceFuncAgain.setVisibility(View.GONE);
-        }*/
-        /*SharedPreferences sp = requireActivity().getSharedPreferences("userNickName", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("userNickName", userNickName);
-        editor.apply();*/
     }
+
     @SuppressLint("NotifyDataSetChanged")
     private void monthlyReviewRequest(String accessToken) {
         monthlyReviewItems.clear();
@@ -231,10 +185,18 @@ public class HomeFragment extends Fragment {
                 hasFaceShape = response.getBoolean("hasFaceShape");
                 faceShapeTag = response.getString("faceShapeTag");
 
+                SharedPreferences sp = requireActivity().getSharedPreferences("userNickName", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("userNickName", userNickName);
+                editor.apply();
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if (hasFaceShape) {
+            receivedText.setText(userNickName);
+
+//             11/13 >> 추천 받기 버튼 계속 살아있게
+            /*if (hasFaceShape) {
                 hello.setVisibility(View.GONE);
                 receivedText.setText(faceShapeTag);
                 settingMessage1.setText("에 어울리는");
@@ -243,9 +205,7 @@ public class HomeFragment extends Fragment {
                 btn_faceFunc.setVisibility(View.GONE);
             } else {
                 receivedText.setText(userNickName);
-                btn_tagFunc.setVisibility(View.GONE);
-                btn_faceFuncAgain.setVisibility(View.GONE);
-            }
+            }*/
         }, error -> {}) {
             @Override
             public Map<String, String> getHeaders() {

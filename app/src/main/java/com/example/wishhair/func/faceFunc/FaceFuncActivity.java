@@ -9,7 +9,6 @@ import androidx.loader.content.CursorLoader;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -25,8 +24,7 @@ import com.example.wishhair.func.FuncLoading;
 import com.example.wishhair.R;
 import com.example.wishhair.func.UploadCallback;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.util.ArrayList;
 
 public class FaceFuncActivity extends AppCompatActivity implements UploadCallback {
 
@@ -37,11 +35,13 @@ public class FaceFuncActivity extends AppCompatActivity implements UploadCallbac
     private FuncLoading loading;
 
     @Override
-    public void onUploadCallback(boolean isSuccess, String result) {
+    public void onUploadCallback(boolean isSuccess, String faceShape, String hairstyleName, String googleDriveLink) {
         if (isSuccess) {
             loading.dismiss();
             Intent intent = new Intent(FaceFuncActivity.this, FaceResultActivity.class);
-            intent.putExtra("result", result);
+            intent.putExtra("face_shape", faceShape);
+            intent.putExtra("hairstyle_name", hairstyleName);
+            intent.putExtra("google_drive_link", googleDriveLink);
             startActivity(intent);
             finish();
         } else {
@@ -66,6 +66,12 @@ public class FaceFuncActivity extends AppCompatActivity implements UploadCallbac
         userImage = findViewById(R.id.func_faceImage);
         userImage.setOnClickListener(view -> setImageView(userImage));
 
+//        Tags
+        //태그 같이 안넘김
+        String selectedHairLength = getIntent().getStringExtra("selectedHairLength");
+        String selectedPerm = getIntent().getStringExtra("selectedPerm");
+        ArrayList<String> selectedImages = getIntent().getStringArrayListExtra("selectedImages");
+
 //        loading
         loading = new FuncLoading(this);
         loading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -77,7 +83,6 @@ public class FaceFuncActivity extends AppCompatActivity implements UploadCallbac
             loading.show();
         });
     }
-
 
     private void setImageView(ImageView imageView) {
 //        기존에 이미지 지움

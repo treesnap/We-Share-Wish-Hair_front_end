@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final FragmentManager fragmentManager = getSupportFragmentManager();
     private static FragmentTransaction fragmentTransaction;
-    private HomeFragment homeFragment;
+    private HomeFragment homeFragment = new HomeFragment();
     private final ReviewFragment reviewFragment = new ReviewFragment();
     private final MyPageFragment myPageFragment = new MyPageFragment();
     private final ConfigFragment configFragment = new ConfigFragment();
@@ -45,21 +45,11 @@ public class MainActivity extends AppCompatActivity {
     private final VIPSubFragment vipSubFragment = new VIPSubFragment();
     public static Context context;
 
-    private boolean hasFaceShape;
-    private String userNickName, faceShapeTag;
-
-    final static private String url = UrlConst.URL + "/api/my_page";
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
         setContentView(R.layout.activity_main);
 
-        userNickName = getIntent().getStringExtra("nickname");
-        hasFaceShape = getIntent().getBooleanExtra("hasFaceShape", false);
-        faceShapeTag = getIntent().getStringExtra("faceShapeTag");
-
-        homeFragment = HomeFragment.newInstance(userNickName, hasFaceShape, faceShapeTag);
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.MainLayout, homeFragment).commitAllowingStateLoss();
         getSupportFragmentManager().executePendingTransactions();

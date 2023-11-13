@@ -54,7 +54,7 @@ public class FaceFuncUploader {
         File file = new File(imagePath);
         RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
-        String fileName = "userImage.jpg";
+        String fileName = file.getName();
         MultipartBody.Part imagePart = MultipartBody.Part.createFormData("file", fileName, imageBody);
 
         Call<ResponseBody> call = api.uploadImages("bearer" + accessToken, imagePart);
@@ -63,8 +63,12 @@ public class FaceFuncUploader {
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 try {
                     JSONObject resultObject = new JSONObject(response.body().string());
-                    String result = resultObject.getString("result");
-                    callback.onUploadCallback(response.isSuccessful(), result);
+//                    result parsing
+                    String faceShape = resultObject.getString("face_shape");
+                    String hairStyleName = resultObject.getString("hairstyle_name");
+                    String google_drive_link = resultObject.getString("google_drive_link");
+
+                    callback.onUploadCallback(response.isSuccessful(), faceShape, hairStyleName, google_drive_link);
                 } catch (JSONException | IOException e) {
                     e.printStackTrace();
                 }
@@ -72,7 +76,7 @@ public class FaceFuncUploader {
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                callback.onUploadCallback(false, null);
+                callback.onUploadCallback(false, null, null, null);
             }
         });
     }

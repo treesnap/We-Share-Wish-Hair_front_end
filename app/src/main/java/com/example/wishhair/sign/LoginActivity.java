@@ -97,9 +97,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra("nickname", userNickName);
-            intent.putExtra("hasFaceShape", hasFaceShape);
-            intent.putExtra("faceShapeTag", faceShapeTag);
+
             startActivity(intent);
             finish();
         }, error -> {

@@ -69,13 +69,11 @@
     <string name="home_icon_notification">home_icon_notification</string>
     <string name="home_message_1">안녕하세요, </string>
     <string name="home_message_2">님!</string>
-    <string name="home_message_3">얼굴형 분석에 참여해보세요.</string>
-    <string name="home_message_4">AI 얼굴형 분석하러</string>
+    <string name="home_message_3">얼굴형 분석 후 헤어스타일 추천 받아보세요</string>
+    <string name="home_message_4">AI 헤어스타일 추천 바로가기</string>
     <string name="home_message_5">GO!</string>
     <string name="home_message_6">이달의 추천 리뷰</string>
     <string name="home_message_7">님 만을 위한 추천</string>
-    <string name="home_btn_tagFunc">헤어스타일 추천받기</string>
-    <string name="home_btn_faceFuncAgain">얼굴형분석 다시하기</string>
     <string name="review_monthly_message">님의 리뷰</string>
     <string name="home_item_rec_btn">상세보기 〉</string>
 
@@ -88,11 +86,13 @@
     <string name="func_message_2">정면을 보고 있는 사진을 업로드해주세요</string>
     <string name="func_message_btn_submit">얼굴형 분석하기</string>
     <!--    faceResult -->
-    <string name="faceResult_message_1">님의 얼굴형은</string>
-    <string name="faceResult_message_2">입니다.</string>
-    <string name="faceResult_message_3">을 위한 추천 헤어스타일</string>
+    <string name="faceResult_message_1">님은 </string>
+    <string name="faceResult_message_2">을</string>
+    <string name="faceResult_message_3">소유하고 있네요!</string>
+    <string name="faceResult_message_4">조건에 가장 적합한 헤어스타일은…</string>
     <string name="faceResult_btn_finish">얼굴형 분석 끝내기</string>
     <string name="loading_message">AI가 얼굴형을 분석하고 있어요</string>
+    <string name="faceResult_recommendStyle_pic">faceResult_recommendStyle_pic</string>
 
     <!--    tag func -->
     <string name="tagFunc_title">헤어스타일 추천</string>
@@ -121,6 +121,5 @@
     <string name="tag_image_formal">포멀한</string>
     <string name="tag_image_manly">남성적인</string>
     <string name="tag_image_soft">부드러운</string>
-
 
 </resources>

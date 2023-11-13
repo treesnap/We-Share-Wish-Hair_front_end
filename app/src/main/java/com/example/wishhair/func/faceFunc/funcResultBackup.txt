@@ -1,0 +1,73 @@
+private void faceResultRequest(String accessToken) {
+    String faceResultUrl = UrlConst.URL + "/api/hair_style/home";
+    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, faceResultUrl, null, response -> {
+        String recResponse = String.valueOf(response);
+        try {
+            JSONObject result = new JSONObject(recResponse);
+            JSONArray resultArray = result.getJSONArray("result");
+            for (int i = 0; i < resultArray.length(); i++) {
+                if (i > 3) {
+                    break;
+                }
+                JSONObject itemObject = resultArray.getJSONObject(i);
+
+                int hairStyleId = itemObject.getInt("hairStyleId");
+                String hairStyleName = itemObject.getString("name");
+
+                JSONArray photosArray = itemObject.getJSONArray("photos");
+                ArrayList<String> photoUrls = new ArrayList<>();
+                for (int j = 0; j < photosArray.length(); j++) {
+                    JSONObject photoObject = photosArray.getJSONObject(j);
+                    photoUrls.add(photoObject.getString("storeUrl"));
+                }
+
+                JSONArray hashTagsArray = itemObject.getJSONArray("hashTags");
+                ArrayList<String> tags = new ArrayList<>();
+                for (int j = 0; j < hashTagsArray.length(); j++) {
+                    JSONObject hasTagObject = hashTagsArray.getJSONObject(j);
+                    tags.add(hasTagObject.getString("tag"));
+                }
+
+                HomeItems item = new HomeItems(hairStyleId, photoUrls, hairStyleName, tags);
+
+                faceRecItems.add(item);
+            }
+            faceResultAdapter = new HairItemAdapter(faceRecItems, this);
+            faceResultAdapter.setOnItemClickListener(((v1, position) -> {
+                // 프래그먼트 생성 시 액티비티 레이아웃 비활성화
+                overlay.setVisibility(View.VISIBLE);
+                btn_finish.setVisibility(View.GONE);
+
+                HomeItems selectedItem = faceRecItems.get(position);
+                Bundle bundle = new Bundle();
+                bundle.putString("hairStylename", selectedItem.getHairStyleName());
+                bundle.putStringArrayList("tags", selectedItem.getTags());
+                bundle.putInt("hairStyleId", selectedItem.getHairStyleId());
+                bundle.putStringArrayList("ImageUrls", selectedItem.getHairImages());
+
+                FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
+                FavoriteDetail favoriteDetail = new FavoriteDetail();
+                favoriteDetail.setArguments(bundle);
+                transaction.replace(R.id.faceResult_layout, favoriteDetail);
+                transaction.commit();
+            }));
+            recyclerView.setAdapter(faceResultAdapter);
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }, error -> {
+        String message = GetErrorMessage.getErrorMessage(error);
+        Log.e("validate error message", message);
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }) { @Override
+    public Map<String, String> getHeaders() {
+        Map<String, String>  params = new HashMap();
+        params.put("Authorization", "bearer" + accessToken);
+        return params;
+    }
+    };
+
+    RequestQueue queue = Volley.newRequestQueue(this);
+    queue.add(jsonObjectRequest);
+}
