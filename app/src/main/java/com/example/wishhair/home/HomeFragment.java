@@ -193,7 +193,10 @@ public class HomeFragment extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if (hasFaceShape) {
+            receivedText.setText(userNickName);
+
+//             11/13 >> 추천 받기 버튼 계속 살아있게
+            /*if (hasFaceShape) {
                 hello.setVisibility(View.GONE);
                 receivedText.setText(faceShapeTag);
                 settingMessage1.setText("에 어울리는");
@@ -202,7 +205,7 @@ public class HomeFragment extends Fragment {
                 btn_faceFunc.setVisibility(View.GONE);
             } else {
                 receivedText.setText(userNickName);
-            }
+            }*/
         }, error -> {}) {
             @Override
             public Map<String, String> getHeaders() {
